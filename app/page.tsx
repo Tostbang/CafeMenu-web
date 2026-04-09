@@ -4,7 +4,7 @@ export default function Home() {
 
   return (
     <div className="">
-      <Link href={"/menu"}>menu</Link>
+      <Linkfont-sans href={"/menu"}>menu</Link>
     </div>
   );
 }

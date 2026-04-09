@@ -5,7 +5,6 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-
   --my-lavender: #c5b4e2;
   --my-blue: #24a3e3;
   --my-plum: #811b48;

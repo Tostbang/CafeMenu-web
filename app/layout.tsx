@@ -56,8 +56,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("h-full", "antialiased", "font-sans", geist.variable, montserratHeading.variable)}>
-      <body className={`min-h-full flex flex-col bright ${degular.variable} ${carter.variable}`}>{children}</body>
+    <html lang="en" className={"h-full antialiased font-sans"}>
+      <body className={`min-h-full flex flex-col bright ${degular.className} ${carter.variable}`}>{children}</body>
     </html>
   );
 }

@@ -1,13 +1,20 @@
 import { ReactNode } from "react";
-import { Button } from "./ui/button";
 import { ArrowRight01Sharp } from "asem-icons";
+import { cn } from "@/lib/utils";
 
-export function MyButton({ children }: { children: ReactNode }) {
+export function MyButton({
+  children,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <button className="bg-my-bright-background text-black rounded-md px-3.5 py-2.5 font-bold cursor-pointer flex gap-x-2 items-center">
-      {children}{" "}
-      <span className="size-4 bg-my-dark-background rounded-[6px] text-white flex justify-center items-center">
-        <ArrowRight01Sharp className="size-3"/>
+    <button
+      {...props}
+      type="button"
+      className={cn("inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-sm bg-my-bright-background px-3 py-1.5 text-xs font-semibold text-black shadow-[0_8px_18px_rgba(35,31,32,0.2)] transition active:scale-95", props.className)}
+    >
+      {children}
+      <span className="flex size-4 items-center justify-center rounded-full bg-my-dark-background text-my-bright-background">
+        <ArrowRight01Sharp className="size-2.5" />
       </span>
     </button>
   );

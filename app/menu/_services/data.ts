@@ -1,6 +1,7 @@
 export const data = {
   menu: {
     menuId: 2,
+    slug: "slug",
     title: "Çarşı Kafe",
     description: "İstanbul'un en iyi yeri",
     logoUrl: "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",

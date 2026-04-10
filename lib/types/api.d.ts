@@ -3,7 +3,7 @@
  * Do not edit manually. Run `npm run sync-api` to regenerate.
  *
  * Generated from: https://cafemenuapi.azurewebsites.net/swagger/v1/swagger.json
- * Generated at: 2026-04-06T09:53:11.851Z
+ * Generated at: 2026-04-10T11:10:02.493Z
  */
 export interface paths {
     "/api/Admin/Users/Search": {
@@ -105,6 +105,280 @@ export interface paths {
                         "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteUserResponse"];
                         "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteUserResponse"];
                         "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteUserResponse"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/Menus/Search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Admin menüleri filtreli listeler */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllMenusRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllMenusRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllMenusRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllMenusResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllMenusResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllMenusResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/Menus/{menuId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Admin menü detayı getirir */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    menuId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminGetMenuByIdResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetMenuByIdResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetMenuByIdResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        /** Admin menüyü pasife çeker */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    menuId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteMenuResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteMenuResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteMenuResponse"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/Menus/PublishStatus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Admin menüyü yayına alır veya yayından kaldırır */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/GlobalCategories/Create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Admin global kategori oluşturur */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminCreateGlobalCategoryRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminCreateGlobalCategoryRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.AdminCreateGlobalCategoryRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminCreateGlobalCategoryResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminCreateGlobalCategoryResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminCreateGlobalCategoryResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/GlobalCategories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Admin global kategorileri listeler */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllGlobalCategoriesResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllGlobalCategoriesResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllGlobalCategoriesResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/GlobalCategories/{categoryId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Admin global kategoriyi pasife çeker */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    categoryId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteGlobalCategoryResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteGlobalCategoryResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteGlobalCategoryResponse"];
                     };
                 };
             };
@@ -499,7 +773,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Kullanıcının menüsüne yeni kategori ekler */
+        /** Kendi menüme kategori ekle */
         post: {
             parameters: {
                 query?: never;
@@ -542,7 +816,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** Kullanıcı kendi kategorisini günceller */
+        /** Kendi kategorimi güncelle */
         put: {
             parameters: {
                 query?: never;
@@ -585,7 +859,31 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Kendi kategori detayımı ve ürünlerini getir */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    categoryId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetCategoryByIdResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetCategoryByIdResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetCategoryByIdResponse"];
+                    };
+                };
+            };
+        };
         put?: never;
         post?: never;
         /** Kullanıcı kendi kategorisini pasife alır */
@@ -618,21 +916,19 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Category/Menu/{menuId}": {
+    "/api/Category/MyCategories": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Kullanıcı kategorilerini listeler */
+        /** Kendi kategorilerimi getir */
         get: {
             parameters: {
                 query?: never;
                 header?: never;
-                path: {
-                    menuId: number;
-                };
+                path?: never;
                 cookie?: never;
             };
             requestBody?: never;
@@ -646,6 +942,88 @@ export interface paths {
                         "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetCategoriesByMenuResponse"];
                         "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetCategoriesByMenuResponse"];
                         "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetCategoriesByMenuResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Category/AddGlobalCategory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Global kategoriyi kendi menüme ekle */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.AddGlobalCategoryToMyMenuRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.AddGlobalCategoryToMyMenuRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.AddGlobalCategoryToMyMenuRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AddGlobalCategoryToMyMenuResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AddGlobalCategoryToMyMenuResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AddGlobalCategoryToMyMenuResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Category/GlobalCategories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Aktif global kategorileri getir */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetGlobalCategoriesResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetGlobalCategoriesResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetGlobalCategoriesResponse"];
                     };
                 };
             };
@@ -740,70 +1118,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Menu/{menuId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Menünün detaylarını getirir */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    menuId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetMenuByIdResponse"];
-                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetMenuByIdResponse"];
-                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetMenuByIdResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        /** Menüyü pasif duruma alır */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    menuId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.DeleteMenuResponse"];
-                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.DeleteMenuResponse"];
-                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.DeleteMenuResponse"];
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/Menu/Update": {
         parameters: {
             query?: never;
@@ -843,6 +1157,46 @@ export interface paths {
         };
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Menu/{menuId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Menüyü pasif duruma alır */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    menuId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.DeleteMenuResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.DeleteMenuResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.DeleteMenuResponse"];
+                    };
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -943,7 +1297,31 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** kullanıcıya ait ürün detayını getir */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    productId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetProductByIdResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetProductByIdResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetProductByIdResponse"];
+                    };
+                };
+            };
+        };
         put?: never;
         post?: never;
         /** Ürün sil (pasife al) */
@@ -976,21 +1354,19 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Product/Category/{categoryId}": {
+    "/api/Product/MyProducts": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Kategoriye ait ürünleri getir */
+        /** Giriş yapan kullanıcıya ait tüm ürünleri getir */
         get: {
             parameters: {
                 query?: never;
                 header?: never;
-                path: {
-                    categoryId: number;
-                };
+                path?: never;
                 cookie?: never;
             };
             requestBody?: never;
@@ -1001,9 +1377,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetProductsByCategoryResponse"];
-                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetProductsByCategoryResponse"];
-                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetProductsByCategoryResponse"];
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetMyProductsResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetMyProductsResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetMyProductsResponse"];
                     };
                 };
             };
@@ -1016,20 +1392,20 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/PublicMenu/{menuId}": {
+    "/api/PublicMenu/{slug}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Public menüyü getirir */
+        /** Public menüyü slug ile getirir */
         get: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
-                    menuId: number;
+                    slug: string;
                 };
                 cookie?: never;
             };
@@ -1056,16 +1432,138 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/PublicMenu/{slug}/Search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Public menüde ürün araması yapar */
+        get: {
+            parameters: {
+                query?: {
+                    text?: string;
+                };
+                header?: never;
+                path: {
+                    slug: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.SearchPublicMenuProductsResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.SearchPublicMenuProductsResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.SearchPublicMenuProductsResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        "CafeMenu.Entity.DTO.AddGlobalCategoryToMyMenuRequest": {
+            /** Format: int64 */
+            globalCategoryId: number;
+            /** Format: int32 */
+            order: number;
+        };
+        "CafeMenu.Entity.DTO.AddGlobalCategoryToMyMenuResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            categoryId: number;
+        };
+        "CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusRequest": {
+            /** Format: int64 */
+            menuId: number;
+            isPublished: boolean;
+        };
+        "CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            menuId: number;
+            isPublished: boolean;
+        };
+        "CafeMenu.Entity.DTO.AdminCreateGlobalCategoryRequest": {
+            name: string | null;
+            /** Format: int32 */
+            order: number;
+        };
+        "CafeMenu.Entity.DTO.AdminCreateGlobalCategoryResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            categoryId: number;
+        };
+        "CafeMenu.Entity.DTO.AdminDeleteGlobalCategoryResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            categoryId: number;
+        };
+        "CafeMenu.Entity.DTO.AdminDeleteMenuResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            menuId: number;
+        };
         "CafeMenu.Entity.DTO.AdminDeleteUserResponse": {
             code: string | null;
             message: string | null;
             errors: string[] | null;
             /** Format: int64 */
             deletedUserId: number;
+        };
+        "CafeMenu.Entity.DTO.AdminGetAllGlobalCategoriesResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            categories: components["schemas"]["CafeMenu.Entity.DTO.CategoryModel"][] | null;
+        };
+        "CafeMenu.Entity.DTO.AdminGetAllMenusRequest": {
+            status: boolean | null;
+            isPublished: boolean | null;
+            /** Format: int32 */
+            page: number;
+            /** Format: int32 */
+            pageSize: number;
+        };
+        "CafeMenu.Entity.DTO.AdminGetAllMenusResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            menus: components["schemas"]["CafeMenu.Entity.DTO.AdminMenuListModel"][] | null;
+            /** Format: int32 */
+            page: number;
+            /** Format: int32 */
+            pageSize: number;
+            /** Format: int32 */
+            totalCount: number;
+            /** Format: int32 */
+            totalPages: number;
         };
         "CafeMenu.Entity.DTO.AdminGetAllUsersRequest": {
             status: boolean | null;
@@ -1088,11 +1586,63 @@ export interface components {
             /** Format: int32 */
             totalPages: number;
         };
+        "CafeMenu.Entity.DTO.AdminGetMenuByIdResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            menu: components["schemas"]["CafeMenu.Entity.DTO.AdminMenuDetailModel"];
+        };
         "CafeMenu.Entity.DTO.AdminGetUserByIdResponse": {
             code: string | null;
             message: string | null;
             errors: string[] | null;
             user: components["schemas"]["CafeMenu.Entity.DTO.AdminUserDetailModel"];
+        };
+        "CafeMenu.Entity.DTO.AdminMenuDetailModel": {
+            /** Format: int64 */
+            menuId: number;
+            /** Format: int64 */
+            userId: number;
+            title: string | null;
+            slug: string | null;
+            description: string | null;
+            logoUrl: string | null;
+            backgroundImageUrl: string | null;
+            primaryColor: string | null;
+            secondaryColor: string | null;
+            accentColor: string | null;
+            phoneNumber: string | null;
+            address: string | null;
+            instagramUrl: string | null;
+            facebookUrl: string | null;
+            xUrl: string | null;
+            whatsappPhone: string | null;
+            status: boolean;
+            isPublished: boolean;
+            /** Format: date-time */
+            createdDate: string;
+            /** Format: date-time */
+            modifiedDate: string | null;
+            /** Format: date-time */
+            deletedDate: string | null;
+        };
+        "CafeMenu.Entity.DTO.AdminMenuListModel": {
+            /** Format: int64 */
+            menuId: number;
+            /** Format: int64 */
+            userId: number;
+            title: string | null;
+            slug: string | null;
+            status: boolean;
+            isPublished: boolean;
+            phoneNumber: string | null;
+            address: string | null;
+            /** Format: date-time */
+            createdDate: string;
+            /** Format: date-time */
+            modifiedDate: string | null;
+            /** Format: date-time */
+            deletedDate: string | null;
         };
         "CafeMenu.Entity.DTO.AdminUserDetailModel": {
             /** Format: int64 */
@@ -1130,14 +1680,30 @@ export interface components {
             /** Format: date-time */
             deletedDate: string | null;
         };
+        "CafeMenu.Entity.DTO.CategoryDetailModel": {
+            /** Format: int64 */
+            categoryId: number;
+            /** Format: int64 */
+            menuId: number | null;
+            name: string | null;
+            /** Format: int32 */
+            order: number;
+            isGlobal: boolean;
+            /** Format: int64 */
+            globalCategoryId: number | null;
+            products: components["schemas"]["CafeMenu.Entity.DTO.ProductModel"][] | null;
+        };
         "CafeMenu.Entity.DTO.CategoryModel": {
             /** Format: int64 */
             categoryId: number;
             /** Format: int64 */
-            menuId: number;
+            menuId: number | null;
             name: string | null;
             /** Format: int32 */
             order: number;
+            isGlobal: boolean;
+            /** Format: int64 */
+            globalCategoryId: number | null;
         };
         "CafeMenu.Entity.DTO.ChangeMyPasswordRequest": {
             currentPassword: string | null;
@@ -1150,8 +1716,6 @@ export interface components {
             errors: string[] | null;
         };
         "CafeMenu.Entity.DTO.CreateCategoryRequest": {
-            /** Format: int64 */
-            menuId: number;
             name: string | null;
             /** Format: int32 */
             order: number;
@@ -1185,6 +1749,7 @@ export interface components {
             errors: string[] | null;
             /** Format: int64 */
             menuId: number;
+            slug: string | null;
         };
         "CafeMenu.Entity.DTO.CreateProductRequest": {
             /** Format: int64 */
@@ -1240,11 +1805,17 @@ export interface components {
             errors: string[] | null;
             categories: components["schemas"]["CafeMenu.Entity.DTO.CategoryModel"][] | null;
         };
-        "CafeMenu.Entity.DTO.GetMenuByIdResponse": {
+        "CafeMenu.Entity.DTO.GetCategoryByIdResponse": {
             code: string | null;
             message: string | null;
             errors: string[] | null;
-            menu: components["schemas"]["CafeMenu.Entity.DTO.MenuDetailModel"];
+            category: components["schemas"]["CafeMenu.Entity.DTO.CategoryDetailModel"];
+        };
+        "CafeMenu.Entity.DTO.GetGlobalCategoriesResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            categories: components["schemas"]["CafeMenu.Entity.DTO.CategoryModel"][] | null;
         };
         "CafeMenu.Entity.DTO.GetMyMenuResponse": {
             code: string | null;
@@ -1252,11 +1823,17 @@ export interface components {
             errors: string[] | null;
             menu: components["schemas"]["CafeMenu.Entity.DTO.MenuDetailModel"];
         };
-        "CafeMenu.Entity.DTO.GetProductsByCategoryResponse": {
+        "CafeMenu.Entity.DTO.GetMyProductsResponse": {
             code: string | null;
             message: string | null;
             errors: string[] | null;
             products: components["schemas"]["CafeMenu.Entity.DTO.ProductModel"][] | null;
+        };
+        "CafeMenu.Entity.DTO.GetProductByIdResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            product: components["schemas"]["CafeMenu.Entity.DTO.ProductModel"];
         };
         "CafeMenu.Entity.DTO.GetPublicMenuResponse": {
             code: string | null;
@@ -1297,6 +1874,7 @@ export interface components {
             /** Format: int64 */
             userId: number;
             title: string | null;
+            slug: string | null;
             description: string | null;
             logoUrl: string | null;
             backgroundImageUrl: string | null;
@@ -1316,6 +1894,7 @@ export interface components {
             productId: number;
             /** Format: int64 */
             categoryId: number;
+            categoryName: string | null;
             name: string | null;
             description: string | null;
             /** Format: double */
@@ -1338,6 +1917,7 @@ export interface components {
             /** Format: int64 */
             menuId: number;
             title: string | null;
+            slug: string | null;
             description: string | null;
             logoUrl: string | null;
             backgroundImageUrl: string | null;
@@ -1351,6 +1931,21 @@ export interface components {
             xUrl: string | null;
             whatsappPhone: string | null;
             categories: components["schemas"]["CafeMenu.Entity.DTO.PublicCategoryModel"][] | null;
+        };
+        "CafeMenu.Entity.DTO.PublicMenuSearchProductModel": {
+            /** Format: int64 */
+            productId: number;
+            /** Format: int64 */
+            categoryId: number;
+            categoryName: string | null;
+            name: string | null;
+            description: string | null;
+            /** Format: double */
+            price: number;
+            imageUrl: string | null;
+            isPopular: boolean;
+            ingredients: string | null;
+            allergens: string | null;
         };
         "CafeMenu.Entity.DTO.PublicProductModel": {
             /** Format: int64 */
@@ -1386,11 +1981,15 @@ export interface components {
             /** Format: int32 */
             remainingSeconds: number | null;
         };
+        "CafeMenu.Entity.DTO.SearchPublicMenuProductsResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            products: components["schemas"]["CafeMenu.Entity.DTO.PublicMenuSearchProductModel"][] | null;
+        };
         "CafeMenu.Entity.DTO.UpdateCategoryRequest": {
             /** Format: int64 */
             categoryId: number;
-            /** Format: int64 */
-            menuId: number;
             name: string | null;
             /** Format: int32 */
             order: number;
@@ -1403,8 +2002,6 @@ export interface components {
             categoryId: number;
         };
         "CafeMenu.Entity.DTO.UpdateMenuRequest": {
-            /** Format: int64 */
-            menuId: number;
             title: string | null;
             description: string | null;
             logoUrl: string | null;
@@ -1426,6 +2023,7 @@ export interface components {
             errors: string[] | null;
             /** Format: int64 */
             menuId: number;
+            slug: string | null;
         };
         "CafeMenu.Entity.DTO.UpdateProductRequest": {
             /** Format: int64 */

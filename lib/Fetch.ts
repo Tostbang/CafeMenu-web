@@ -4,7 +4,7 @@ import type { paths } from "@/lib/types/api"
 import { deleteToken, getToken } from "./helpers"
 import { isRedirectError } from "next/dist/client/components/redirect-error"
 
-export const baseUrl = "https://jewelerapi20260130150239.azurewebsites.net"
+export const baseUrl = "https://cafemenuapi.azurewebsites.net"
 
 
 type baseApi = {

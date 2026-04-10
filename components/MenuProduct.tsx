@@ -1,12 +1,15 @@
 import { components } from "@/lib/types/api";
 import { cn } from "@/lib/utils";
-import { CheckmarkBadge02Filled } from "asem-icons";
 import Image from "next/image";
 import { MyButton } from "./myButtons";
-import { useEffect, useState } from "react";
-import { FastAverageColor, FastAverageColorResult } from "fast-average-color";
 
-export const colors = [
+const priceFormatter = new Intl.NumberFormat("tr-TR", {
+  style: "currency",
+  currency: "TRY",
+  maximumFractionDigits: 0,
+});
+
+const colors = [
   "bg-my-lavender",
   "bg-my-blue",
   "bg-my-plum",
@@ -23,50 +26,77 @@ export function MenuProduct({
   product: components["schemas"]["CafeMenu.Entity.DTO.PublicProductModel"];
   i: number;
 }) {
-  const [averageColor, setAverageColor] = useState<null | FastAverageColorResult>(null);
-
-  useEffect(() => {
-    const averageColor = new FastAverageColor();
-    averageColor.getColorAsync(product.imageUrl).then((color) => {
-      setAverageColor(color);
-    });
-  }, [product.imageUrl]);
-
-  console.log(averageColor)
+  const colorClass = colors[i % colors.length];
+  const isDarkCard = colorClass === "bg-my-plum";
+  const textClass = isDarkCard ? "text-my-bright-background" : "text-black";
+  const productName = product.name || "Product";
+  const productDescription = product.description || "No description available.";
+  const hasIngredients = Boolean(product.ingredients);
+  const hasAllergens = Boolean(product.allergens);
 
   return (
-    <div
-      // style={{backgroundColor: averageColor?.hex, color: averageColor?.isDark ? "white": "black" }}
+    <article
       className={cn(
-        "p-4 rounded-3xl background ",
-	colors[i],
-        colors[i] === "bg-my-plum" ? "text-my-bright-background" : "text-black",
+        "overflow-hidden rounded-[1.4rem] p-2.5 shadow-[0_10px_24px_rgba(15,23,42,0.12)]",
+        colorClass,
+        textClass,
       )}
     >
-      <div>
+      <div className="relative">
         {product.imageUrl && (
           <Image
             src={product.imageUrl}
-            alt={product.name ?? "product image"}
+            alt={productName}
             width={400}
             height={400}
-            className="w-full rounded-xl h-55 object-cover"
+            className="h-52 w-full rounded-2xl object-cover"
           />
         )}
+        {!product.imageUrl && (
+          <div className="flex h-52 w-full items-center justify-center rounded-2xl bg-my-bright-background/50 text-sm font-medium opacity-75">
+            No image
+          </div>
+        )}
+        {product.isPopular && (
+          <span
+            className={cn(
+              "absolute left-2 top-2 rounded-full px-2 py-1 text-xs font-semibold",
+              isDarkCard
+                ? "bg-my-bright-background/90 text-my-dark-background"
+                : "bg-my-dark-background text-my-bright-background",
+            )}
+          >
+            Popular
+          </span>
+        )}
       </div>
-      <div className="mt-2 h-35 flex flex-col">
-        <div className="flex items-center gap-x-1">
-          <CheckmarkBadge02Filled className="size-4" />
-          <p className="font-semibold text-sm">vegan</p>
-        </div>
+
+      <div className="mt-3 flex min-h-36 flex-col">
         <div className="flex-1">
-          <h2 className="font-carter text-2xl">{product.name}</h2>
-          <p className="text-sm mt-0.5">{product.description}</p>
+          <h3 className="font-carter text-2xl">{productName}</h3>
+          <p className="mt-1 text-sm opacity-80">{productDescription}</p>
         </div>
-        <div className="pl-1">
-          <MyButton>View Ingredient</MyButton>
+
+        <div className="mt-3">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-base font-semibold">
+              {priceFormatter.format(product.price)}
+            </p>
+            {hasAllergens && (
+              <span className="rounded-full bg-my-dark-background/12 px-2 py-1 text-xs font-medium">
+                Allergens: {product.allergens}
+              </span>
+            )}
+          </div>
+
+          <div className="mt-2 flex items-center justify-between gap-2">
+            <p className="text-xs opacity-75">
+              {hasIngredients ? product.ingredients : "Ingredients unavailable"}
+            </p>
+            <MyButton>{hasIngredients ? "Ingredients" : "Details"}</MyButton>
+          </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

@@ -39,6 +39,7 @@ const ticker = [
 ];
 
 export default function Home() {
+	console.log("hello there")
   return (
     <main className="bg-[#f2efed] text-[#161316]">
       <MyMainNav />

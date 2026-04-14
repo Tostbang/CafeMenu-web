@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { hostname: "images.pexels.com" },
       { hostname: "cdn.pixabay.com" },
+      {hostname: 'tostbangadmin.blob.core.windows.net'},
+      {hostname: "example.com"}
     ],
   },
 };

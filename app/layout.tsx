@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
-import { Geist, Montserrat } from "next/font/google";
+import { Figtree, Geist, Montserrat } from "next/font/google";
 import Providers from "@/components/Providers";
 
 const montserratHeading = Montserrat({
@@ -26,6 +26,10 @@ const carter = localFont({
   src: "./VeniceBlvd-Black.woff2",
   variable: "--font-carter-one",
   weight: "400",
+});
+const figtree = Figtree({
+  variable: "--font-figtree",
+  weight: ["400", "700", "500", "600"],
 });
 
 const degular = localFont({
@@ -64,7 +68,7 @@ export default function RootLayout({
       className={`${geist.variable} ${montserratHeading.variable} h-full antialiased font-sans`}
     >
       <body
-        className={`min-h-full flex flex-col bright ${degular.className} ${carter.variable}`}
+        className={`min-h-full flex flex-col bright ${figtree.variable} ${degular.className} ${figtree} ${carter.variable}`}
       >
         <Providers>{children}</Providers>
       </body>

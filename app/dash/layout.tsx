@@ -11,7 +11,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <ViewTransitions>
-      <main>
+      <main className="font-figtree">
         <DashProviders sideBarDefaultValue={sideBarDefaultValue}>
           <AppSidebar layout="dash" variant="floating" />
           <SidebarInset className="overflow-hidden">

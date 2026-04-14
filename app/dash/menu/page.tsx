@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -8,10 +7,12 @@ import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useMutationOP, useQueryOP } from "@/lib/Fetch";
+import { uploadFile } from "@/lib/file-upload";
 import type { components } from "@/lib/types/api";
+import { Abacus } from "asem-icons";
+import { FileUploadStruc } from "@/components/FileUpload";
 
 const MAX_INPUT_LENGTH = 300;
-const HEX_COLOR_REGEX = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 
 function optionalUrlIsValid(value: string) {
   const normalized = value.trim();
@@ -42,37 +43,6 @@ const menuFormSchema = z.object({
     .string()
     .trim()
     .max(400, "Açıklama en fazla 400 karakter olabilir."),
-  logoUrl: z
-    .string()
-    .trim()
-    .max(MAX_INPUT_LENGTH, "Logo bağlantısı çok uzun.")
-    .refine(optionalUrlIsValid, "Logo için geçerli bir bağlantı girin."),
-  backgroundImageUrl: z
-    .string()
-    .trim()
-    .max(MAX_INPUT_LENGTH, "Arkaplan bağlantısı çok uzun.")
-    .refine(optionalUrlIsValid, "Arkaplan için geçerli bir bağlantı girin."),
-  primaryColor: z
-    .string()
-    .trim()
-    .refine(
-      (value) => !value || HEX_COLOR_REGEX.test(value),
-      "Ana renk HEX formatında olmalıdır. Örn: #7f1148",
-    ),
-  secondaryColor: z
-    .string()
-    .trim()
-    .refine(
-      (value) => !value || HEX_COLOR_REGEX.test(value),
-      "İkincil renk HEX formatında olmalıdır. Örn: #f4f0e8",
-    ),
-  accentColor: z
-    .string()
-    .trim()
-    .refine(
-      (value) => !value || HEX_COLOR_REGEX.test(value),
-      "Vurgu rengi HEX formatında olmalıdır. Örn: #0ea5e9",
-    ),
   phoneNumber: z.string().trim().max(30, "Telefon numarası çok uzun."),
   address: z
     .string()
@@ -104,11 +74,6 @@ type MenuDetailModel =
 const defaultValues: MenuFormValues = {
   title: "",
   description: "",
-  logoUrl: "",
-  backgroundImageUrl: "",
-  primaryColor: "",
-  secondaryColor: "",
-  accentColor: "",
   phoneNumber: "",
   address: "",
   instagramUrl: "",
@@ -143,11 +108,6 @@ function mapMenuToForm(menu: MenuDetailModel): MenuFormValues {
   return {
     title: toInputValue(menu.title),
     description: toInputValue(menu.description),
-    logoUrl: toInputValue(menu.logoUrl),
-    backgroundImageUrl: toInputValue(menu.backgroundImageUrl),
-    primaryColor: toInputValue(menu.primaryColor),
-    secondaryColor: toInputValue(menu.secondaryColor),
-    accentColor: toInputValue(menu.accentColor),
     phoneNumber: toInputValue(menu.phoneNumber),
     address: toInputValue(menu.address),
     instagramUrl: toInputValue(menu.instagramUrl),
@@ -168,6 +128,7 @@ export default function MenuPage() {
   const updateMenuMutation = useMutationOP("put", "/api/Menu/Update");
   const [feedback, setFeedback] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [newLogoFile, setNewLogoFile] = useState<File | null>(null);
 
   const {
     control,
@@ -189,6 +150,10 @@ export default function MenuPage() {
     }
   }, [currentMenu, reset]);
 
+  const handleLogoUpload = (files: File[]) => {
+    setNewLogoFile(files[0] ?? null);
+  };
+
   const onSubmit = async (values: MenuFormValues) => {
     setFeedback(null);
     setFormError(null);
@@ -196,11 +161,6 @@ export default function MenuPage() {
     const payloadBase = {
       title: toNullableString(values.title),
       description: toNullableString(values.description),
-      logoUrl: toNullableUrl(values.logoUrl),
-      backgroundImageUrl: toNullableUrl(values.backgroundImageUrl),
-      primaryColor: toNullableString(values.primaryColor),
-      secondaryColor: toNullableString(values.secondaryColor),
-      accentColor: toNullableString(values.accentColor),
       phoneNumber: toNullableString(values.phoneNumber),
       address: toNullableString(values.address),
       instagramUrl: toNullableUrl(values.instagramUrl),
@@ -211,14 +171,35 @@ export default function MenuPage() {
     };
 
     try {
+      const uploadedLogo = newLogoFile ? await uploadFile(newLogoFile) : null;
+
       if (currentMenu?.menuId) {
-        await updateMenuMutation.mutateAsync({ body: payloadBase });
+        await updateMenuMutation.mutateAsync({
+          body: {
+            ...payloadBase,
+            logoUrl: uploadedLogo?.url ?? currentMenu.logoUrl ?? null,
+            backgroundImageUrl: currentMenu.backgroundImageUrl ?? null,
+            primaryColor: currentMenu.primaryColor ?? null,
+            secondaryColor: currentMenu.secondaryColor ?? null,
+            accentColor: currentMenu.accentColor ?? null,
+          },
+        });
         setFeedback("Menünüz başarıyla güncellendi.");
       } else {
-        await createMenuMutation.mutateAsync({ body: payloadBase });
+        await createMenuMutation.mutateAsync({
+          body: {
+            ...payloadBase,
+            logoUrl: uploadedLogo?.url ?? null,
+            backgroundImageUrl: null,
+            primaryColor: null,
+            secondaryColor: null,
+            accentColor: null,
+          },
+        });
         setFeedback("Menünüz başarıyla oluşturuldu.");
       }
 
+      setNewLogoFile(null);
       await getMyMenuQuery.refetch();
     } catch (error) {
       setFormError(
@@ -229,12 +210,12 @@ export default function MenuPage() {
 
   return (
     <div className="h-full p-4 md:p-6">
-      <div className="mx-auto max-w-6xl rounded-2xl border p-4 md:p-6">
+      <div className="mx-auto max-w-6xl rounded-2xl p-4 md:p-6">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="font-carter text-3xl uppercase">Menü Düzenleyici</h1>
             <p className="mt-1 text-sm">
-              Başlık, renkler ve iletişim bilgilerini tek ekrandan yönetin.
+              Başlık ve iletişim bilgilerini tek ekrandan yönetin.
             </p>
           </div>
           <span className="rounded-full border px-3 py-1 text-xs font-semibold">
@@ -270,120 +251,96 @@ export default function MenuPage() {
         )}
 
         <form
-          className="grid grid-cols-1 gap-3 md:grid-cols-2"
+          className="grid grid-cols-1 gap-3 md:grid-cols-5 gap-x-8"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <FormInput
-            type="text"
-            name="title"
-            label="Menü Başlığı"
-            placeholder="Örn: Asem Cafe Menüsü"
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="description"
-            label="Açıklama"
-            placeholder="Menünüz hakkında kısa bir açıklama"
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="logoUrl"
-            label="Logo URL"
-            placeholder="https://..."
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="backgroundImageUrl"
-            label="Arkaplan Görsel URL"
-            placeholder="https://..."
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="primaryColor"
-            label="Ana Renk"
-            placeholder="#7f1148"
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="secondaryColor"
-            label="İkincil Renk"
-            placeholder="#f4f0e8"
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="accentColor"
-            label="Vurgu Rengi"
-            placeholder="#0ea5e9"
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="phoneNumber"
-            label="Telefon"
-            placeholder="+90 5xx xxx xx xx"
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="whatsappPhone"
-            label="WhatsApp Numarası"
-            placeholder="+90 5xx xxx xx xx"
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="address"
-            label="Adres"
-            placeholder="Şube adresi"
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="instagramUrl"
-            label="Instagram URL"
-            placeholder="instagram.com/..."
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="facebookUrl"
-            label="Facebook URL"
-            placeholder="facebook.com/..."
-            control={control}
-          />
-          <FormInput
-            type="text"
-            name="xUrl"
-            label="X URL"
-            placeholder="x.com/..."
-            control={control}
-          />
+          <div className="col-span-2 relative flex">
+            <div className="w-full">
+              <FileUploadStruc onChange={handleLogoUpload} />
+              <FormInput
+                Icon={Abacus}
+                type="text"
+                name="title"
+                label="Menü Başlığı *"
+                placeholder="Örn: Asem Cafe Menüsü"
+                control={control}
+              />
+              <FormInput
+                type="text"
+                name="description"
+                label="Açıklama"
+                placeholder="Menünüz hakkında kısa bir açıklama"
+                control={control}
+              />
+            </div>
+            <div>
+              <div className="h-full w-[1px] bg-gray-200 ml-8" />
+            </div>
+          </div>
+          <div className="col-span-3 grid grid-cols-2 gap-x-3">
+            <FormInput
+              type="text"
+              name="phoneNumber"
+              label="Telefon"
+              placeholder="+90 5xx xxx xx xx"
+              control={control}
+            />
+            <FormInput
+              type="text"
+              name="whatsappPhone"
+              label="WhatsApp Numarası"
+              placeholder="+90 5xx xxx xx xx"
+              control={control}
+            />
+            <FormInput
+              type="text"
+              name="address"
+              label="Adres"
+              placeholder="Şube adresi"
+              control={control}
+            />
+            <FormInput
+              type="text"
+              name="instagramUrl"
+              label="Instagram URL"
+              placeholder="instagram.com/..."
+              control={control}
+            />
+            <FormInput
+              type="text"
+              name="facebookUrl"
+              label="Facebook URL"
+              placeholder="facebook.com/..."
+              control={control}
+            />
+            <FormInput
+              type="text"
+              name="xUrl"
+              label="X URL"
+              placeholder="x.com/..."
+              control={control}
+            />
 
-          <Controller
-            name="isPublished"
-            control={control}
-            render={({ field }) => (
-              <div className="mt-3 flex items-center justify-between rounded-2xl border px-4 py-3 md:col-span-2">
-                <div>
-                  <p className="text-sm font-semibold">Menü Yayında</p>
-                  <p className="text-xs">
-                    Kapalıysa müşteriler menünüzün güncel halini görmez.
-                  </p>
+            <Controller
+              name="isPublished"
+              control={control}
+              render={({ field }) => (
+                <div className="mt-3 flex items-center justify-between rounded-2xl border px-4 py-3 md:col-span-2">
+                   <div>
+                    <p className="text-sm font-semibold">Menü Yayında</p>
+                    <p className="text-xs">
+                      Kapalıysa müşteriler menünüzün güncel halini görmez.
+                    </p>
+                  </div>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    aria-label="Menüyü yayına al"
+                  />
                 </div>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  aria-label="Menüyü yayına al"
-                />
-              </div>
-            )}
-          />
+              )}
+            />
+          </div>
 
           <div className="md:col-span-2 mt-2 flex items-center gap-3">
             <Button

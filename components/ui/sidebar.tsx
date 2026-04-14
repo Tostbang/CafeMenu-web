@@ -23,6 +23,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { RiSideBarLine } from "@remixicon/react"
+import { LeftSidebarFilled, SidebarLeft02 } from "asem-icons"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -270,7 +271,7 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      <RiSideBarLine />
+      <SidebarLeft02 className="size-5 text-gray-40"/>
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

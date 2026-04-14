@@ -43,7 +43,7 @@ export function MenuProduct({
       )}
     >
       <div className="relative">
-        {product.imageUrl && (
+        {product.imageUrl && product.imageUrl.includes("https") && (
           <Image
             src={product.imageUrl}
             alt={productName}

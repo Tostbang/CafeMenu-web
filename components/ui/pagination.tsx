@@ -8,7 +8,7 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
       role="navigation"
-      aria-label="pagination"
+      aria-label="sayfalama"
       data-slot="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
       {...props}
@@ -63,12 +63,12 @@ function PaginationLink({
 
 function PaginationPrevious({
   className,
-  text = "Previous",
+  text = "Önceki",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label="Önceki sayfaya git"
       size="default"
       className={cn("pl-2!", className)}
       {...props}
@@ -81,12 +81,12 @@ function PaginationPrevious({
 
 function PaginationNext({
   className,
-  text = "Next",
+  text = "Sonraki",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label="Sonraki sayfaya git"
       size="default"
       className={cn("pr-2!", className)}
       {...props}
@@ -113,7 +113,7 @@ function PaginationEllipsis({
     >
       <RiMoreLine
       />
-      <span className="sr-only">More pages</span>
+      <span className="sr-only">Daha fazla sayfa</span>
     </span>
   )
 }

@@ -5,53 +5,59 @@ import Image from "next/image";
 export function CategoryNav({
   menu,
   categories,
+  isPreview = false,
 }: {
   menu: components["schemas"]["CafeMenu.Entity.DTO.PublicMenuDetailModel"];
   categories: components["schemas"]["CafeMenu.Entity.DTO.PublicCategoryModel"][];
+  isPreview?: boolean;
 }) {
-  const menuTitle = menu.title || "Menu";
+  const menuTitle = menu.title || "Menü";
 
   return (
-    <div className="sticky top-2 z-20 mt-3">
-      <div className="rounded-[1.6rem] bg-my-dark-background p-3 text-my-bright-background shadow-[0_12px_32px_rgba(17,24,39,0.2)]">
-        <div className="flex items-center gap-2">
+    <div className={`sticky z-20 mt-4 ${isPreview ? "top-2" : "top-0"}`}>
+      <div className="rounded-b-[2rem] border border-[var(--menu-border)] bg-[var(--menu-surface)] p-3 text-[var(--menu-text)] shadow-[0_14px_36px_rgba(15,23,42,0.1)] backdrop-blur-md">
+        <div className="flex items-center gap-3">
           {menu.logoUrl && (
             <Image
               src={menu.logoUrl}
-              alt={`${menuTitle} logo`}
-              width={40}
-              height={40}
-              className="size-10 rounded-xl border border-my-bright-background/30 object-cover"
+              alt={`${menuTitle} logosu`}
+              width={44}
+              height={44}
+              className="size-11 rounded-xl border border-[var(--menu-border)] object-cover"
               loading="eager"
             />
           )}
-          <h2 className="truncate text-base font-semibold">
-            {menuTitle}
-          </h2>
-          <span className="ml-auto rounded-full bg-my-bright-background/12 px-2 py-1 text-xs font-medium text-my-bright-background/80">
-            {categories.length} categories
-          </span>
+          <div className="min-w-0">
+            <h2 className="truncate text-sm font-semibold tracking-tight sm:text-base">
+              {menuTitle}
+            </h2>
+            <p className="text-xs text-[var(--menu-muted-text)]">
+              {categories.length} kategori
+            </p>
+          </div>
         </div>
-
         <nav
-          aria-label="Menu categories"
-          className="mt-3 flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1"
+          aria-label="Menü kategorileri"
+          className="custom-scroll mt-3 flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1"
         >
           {categories.map((category, i) => (
             <a
               key={category.categoryId}
               href={`#category-${category.categoryId}`}
-              className="flex snap-start shrink-0 items-center gap-2 rounded-full border border-my-bright-background/20 bg-my-bright-background/10 px-3 py-2 text-sm font-medium text-my-bright-background transition active:scale-95"
+              className="group flex snap-start shrink-0 items-center gap-2 rounded-full border border-[var(--menu-border)] bg-[var(--menu-primary)] px-2 py-1.5 text-sm font-medium text-[var(--menu-on-primary)] transition-all hover:brightness-95 hover:shadow-[0_8px_18px_rgba(0,0,0,0.08)] active:scale-95"
             >
-              <span className="flex size-6 items-center justify-center rounded-full bg-my-bright-background/20">
+              <span className="flex size-4.5 items-center justify-center rounded-lg">
                 <Image
                   src={CategoryImages[i % CategoryImages.length]}
                   alt=""
                   width={16}
                   height={16}
+                  className="h-full w-full opacity-70"
                 />
               </span>
-              <span className="max-w-28 truncate">{category.name || "Category"}</span>
+              <span className="max-w-28 truncate">
+                {category.name || "Kategori"}
+              </span>
             </a>
           ))}
         </nav>

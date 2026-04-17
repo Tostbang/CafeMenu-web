@@ -1,6 +1,6 @@
 
 import { Calculator01Filled, CustomerSupportFilled, DashboardSquare03Filled, File02Filled, GeometricShapes01Filled, LaptopPhoneSync1Filled, Location01Filled, NoodlesFilled, Package, PackageFilled, User02Filled, UserMultipleFilled } from "asem-icons";
-import { CircleQuestionMark, Factory, Headset, LayoutDashboard, QrCode, Star, User } from "lucide-react";
+import { CircleQuestionMark, Factory, Headset, LayoutDashboard, Palette, QrCode, Star, User } from "lucide-react";
 
 
 export const userLinks = [
@@ -26,6 +26,12 @@ export const userLinks = [
     title: "QR Kod",
     url: "/dash/qr",
     icon: QrCode,
+    subLinks: null,
+  },
+  {
+    title: "Tasarım",
+    url: "/dash/tasarim",
+    icon: Palette,
     subLinks: null,
   },
   // {

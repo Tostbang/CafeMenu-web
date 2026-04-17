@@ -7,7 +7,7 @@ import { RiArrowRightSLine, RiMoreLine } from "@remixicon/react"
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
-      aria-label="breadcrumb"
+      aria-label="ekmek kırıntısı"
       data-slot="breadcrumb"
       className={cn(className)}
       {...props}
@@ -106,7 +106,7 @@ function BreadcrumbEllipsis({
     >
       <RiMoreLine
       />
-      <span className="sr-only">More</span>
+      <span className="sr-only">Daha fazla</span>
     </span>
   )
 }

@@ -6,11 +6,13 @@ import { z } from "zod";
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { useMutationOP, useQueryOP } from "@/lib/Fetch";
 import { uploadFile } from "@/lib/file-upload";
 import type { components } from "@/lib/types/api";
 import { Abacus } from "asem-icons";
 import { FileUploadStruc } from "@/components/FileUpload";
+import { toast } from "sonner";
 
 const MAX_INPUT_LENGTH = 300;
 
@@ -126,8 +128,6 @@ export default function MenuPage() {
   const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
   const createMenuMutation = useMutationOP("post", "/api/Menu/Create");
   const updateMenuMutation = useMutationOP("put", "/api/Menu/Update");
-  const [feedback, setFeedback] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
   const [newLogoFile, setNewLogoFile] = useState<File | null>(null);
 
   const {
@@ -155,9 +155,6 @@ export default function MenuPage() {
   };
 
   const onSubmit = async (values: MenuFormValues) => {
-    setFeedback(null);
-    setFormError(null);
-
     const payloadBase = {
       title: toNullableString(values.title),
       description: toNullableString(values.description),
@@ -184,7 +181,7 @@ export default function MenuPage() {
             accentColor: currentMenu.accentColor ?? null,
           },
         });
-        setFeedback("Menünüz başarıyla güncellendi.");
+        toast.success("Menünüz başarıyla güncellendi.");
       } else {
         await createMenuMutation.mutateAsync({
           body: {
@@ -196,15 +193,15 @@ export default function MenuPage() {
             accentColor: null,
           },
         });
-        setFeedback("Menünüz başarıyla oluşturuldu.");
+        toast.success("Menünüz başarıyla oluşturuldu.");
       }
 
       setNewLogoFile(null);
       await getMyMenuQuery.refetch();
     } catch (error) {
-      setFormError(
-        toErrorMessage(error, "Menü kaydedilirken bir hata oluştu."),
-      );
+      if (!(error instanceof Error)) {
+        toast.error(toErrorMessage(error, "Menü kaydedilirken bir hata oluştu."));
+      }
     }
   };
 
@@ -238,25 +235,16 @@ export default function MenuPage() {
           </p>
         )}
 
-        {feedback && (
-          <p className="mb-4 rounded-2xl border px-4 py-2 text-sm">
-            {feedback}
-          </p>
-        )}
-
-        {formError && (
-          <p className="mb-4 rounded-2xl border px-4 py-2 text-sm">
-            {formError}
-          </p>
-        )}
-
         <form
           className="grid grid-cols-1 gap-3 md:grid-cols-5 gap-x-8"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="col-span-2 relative flex">
             <div className="w-full">
-              <FileUploadStruc onChange={handleLogoUpload} />
+              <FileUploadStruc
+                defaultImageUrl={currentMenu?.logoUrl ?? null}
+                onChange={handleLogoUpload}
+              />
               <FormInput
                 Icon={Abacus}
                 type="text"
@@ -325,19 +313,23 @@ export default function MenuPage() {
               name="isPublished"
               control={control}
               render={({ field }) => (
-                <div className="mt-3 flex items-center justify-between rounded-2xl border px-4 py-3 md:col-span-2">
-                   <div>
+                <Label
+                  htmlFor="menu-is-published"
+                  className="mt-3 flex cursor-pointer items-center justify-between rounded-2xl border px-4 py-3 md:col-span-2"
+                >
+                  <div>
                     <p className="text-sm font-semibold">Menü Yayında</p>
                     <p className="text-xs">
                       Kapalıysa müşteriler menünüzün güncel halini görmez.
                     </p>
                   </div>
                   <Switch
+                    id="menu-is-published"
                     checked={field.value}
                     onCheckedChange={field.onChange}
                     aria-label="Menüyü yayına al"
                   />
-                </div>
+                </Label>
               )}
             />
           </div>

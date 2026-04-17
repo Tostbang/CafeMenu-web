@@ -21,29 +21,33 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { useMutationOP, useQueryOP } from "@/lib/Fetch";
 import type { components } from "@/lib/types/api";
+import { toast } from "sonner";
+import MyCard from "@/components/MyCard";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Delete02Filled, Edit02Filled } from "asem-icons";
+import { MoreHorizontal } from "lucide-react";
+import { Alert } from "@/lib/store/useGlobalStore";
+import { FileUploadStruc } from "@/components/FileUpload";
+import { uploadFile } from "@/lib/file-upload";
 
 const MAX_INPUT_LENGTH = 400;
-
-function optionalUrlIsValid(value: string) {
-  const normalized = value.trim();
-
-  if (!normalized) {
-    return true;
-  }
-
-  const normalizedWithScheme = /^https?:\/\//i.test(normalized)
-    ? normalized
-    : `https://${normalized}`;
-
-  try {
-    new URL(normalizedWithScheme);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 const productFormSchema = z.object({
   categoryId: z
@@ -59,11 +63,6 @@ const productFormSchema = z.object({
   price: z
     .number({ invalid_type_error: "Fiyat girin." })
     .min(0, "Fiyat 0'dan küçük olamaz."),
-  imageUrl: z
-    .string()
-    .trim()
-    .max(MAX_INPUT_LENGTH, "Görsel bağlantısı çok uzun.")
-    .refine(optionalUrlIsValid, "Görsel için geçerli bir bağlantı girin."),
   ingredients: z
     .string()
     .trim()
@@ -84,7 +83,6 @@ const defaultValues: ProductFormValues = {
   name: "",
   description: "",
   price: 0,
-  imageUrl: "",
   ingredients: "",
   allergens: "",
   isAvailable: true,
@@ -96,20 +94,19 @@ function toNullableString(value: string) {
   return normalized.length > 0 ? normalized : null;
 }
 
-function toNullableUrl(value: string) {
-  const normalized = toNullableString(value);
-
-  if (!normalized) {
-    return null;
-  }
-
-  return /^https?:\/\//i.test(normalized)
-    ? normalized
-    : `https://${normalized}`;
-}
-
 function toErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
+}
+
+function ProductsTableSkeleton() {
+  return (
+    <div className="mt-3 space-y-3">
+      <Skeleton className="h-10 w-full rounded-xl" />
+      {Array.from({ length: 5 }).map((_, index) => (
+        <Skeleton key={index} className="h-12 w-full rounded-xl" />
+      ))}
+    </div>
+  );
 }
 
 export default function ProductsPage() {
@@ -131,8 +128,9 @@ export default function ProductsPage() {
   );
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [newProductImageFile, setNewProductImageFile] = useState<File | null>(
+    null,
+  );
 
   const { control, handleSubmit, reset } = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
@@ -165,22 +163,23 @@ export default function ProductsPage() {
     createProductMutation.isPending || updateProductMutation.isPending;
 
   const onSubmit = async (values: ProductFormValues) => {
-    setFeedback(null);
-    setFormError(null);
-
-    const payloadBase = {
-      categoryId: values.categoryId,
-      name: toNullableString(values.name),
-      description: toNullableString(values.description),
-      price: values.price,
-      imageUrl: toNullableUrl(values.imageUrl),
-      isAvailable: values.isAvailable,
-      isPopular: values.isPopular,
-      ingredients: toNullableString(values.ingredients),
-      allergens: toNullableString(values.allergens),
-    };
-
     try {
+      const uploadedImage = newProductImageFile
+        ? await uploadFile(newProductImageFile)
+        : null;
+
+      const payloadBase = {
+        categoryId: values.categoryId,
+        name: toNullableString(values.name),
+        description: toNullableString(values.description),
+        price: values.price,
+        imageUrl: uploadedImage?.url ?? editingProduct?.imageUrl ?? null,
+        isAvailable: values.isAvailable,
+        isPopular: values.isPopular,
+        ingredients: toNullableString(values.ingredients),
+        allergens: toNullableString(values.allergens),
+      };
+
       if (editingProduct) {
         const body: components["schemas"]["CafeMenu.Entity.DTO.UpdateProductRequest"] =
           {
@@ -188,12 +187,12 @@ export default function ProductsPage() {
             ...payloadBase,
           };
         await updateProductMutation.mutateAsync({ body });
-        setFeedback("Ürün güncellendi.");
+        toast.success("Ürün güncellendi.");
       } else {
         const body: components["schemas"]["CafeMenu.Entity.DTO.CreateProductRequest"] =
           payloadBase;
         await createProductMutation.mutateAsync({ body });
-        setFeedback("Ürün oluşturuldu.");
+        toast.success("Ürün oluşturuldu.");
       }
 
       setSelectedCategoryId(values.categoryId);
@@ -204,14 +203,15 @@ export default function ProductsPage() {
         setIsCreateDialogOpen(false);
       }
       setEditingProduct(null);
+      setNewProductImageFile(null);
       reset({
         ...defaultValues,
         categoryId: values.categoryId,
       });
     } catch (error) {
-      setFormError(
-        toErrorMessage(error, "Ürün kaydedilirken bir hata oluştu."),
-      );
+      if (!(error instanceof Error)) {
+        toast.error(toErrorMessage(error, "Ürün kaydedilirken bir hata oluştu."));
+      }
     }
   };
 
@@ -226,8 +226,7 @@ export default function ProductsPage() {
         : categories[0].categoryId;
 
     setEditingProduct(null);
-    setFeedback(null);
-    setFormError(null);
+    setNewProductImageFile(null);
     reset({
       ...defaultValues,
       categoryId: initialCategoryId,
@@ -237,27 +236,22 @@ export default function ProductsPage() {
 
   const onEdit = (product: ProductModel) => {
     setEditingProduct(product);
-    setFeedback(null);
-    setFormError(null);
 
     reset({
       categoryId: product.categoryId,
       name: product.name ?? "",
       description: product.description ?? "",
       price: product.price,
-      imageUrl: product.imageUrl ?? "",
       ingredients: product.ingredients ?? "",
       allergens: product.allergens ?? "",
       isAvailable: product.isAvailable,
       isPopular: product.isPopular,
     });
+    setNewProductImageFile(null);
     setIsEditDialogOpen(true);
   };
 
   const onDelete = async (productId: number) => {
-    setFeedback(null);
-    setFormError(null);
-
     try {
       await deleteProductMutation.mutateAsync({
         params: {
@@ -267,7 +261,7 @@ export default function ProductsPage() {
         },
       });
       await productsQuery.refetch();
-      setFeedback("Ürün silindi.");
+      toast.success("Ürün silindi.");
 
       if (editingProduct?.productId === productId) {
         setIsEditDialogOpen(false);
@@ -276,10 +270,26 @@ export default function ProductsPage() {
           ...defaultValues,
           categoryId: effectiveSelectedCategoryId || 0,
         });
+        setNewProductImageFile(null);
       }
     } catch (error) {
-      setFormError(toErrorMessage(error, "Ürün silinirken bir hata oluştu."));
+      if (!(error instanceof Error)) {
+        toast.error(toErrorMessage(error, "Ürün silinirken bir hata oluştu."));
+      }
     }
+  };
+
+  const onDeleteConfirm = (productId: number) => {
+    Alert({
+      AlertTitle: "Ürünü Sil",
+      AlertDescription:
+        "Bu ürünü silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      CancelLabel: "Vazgeç",
+      ConfirmLabel: "Sil",
+      onConfirm: () => {
+        void onDelete(productId);
+      },
+    });
   };
 
   return (
@@ -308,16 +318,6 @@ export default function ProductsPage() {
         {menuId && categories.length === 0 && !categoriesQuery.isPending && (
           <p className="mb-4 rounded-xl border px-4 py-2 text-sm">
             Ürün eklemek için önce kategori oluşturun.
-          </p>
-        )}
-
-        {feedback && (
-          <p className="mb-4 rounded-xl border px-4 py-2 text-sm">{feedback}</p>
-        )}
-
-        {formError && (
-          <p className="mb-4 rounded-xl border px-4 py-2 text-sm">
-            {formError}
           </p>
         )}
 
@@ -351,12 +351,8 @@ export default function ProductsPage() {
           </div>
         )}
 
-        <div className="mt-2">
-          <h2 className="text-lg font-semibold">Ürünler</h2>
-
-          {productsQuery.isPending && (
-            <p className="mt-2 text-sm">Ürünler yükleniyor...</p>
-          )}
+        <MyCard title="Ürünler" className="mt-2">
+          {productsQuery.isPending && <ProductsTableSkeleton />}
 
           {!productsQuery.isPending &&
             products.length === 0 &&
@@ -365,58 +361,57 @@ export default function ProductsPage() {
             )}
 
           {products.length > 0 && (
-            <div className="mt-3 overflow-x-auto rounded-xl border">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="px-3 py-2">ID</th>
-                    <th className="px-3 py-2">Ad</th>
-                    <th className="px-3 py-2">Fiyat</th>
-                    <th className="px-3 py-2">Durum</th>
-                    <th className="px-3 py-2">İşlemler</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <div className="mt-3 rounded-xl border bg-white/60">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Ad</TableHead>
+                    <TableHead>Fiyat</TableHead>
+                    <TableHead>Durum</TableHead>
+                    <TableHead>İşlemler</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {products.map((product) => (
-                    <tr
-                      key={product.productId}
-                      className="border-b last:border-0"
-                    >
-                      <td className="px-3 py-2">{product.productId}</td>
-                      <td className="px-3 py-2">{product.name || "-"}</td>
-                      <td className="px-3 py-2">{product.price}</td>
-                      <td className="px-3 py-2">
+                    <TableRow key={product.productId}>
+                      <TableCell>{product.productId}</TableCell>
+                      <TableCell>{product.name || "-"}</TableCell>
+                      <TableCell>{product.price}</TableCell>
+                      <TableCell>
                         {product.isAvailable ? "Satışta" : "Kapalı"}
                         {product.isPopular ? " / Popüler" : ""}
-                      </td>
-                      <td className="px-3 py-2">
-                        <div className="flex gap-2">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onEdit(product)}
-                          >
-                            Düzenle
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onDelete(product.productId)}
-                            disabled={deleteProductMutation.isPending}
-                          >
-                            Sil
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button type="button" variant="outline" size="icon-sm">
+                              <MoreHorizontal className="size-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuItem onClick={() => onEdit(product)}>
+                              <Edit02Filled className="size-4" />
+                              Düzenle
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              variant="destructive"
+                              onClick={() => onDeleteConfirm(product.productId)}
+                              disabled={deleteProductMutation.isPending}
+                            >
+                              <Delete02Filled className="size-4" />
+                              Sil
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           )}
-        </div>
+        </MyCard>
 
         <Dialog
           open={isCreateDialogOpen}
@@ -427,10 +422,11 @@ export default function ProductsPage() {
                 ...defaultValues,
                 categoryId: effectiveSelectedCategoryId || 0,
               });
+              setNewProductImageFile(null);
             }
           }}
         >
-          <DialogContent className="sm:max-w-170">
+          <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-170">
             <DialogHeader>
               <DialogTitle>Yeni Ürün Oluştur</DialogTitle>
               <DialogDescription>
@@ -472,18 +468,17 @@ export default function ProductsPage() {
                 min={0}
                 step="0.01"
               />
+              <div className="md:col-span-2">
+                <FileUploadStruc
+                  key="product-create-image"
+                  onChange={(files) => setNewProductImageFile(files[0] ?? null)}
+                />
+              </div>
               <FormInput
                 type="text"
                 name="description"
                 label="Açıklama"
                 placeholder="Ürün açıklaması"
-                control={control}
-              />
-              <FormInput
-                type="text"
-                name="imageUrl"
-                label="Görsel URL"
-                placeholder="https://..."
                 control={control}
               />
               <FormInput
@@ -505,7 +500,10 @@ export default function ProductsPage() {
                 name="isAvailable"
                 control={control}
                 render={({ field }) => (
-                  <div className="flex items-center justify-between rounded-xl border px-4 py-3 md:col-span-2">
+                  <Label
+                    htmlFor="product-create-is-available"
+                    className="flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 md:col-span-2"
+                  >
                     <div>
                       <p className="text-sm font-semibold">Satışta</p>
                       <p className="text-xs">
@@ -513,10 +511,11 @@ export default function ProductsPage() {
                       </p>
                     </div>
                     <Switch
+                      id="product-create-is-available"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                  </div>
+                  </Label>
                 )}
               />
 
@@ -524,16 +523,20 @@ export default function ProductsPage() {
                 name="isPopular"
                 control={control}
                 render={({ field }) => (
-                  <div className="flex items-center justify-between rounded-xl border px-4 py-3 md:col-span-2">
+                  <Label
+                    htmlFor="product-create-is-popular"
+                    className="flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 md:col-span-2"
+                  >
                     <div>
                       <p className="text-sm font-semibold">Popüler</p>
                       <p className="text-xs">Açık olursa ürünü öne çıkarır.</p>
                     </div>
                     <Switch
+                      id="product-create-is-popular"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                  </div>
+                  </Label>
                 )}
               />
 
@@ -558,10 +561,11 @@ export default function ProductsPage() {
                 ...defaultValues,
                 categoryId: effectiveSelectedCategoryId || 0,
               });
+              setNewProductImageFile(null);
             }
           }}
         >
-          <DialogContent className="sm:max-w-170">
+          <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-170">
             <DialogHeader>
               <DialogTitle>Ürün Düzenle</DialogTitle>
               <DialogDescription>
@@ -603,18 +607,18 @@ export default function ProductsPage() {
                 min={0}
                 step="0.01"
               />
+              <div className="md:col-span-2">
+                <FileUploadStruc
+                  key={`product-edit-image-${editingProduct?.productId ?? "none"}`}
+                  defaultImageUrl={editingProduct?.imageUrl ?? null}
+                  onChange={(files) => setNewProductImageFile(files[0] ?? null)}
+                />
+              </div>
               <FormInput
                 type="text"
                 name="description"
                 label="Açıklama"
                 placeholder="Ürün açıklaması"
-                control={control}
-              />
-              <FormInput
-                type="text"
-                name="imageUrl"
-                label="Görsel URL"
-                placeholder="https://..."
                 control={control}
               />
               <FormInput
@@ -636,7 +640,10 @@ export default function ProductsPage() {
                 name="isAvailable"
                 control={control}
                 render={({ field }) => (
-                  <div className="flex items-center justify-between rounded-xl border px-4 py-3 md:col-span-2">
+                  <Label
+                    htmlFor="product-edit-is-available"
+                    className="flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 md:col-span-2"
+                  >
                     <div>
                       <p className="text-sm font-semibold">Satışta</p>
                       <p className="text-xs">
@@ -644,10 +651,11 @@ export default function ProductsPage() {
                       </p>
                     </div>
                     <Switch
+                      id="product-edit-is-available"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                  </div>
+                  </Label>
                 )}
               />
 
@@ -655,16 +663,20 @@ export default function ProductsPage() {
                 name="isPopular"
                 control={control}
                 render={({ field }) => (
-                  <div className="flex items-center justify-between rounded-xl border px-4 py-3 md:col-span-2">
+                  <Label
+                    htmlFor="product-edit-is-popular"
+                    className="flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 md:col-span-2"
+                  >
                     <div>
                       <p className="text-sm font-semibold">Popüler</p>
                       <p className="text-xs">Açık olursa ürünü öne çıkarır.</p>
                     </div>
                     <Switch
+                      id="product-edit-is-popular"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                  </div>
+                  </Label>
                 )}
               />
 

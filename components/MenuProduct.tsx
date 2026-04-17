@@ -1,7 +1,21 @@
 import { components } from "@/lib/types/api";
 import { cn } from "@/lib/utils";
+import { useMenuProductDrawerStore } from "@/lib/store/menu-product-drawer-store";
+import { defaultMenuTheme, MenuTheme, toMenuThemeVars } from "@/lib/menu-theme";
 import Image from "next/image";
 import { MyButton } from "./myButtons";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "./ui/drawer";
+import { Button } from "./ui/button";
+import { CrownFilled, Tag01Filled } from "asem-icons";
+import { IconType } from "@/lib/types";
 
 const priceFormatter = new Intl.NumberFormat("tr-TR", {
   style: "currency",
@@ -9,94 +23,202 @@ const priceFormatter = new Intl.NumberFormat("tr-TR", {
   maximumFractionDigits: 0,
 });
 
-const colors = [
-  "bg-my-lavender",
-  "bg-my-blue",
-  "bg-my-plum",
-  "bg-my-turquoise",
-  "bg-my-gold",
-  "bg-my-brown",
-  "bg-my-red",
-];
-
 export function MenuProduct({
   product,
-  i,
+  interactive = true,
 }: {
   product: components["schemas"]["CafeMenu.Entity.DTO.PublicProductModel"];
-  i: number;
+  interactive?: boolean;
 }) {
-  const colorClass = colors[i % colors.length];
-  const isDarkCard = colorClass === "bg-my-plum";
-  const textClass = isDarkCard ? "text-my-bright-background" : "text-black";
-  const productName = product.name || "Product";
-  const productDescription = product.description || "No description available.";
+  const openDrawer = useMenuProductDrawerStore((state) => state.openDrawer);
+  const productName = product.name || "Ürün";
+  const productDescription = product.description || "Açıklama bulunmuyor.";
   const hasIngredients = Boolean(product.ingredients);
   const hasAllergens = Boolean(product.allergens);
 
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[1.4rem] p-2.5 shadow-[0_10px_24px_rgba(15,23,42,0.12)]",
-        colorClass,
-        textClass,
+        "overflow-hidden rounded-[25px] border border-[var(--menu-border)] bg-[var(--menu-card)] p-2.25 text-[var(--menu-text)]",
       )}
     >
       <div className="relative">
-        {product.imageUrl && product.imageUrl.includes("https") && (
-          <Image
-            src={product.imageUrl}
-            alt={productName}
-            width={400}
-            height={400}
-            className="h-52 w-full rounded-2xl object-cover"
-          />
-        )}
-        {!product.imageUrl && (
-          <div className="flex h-52 w-full items-center justify-center rounded-2xl bg-my-bright-background/50 text-sm font-medium opacity-75">
-            No image
-          </div>
-        )}
+        <div className="h-44 overflow-hidden rounded-b-lg rounded-t-[20px]">
+          {product.imageUrl && product.imageUrl.includes("https") && (
+            <Image
+              src={product.imageUrl}
+              alt={productName}
+              width={400}
+              height={400}
+              className="h-full w-full object-cover"
+            />
+          )}
+          {!product.imageUrl && (
+              <div className="flex h-full w-full items-center justify-center rounded-2xl bg-[var(--menu-surface)] text-sm font-medium text-[var(--menu-muted-text)]">
+               Görsel yok
+              </div>
+          )}
+        </div>
         {product.isPopular && (
-          <span
-            className={cn(
-              "absolute left-2 top-2 rounded-full px-2 py-1 text-xs font-semibold",
-              isDarkCard
-                ? "bg-my-bright-background/90 text-my-dark-background"
-                : "bg-my-dark-background text-my-bright-background",
-            )}
-          >
-            Popular
+          <span className="absolute right-3 top-3 flex gap-x-1 rounded-full bg-white/85 px-2 py-1 text-xs font-semibold text-[var(--menu-text)]">
+            <CrownFilled className="size-4" />
+            Popüler
           </span>
         )}
+        {hasAllergens && (
+          <div className="absolute bottom-0 flex items-center gap-x-1 rounded-tr-lg bg-[var(--menu-card)] pl-1 pr-2 pt-2">
+            <MyTag
+              Icon={Tag01Filled}
+              name={`İçerik: ${product.allergens}`}
+              color="bg-[var(--menu-tertiary)] text-[var(--menu-on-tertiary)]"
+            />
+          </div>
+        )}
       </div>
 
-      <div className="mt-3 flex min-h-36 flex-col">
-        <div className="flex-1">
-          <h3 className="font-carter text-2xl">{productName}</h3>
-          <p className="mt-1 text-sm opacity-80">{productDescription}</p>
+      <div className="mt-1 mb-2 flex flex-col px-1.5">
+        <div className="flex-1 font-space">
+          <h3 className="h-6 text-xl font-[500]">{productName}</h3>
+          <p className="text-sm text-[var(--menu-muted-text)]">
+            {productDescription}
+          </p>
         </div>
-
-        <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-base font-semibold">
-              {priceFormatter.format(product.price)}
-            </p>
-            {hasAllergens && (
-              <span className="rounded-full bg-my-dark-background/12 px-2 py-1 text-xs font-medium">
-                Allergens: {product.allergens}
-              </span>
-            )}
-          </div>
-
-          <div className="mt-2 flex items-center justify-between gap-2">
-            <p className="text-xs opacity-75">
-              {hasIngredients ? product.ingredients : "Ingredients unavailable"}
-            </p>
-            <MyButton>{hasIngredients ? "Ingredients" : "Details"}</MyButton>
-          </div>
-        </div>
+      </div>
+      <div className="mt-1 flex w-full items-center gap-x-1">
+        <span
+          className={cn(
+            "flex h-9 items-center gap-x-1 rounded-full px-4 py-.75",
+            "bg-[var(--menu-secondary)] text-[var(--menu-on-secondary)]",
+          )}
+        >
+          <Tag01Filled className="size-3.5" />
+          <span className="max-w-22 overflow-hidden text-ellipsis text-nowrap text-sm font-semibold">
+            {priceFormatter.format(product.price)}
+          </span>
+        </span>
+        <MyButton
+          className={cn(
+            "h-9 flex-1 justify-center rounded-full text-sm font-semibold shadow-none",
+            "bg-[var(--menu-primary)] text-[var(--menu-on-primary)] [&_svg]:text-[var(--menu-on-primary)]",
+          )}
+          onClick={() => {
+            if (interactive) {
+              openDrawer(product);
+            }
+          }}
+          disabled={!interactive}
+        >
+          {hasIngredients ? "İçindekiler" : "Detaylar"}
+        </MyButton>
       </div>
     </article>
+  );
+}
+
+export function MenuProductDrawer({ theme = defaultMenuTheme }: { theme?: MenuTheme }) {
+  const { isOpen, product, setOpen } = useMenuProductDrawerStore();
+
+  if (!product) {
+    return null;
+  }
+
+  const productName = product.name || "Ürün";
+  const productDescription = product.description || "Açıklama bulunmuyor.";
+  const hasIngredients = Boolean(product.ingredients);
+  const hasAllergens = Boolean(product.allergens);
+
+  return (
+    <Drawer open={isOpen} onOpenChange={setOpen}>
+      <DrawerContent className="p-0" style={toMenuThemeVars(theme)}>
+        <div className="mx-auto w-full max-w-xl overflow-y-auto rounded-t-[2rem] bg-[var(--menu-surface)] text-[var(--menu-text)]">
+          <div className="space-y-4 px-5 pb-4">
+            <div className="h-52 overflow-hidden rounded-[1.25rem] bg-[var(--menu-card)]">
+              {product.imageUrl && product.imageUrl.includes("https") ? (
+                <Image
+                  src={product.imageUrl}
+                  alt={productName}
+                  width={800}
+                  height={600}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-sm font-medium text-[var(--menu-muted-text)]">
+                  Görsel yok
+                </div>
+              )}
+            </div>
+            <DrawerHeader className="px-2 py-0 text-left!">
+              <DrawerTitle className="font-space text-2xl font-semibold text-[var(--menu-text)]">
+                {productName}
+              </DrawerTitle>
+              <DrawerDescription className="font-space text-sm text-[var(--menu-muted-text)]">
+                {productDescription}
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="flex flex-wrap items-center gap-2 font-space">
+              <MyTag
+                Icon={Tag01Filled}
+                name={priceFormatter.format(product.price)}
+                color="bg-[var(--menu-secondary)] text-[var(--menu-on-secondary)]"
+              />
+              {product.isPopular && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--menu-primary)] px-2.5 py-1 text-xs font-semibold text-[var(--menu-on-primary)]">
+                  <CrownFilled className="size-4" />
+                  Popüler
+                </span>
+              )}
+            </div>
+
+            <section className="text-[var(--menu-text)]">
+              <h4 className="text-xl font-semibold tracking-wide">İçindekiler:</h4>
+              <p className="mt-1 text-sm font-semibold">
+                {hasIngredients
+                  ? product.ingredients
+                  : "İçindekiler bilgisi yok"}
+              </p>
+            </section>
+
+            <section>
+              <h4 className="text-xl font-semibold tracking-wide">Alerjenler:</h4>
+              <p className="mt-1 text-sm font-semibold">
+                {hasAllergens ? product.allergens : "Alerjen bilgisi yok"}
+              </p>
+            </section>
+          </div>
+
+          <DrawerFooter className="px-5 pb-5 pt-1">
+            <DrawerClose asChild>
+              <Button className="h-10 rounded-full bg-[var(--menu-primary)] text-[var(--menu-on-primary)] hover:brightness-95">
+                Kapat
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
+export function MyTag({
+  Icon,
+  name,
+  color,
+}: {
+  Icon: IconType;
+  name: string;
+  color: string;
+}) {
+  return (
+    <span
+      className={cn(
+        "flex h-6.5 items-center gap-x-1 rounded-full px-2.5 py-.75",
+        color,
+      )}
+    >
+      <Icon className="size-3.5" />
+      <span className="max-w-24 overflow-hidden text-ellipsis text-nowrap text-sm font-medium">
+        {name}
+      </span>
+    </span>
   );
 }

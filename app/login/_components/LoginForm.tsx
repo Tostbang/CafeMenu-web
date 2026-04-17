@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { updateToken } from "@/lib/helpers";
 import type { components } from "@/lib/types/api";
 import { useLogin } from "../_services/mutations";
+import { toast } from "sonner";
 
 type LoginFormState = {
   email: string;
@@ -32,19 +33,23 @@ export function LoginForm() {
     ...initialState,
     email: emailFromQuery,
   }));
-  const [formError, setFormError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (registered) {
+      toast.success("Kayıt başarılı. Şimdi giriş yapabilirsiniz.");
+    }
+  }, [registered]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormError(null);
 
     if (!emailPattern.test(values.email)) {
-      setFormError("Lütfen geçerli bir e-posta adresi girin.");
+      toast.error("Lütfen geçerli bir e-posta adresi girin.");
       return;
     }
 
     if (values.password.length < 6) {
-      setFormError("Şifre en az 6 karakter olmalıdır.");
+      toast.error("Şifre en az 6 karakter olmalıdır.");
       return;
     }
 
@@ -57,18 +62,16 @@ export function LoginForm() {
       const response = await loginMutation.mutateAsync({ body });
 
       if (!response.token) {
-        setFormError("Giriş yanıtında token bulunamadı.");
+        toast.error("Giriş yanıtında token bulunamadı.");
         return;
       }
 
       updateToken(response.token);
       router.push("/dash");
     } catch (error) {
-      setFormError(
-        error instanceof Error
-          ? error.message
-          : "Giriş yapılırken bir hata oluştu.",
-      );
+      if (!(error instanceof Error)) {
+        toast.error("Giriş yapılırken bir hata oluştu.");
+      }
     }
   };
 
@@ -87,12 +90,6 @@ export function LoginForm() {
         </h2>
         <p className="text-sm text-black/60">Hesabınıza giriş yapın</p>
       </div>
-
-      {registered && (
-        <p className="mt-4 rounded-2xl border border-[#7f1148]/20 bg-[#7f1148]/8 px-3 py-2 text-sm text-[#7f1148]">
-          Kayıt başarılı. Şimdi giriş yapabilirsiniz.
-        </p>
-      )}
 
       <form className="mt-5 space-y-4" onSubmit={onSubmit}>
         <div className="space-y-2">
@@ -133,12 +130,6 @@ export function LoginForm() {
             required
           />
         </div>
-
-        {formError && (
-          <p className="rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {formError}
-          </p>
-        )}
 
         <Button
           type="submit"

@@ -96,7 +96,7 @@ export default function QrPage() {
     : null;
 
   const encodedMenuUrl = encodeURIComponent(publicMenuUrl);
-  const encodedTitle = encodeURIComponent(menuTitle || "Cafe Menu");
+  const encodedTitle = encodeURIComponent(menuTitle || "Kafe Menüsü");
   const shareLinks = {
     whatsapp: `https://wa.me/?text=${encodedTitle}%20${encodedMenuUrl}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedMenuUrl}`,
@@ -177,7 +177,7 @@ export default function QrPage() {
         <body>
           <h1>${escapedTitle}</h1>
           <p>Menü Linki: ${escapedUrl}</p>
-          <img src="${qrPngDataUrl}" alt="QR Code" />
+          <img src="${qrPngDataUrl}" alt="QR kodu" />
           ${
             escapedSocial
               ? `<h3>Sosyal Medya</h3><ul>${escapedSocial}</ul>`

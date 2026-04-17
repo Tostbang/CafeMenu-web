@@ -21,11 +21,13 @@ const secondaryVariant = {
 interface FileUploadProps {
   onChange?: (files: File[]) => void;
   defaultImageUrl?: string | null;
+  title?: string;
 }
 
 export const FileUploadStruc: React.FC<FileUploadProps> = ({
   onChange,
   defaultImageUrl,
+  title = "Görsel",
 }) => {
   const [uploadedPreviewUrl, setUploadedPreviewUrl] = useState<string | null>(
     null,
@@ -80,19 +82,19 @@ export const FileUploadStruc: React.FC<FileUploadProps> = ({
         onClick={previewUrl ? undefined : handleClick}
         whileHover="animate"
         className={cn(
-          'p-6 group/file block rounded-lg w-full relative overflow-hidden border border-dashed',
+          "group/file relative mx-auto block w-full max-w-sm overflow-hidden rounded-lg border border-dashed p-2.5",
           previewUrl ? 'cursor-default' : 'cursor-pointer',
         )}
       >
-        <div className="mb-3 flex items-center justify-between">
-          <p className="font-bold text-foreground text-xl">Logo</p>
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-sm font-semibold text-foreground">{title}</p>
           {previewUrl && (
             <button
               type="button"
-              className="rounded-md border px-3 py-1 text-sm font-medium"
+              className="rounded-md border px-2 py-0.5 text-[11px] font-medium"
               onClick={handleClick}
             >
-              Düzenle
+              Değiştir
             </button>
           )}
         </div>
@@ -102,16 +104,16 @@ export const FileUploadStruc: React.FC<FileUploadProps> = ({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={previewUrl}
-              alt="Logo önizleme"
-              className="h-48 w-full object-contain"
+              alt="Görsel önizleme"
+              className="h-24 w-full object-contain"
             />
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center">
-            <p className="relative z-20 font-normal text-muted-foreground text-base mt-2">
-              Görseli sürükleyip bırakın veya yüklemek için tıklayın
+            <p className="relative z-20 mt-1 text-center text-xs text-muted-foreground">
+              Görseli sürükleyip bırakın veya yüklemek için tıklayın.
             </p>
-            <div className="relative w-full mt-10 max-w-xl mx-auto">
+            <div className="relative mx-auto mt-2 w-full max-w-xs">
               <EmptyState isDragActive={isDragActive} />
             </div>
           </div>
@@ -139,31 +141,31 @@ const EmptyState: React.FC<EmptyStateProps> = ({ isDragActive }) => (
 
       }}
       className={cn(
-        'relative group-hover/file:shadow-xl z-40 bg-card border flex items-center justify-center h-28 mt-4 w-full max-w-32 mx-auto rounded-md shadow-sm transition-shadow',
+        "relative z-40 mx-auto mt-1.5 flex h-14 w-full max-w-16 items-center justify-center rounded-md border bg-card shadow-sm transition-shadow group-hover/file:shadow-xl",
       )}
     >
       {isDragActive ? (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-muted-foreground flex flex-col items-center"
+          className="flex flex-col items-center text-xs text-muted-foreground"
         >
-          Drop it
-          <Upload size={24} className="h-6 w-6 text-primary shrink-0" />
+          Bırakın
+          <Upload size={16} className="h-4 w-4 shrink-0 text-primary" />
         </motion.p>
       ) : (
-        <Upload size={24} className="h-6 w-6 text-muted-foreground shrink-0" />
+        <Upload size={16} className="h-4 w-4 shrink-0 text-muted-foreground" />
       )}
     </motion.div>
     <motion.div
       variants={secondaryVariant}
-      className="absolute opacity-0 border border-dashed border-primary/50 inset-0 z-30 bg-primary/5 flex items-center justify-center h-28 mt-4 w-full max-w-32 mx-auto rounded-md"
+      className="absolute inset-0 z-30 mx-auto mt-1.5 flex h-14 w-full max-w-16 items-center justify-center rounded-md border border-dashed border-primary/50 bg-primary/5 opacity-0"
     />
   </>
 );
 
 const FileUploadMotion = () => {
-  const handleFileUpload = (_files: File[]) => {};
+  const handleFileUpload = () => {};
 
   return (
     <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-background border-muted rounded-xl flex items-center justify-center p-10">

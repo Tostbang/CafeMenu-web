@@ -14,6 +14,26 @@ import {
 } from "@/components/ui/dialog";
 import { useMutationOP, useQueryOP } from "@/lib/Fetch";
 import type { components } from "@/lib/types/api";
+import { toast } from "sonner";
+import MyCard from "@/components/MyCard";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Delete02Filled, Edit02Filled } from "asem-icons";
+import { MoreHorizontal } from "lucide-react";
+import { Alert } from "@/lib/store/useGlobalStore";
 
 const categoryFormSchema = z.object({
   name: z
@@ -39,6 +59,17 @@ function toErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
 }
 
+function CategoryTableSkeleton() {
+  return (
+    <div className="mt-3 space-y-3">
+      <Skeleton className="h-10 w-full rounded-xl" />
+      {Array.from({ length: 4 }).map((_, index) => (
+        <Skeleton key={index} className="h-12 w-full rounded-xl" />
+      ))}
+    </div>
+  );
+}
+
 export default function CategoryPage() {
   const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
   const menuId = getMyMenuQuery.data?.menu?.menuId;
@@ -57,8 +88,6 @@ export default function CategoryPage() {
   );
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const { control, handleSubmit, reset } = useForm<CategoryFormValues>({
     resolver: zodResolver(categoryFormSchema),
@@ -78,12 +107,9 @@ export default function CategoryPage() {
 
   const onSubmit = async (values: CategoryFormValues) => {
     if (!menuId) {
-      setFormError("Önce menü sayfasından bir menü oluşturmalısınız.");
+      toast.error("Önce menü sayfasından bir menü oluşturmalısınız.");
       return;
     }
-
-    setFeedback(null);
-    setFormError(null);
 
     try {
       if (editingCategory) {
@@ -94,7 +120,7 @@ export default function CategoryPage() {
             order: values.order,
           };
         await updateCategoryMutation.mutateAsync({ body });
-        setFeedback("Kategori güncellendi.");
+        toast.success("Kategori güncellendi.");
       } else {
         const body: components["schemas"]["CafeMenu.Entity.DTO.CreateCategoryRequest"] =
           {
@@ -102,7 +128,7 @@ export default function CategoryPage() {
             order: values.order,
           };
         await createCategoryMutation.mutateAsync({ body });
-        setFeedback("Kategori oluşturuldu.");
+        toast.success("Kategori oluşturuldu.");
       }
 
       await categoriesQuery.refetch();
@@ -116,24 +142,20 @@ export default function CategoryPage() {
       setEditingCategory(null);
       reset(defaultValues);
     } catch (error) {
-      setFormError(
-        toErrorMessage(error, "Kategori kaydedilirken bir hata oluştu."),
-      );
+      if (!(error instanceof Error)) {
+        toast.error(toErrorMessage(error, "Kategori kaydedilirken bir hata oluştu."));
+      }
     }
   };
 
   const onCreateNew = () => {
     setEditingCategory(null);
-    setFeedback(null);
-    setFormError(null);
     reset(defaultValues);
     setIsCreateDialogOpen(true);
   };
 
   const onEdit = (category: CategoryModel) => {
     setEditingCategory(category);
-    setFeedback(null);
-    setFormError(null);
     reset({
       name: category.name ?? "",
       order: category.order,
@@ -142,15 +164,12 @@ export default function CategoryPage() {
   };
 
   const onDelete = async (categoryId: number) => {
-    setFeedback(null);
-    setFormError(null);
-
     try {
       await deleteCategoryMutation.mutateAsync({
         params: { path: { categoryId } },
       });
       await categoriesQuery.refetch();
-      setFeedback("Kategori silindi.");
+      toast.success("Kategori silindi.");
 
       if (editingCategory?.categoryId === categoryId) {
         setIsEditDialogOpen(false);
@@ -158,10 +177,23 @@ export default function CategoryPage() {
         reset(defaultValues);
       }
     } catch (error) {
-      setFormError(
-        toErrorMessage(error, "Kategori silinirken bir hata oluştu."),
-      );
+      if (!(error instanceof Error)) {
+        toast.error(toErrorMessage(error, "Kategori silinirken bir hata oluştu."));
+      }
     }
+  };
+
+  const onDeleteConfirm = (categoryId: number) => {
+    Alert({
+      AlertTitle: "Kategoriyi Sil",
+      AlertDescription:
+        "Bu kategoriyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      CancelLabel: "Vazgeç",
+      ConfirmLabel: "Sil",
+      onConfirm: () => {
+        void onDelete(categoryId);
+      },
+    });
   };
 
   return (
@@ -188,73 +220,59 @@ export default function CategoryPage() {
           </p>
         )}
 
-        {feedback && (
-          <p className="mb-4 rounded-xl border px-4 py-2 text-sm">{feedback}</p>
-        )}
-
-        {formError && (
-          <p className="mb-4 rounded-xl border px-4 py-2 text-sm">
-            {formError}
-          </p>
-        )}
-
-        <div className="mt-2">
-          <h2 className="text-lg font-semibold">Kategoriler</h2>
-          {categoriesQuery.isPending && (
-            <p className="mt-2 text-sm">Kategoriler yükleniyor...</p>
-          )}
+        <MyCard title="Kategoriler" className="mt-2">
+          {categoriesQuery.isPending && <CategoryTableSkeleton />}
           {!categoriesQuery.isPending && categories.length === 0 && (
             <p className="mt-2 text-sm">Henüz kategori yok.</p>
           )}
 
           {categories.length > 0 && (
-            <div className="mt-3 overflow-x-auto rounded-xl border">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="px-3 py-2">ID</th>
-                    <th className="px-3 py-2">Ad</th>
-                    <th className="px-3 py-2">Sıra</th>
-                    <th className="px-3 py-2">İşlemler</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <div className="mt-3 rounded-xl border bg-white/60">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Ad</TableHead>
+                    <TableHead>Sıra</TableHead>
+                    <TableHead>İşlemler</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {categories.map((category) => (
-                    <tr
-                      key={category.categoryId}
-                      className="border-b last:border-0"
-                    >
-                      <td className="px-3 py-2">{category.categoryId}</td>
-                      <td className="px-3 py-2">{category.name || "-"}</td>
-                      <td className="px-3 py-2">{category.order}</td>
-                      <td className="px-3 py-2">
-                        <div className="flex gap-2">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onEdit(category)}
-                          >
-                            Düzenle
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onDelete(category.categoryId)}
-                            disabled={deleteCategoryMutation.isPending}
-                          >
-                            Sil
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
+                    <TableRow key={category.categoryId}>
+                      <TableCell>{category.categoryId}</TableCell>
+                      <TableCell>{category.name || "-"}</TableCell>
+                      <TableCell>{category.order}</TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button type="button" variant="outline" size="icon-sm">
+                              <MoreHorizontal className="size-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuItem onClick={() => onEdit(category)}>
+                              <Edit02Filled className="size-4" />
+                              Düzenle
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              variant="destructive"
+                              onClick={() => onDeleteConfirm(category.categoryId)}
+                              disabled={deleteCategoryMutation.isPending}
+                            >
+                              <Delete02Filled className="size-4" />
+                              Sil
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           )}
-        </div>
+        </MyCard>
 
         <Dialog
           open={isCreateDialogOpen}

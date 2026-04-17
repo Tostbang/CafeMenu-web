@@ -23,6 +23,12 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.97.0
         version: 5.97.0(react@19.2.4)
+      '@tanstack/react-table':
+        specifier: ^8.21.3
+        version: 8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      add:
+        specifier: ^2.0.6
+        version: 2.0.6
       asem-icons:
         specifier: ^2.3.0
         version: 2.3.0(react@19.2.4)
@@ -35,6 +41,9 @@ importers:
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
+      drawer:
+        specifier: ^0.0.2
+        version: 0.0.2
       fast-average-color:
         specifier: ^9.5.2
         version: 9.5.2
@@ -90,8 +99,8 @@ importers:
         specifier: 3.8.0
         version: 3.8.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react-is@16.13.1)(react@19.2.4)(redux@5.0.1)
       shadcn:
-        specifier: ^4.1.2
-        version: 4.1.2(@types/node@20.19.39)(typescript@5.9.3)
+        specifier: ^4.2.0
+        version: 4.2.0(@types/node@20.19.39)(typescript@5.9.3)
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -104,6 +113,9 @@ importers:
       tw-animate-css:
         specifier: ^1.4.0
         version: 1.4.0
+      vaul:
+        specifier: ^1.1.2
+        version: 1.1.2(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -1710,6 +1722,17 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
+  '@tanstack/react-table@8.21.3':
+    resolution: {integrity: sha512-5nNMTSETP4ykGegmVkhjcS8tTLW6Vl4axfEGQN3v0zdHYbK4UfoqfPChclTrJ4EoK9QynqAu9oUf8VEmrpZ5Ww==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+
+  '@tanstack/table-core@8.21.3':
+    resolution: {integrity: sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==}
+    engines: {node: '>=12'}
+
   '@ts-morph/common@0.27.0':
     resolution: {integrity: sha512-Wf29UqxWDpc+i61k3oIOzcUfQt79PIT9y/MWfAGlrkjg6lBC1hwDECLXPVJAhWjiGbfBCxZd65F/LIZF3+jeJQ==}
 
@@ -1945,6 +1968,9 @@ packages:
     resolution: {integrity: sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  add@2.0.6:
+    resolution: {integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==}
 
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
@@ -2361,6 +2387,9 @@ packages:
     resolution: {integrity: sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg==}
     engines: {node: '>= 0.4'}
 
+  delegate-component@0.1.0:
+    resolution: {integrity: sha512-Vxx0gRLNhVxaP9JI8jELKe7D520A10KsJNtUSlFShF8oZDnBeuepk/KqsKjIbkUKpbkNXqWjk/gxykWhl4wlwQ==}
+
   depd@2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
     engines: {node: '>= 0.8'}
@@ -2386,6 +2415,9 @@ packages:
   dotenv@17.4.1:
     resolution: {integrity: sha512-k8DaKGP6r1G30Lx8V4+pCsLzKr8vLmV2paqEj1Y55GdAgJuIqpRp5FfajGF8KtwMxCz9qJc6wUIJnm053d/WCw==}
     engines: {node: '>=12'}
+
+  drawer@0.0.2:
+    resolution: {integrity: sha512-nWvDRJ25dDmPjxa5PUsQCdcWPl0wmnNXNtdRzy1I7opMzAsu6TcmXao8Xc/xNJyGFHa0/jA1957r/3mUyH+Mpg==}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -2605,8 +2637,14 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
+  event-component@0.1.0:
+    resolution: {integrity: sha512-nDko83zL1Sfl4gbYJAsFnyla0Ok+llczIyZ9X+lkCIm5yW/hggS9gbYPxhZW1JD8K5VKaFmgeIZvnGE/DQnh2w==}
+
   eventemitter3@5.0.4:
     resolution: {integrity: sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw==}
+
+  events-component-2@1.0.4:
+    resolution: {integrity: sha512-GU8YJWH0UB1ABohG6mZRmbgQ2hc+3vNTuRx9WcicWM5/ZNBjbPHlUprNn5LDQoK0DI+qTSC6JpYRDLzhfKR+pQ==}
 
   eventsource-parser@3.0.6:
     resolution: {integrity: sha512-Vo1ab+QXPzZ4tCa8SwIHJFaSzy4R6SHf7BY79rFBDf0idraZWAkYrDjDj8uWaSm3S2TK+hJ7/t1CEmZ7jXw+pg==}
@@ -2861,6 +2899,9 @@ packages:
   has-tostringtag@1.0.2:
     resolution: {integrity: sha512-NqADB8VjPFLM2V0VvHUewwwsw0ZWBaIdgo+ieHtK3hasLz4qeCRjYcqfB6AQrBggRKppKF8L52/VqdVsO47Dlw==}
     engines: {node: '>= 0.4'}
+
+  has-translate3d@0.0.3:
+    resolution: {integrity: sha512-8tA0Rt/VtJaiDxri1oZEIbkmFqJu9GK5pLcL+f6B91MkBgkrRD3IaDSHMu8IOAEn60OUDC2oICcw3Mo1QQk8hw==}
 
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
@@ -3316,6 +3357,9 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
+  matches-selector-2@0.1.0:
+    resolution: {integrity: sha512-wA2i+Hog2ONhyfaPNhV/VDi7iGNdHL1Q9VZiCcHpJyDELm43Qq97y+5OGBWOh5USXDsCcNNJfyP98ye1MImanQ==}
+
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
@@ -3708,6 +3752,9 @@ packages:
     resolution: {integrity: sha512-mAZTtNCeetKMH+pSjrb76NAM8V9a05I9aBZOHztWy/UqcJdQYNsf59vrRKWnojAT9Y+GbIvoTBC++CPHqpDBhQ==}
     engines: {node: '>=0.6'}
 
+  query-component@0.0.1:
+    resolution: {integrity: sha512-FbBzbrw6ki0iaaW6VcLCZIfNwFW8q6QjuA37hyH52ykY/oj+JcXYxJs4JBSwvRaP34hrGTmCQ6t7k+/D1pqGew==}
+
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -3933,8 +3980,8 @@ packages:
   setprototypeof@1.2.0:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
 
-  shadcn@4.1.2:
-    resolution: {integrity: sha512-qNQcCavkbYsgBj+X09tF2bTcwRd8abR880bsFkDU2kMqceMCLAm5c+cLg7kWDhfh1H9g08knpQ5ZEf6y/co16g==}
+  shadcn@4.2.0:
+    resolution: {integrity: sha512-ZDuV340itidaUd4Gi1BxQX+Y7Ush6BHp6URZBM2RyxUUBZ6yFtOWIr4nVY+Ro+YRSpo82v7JrsmtcU5xoBCMJQ==}
     hasBin: true
 
   sharp@0.34.5:
@@ -4134,6 +4181,12 @@ packages:
     resolution: {integrity: sha512-LktZQb3IeoUWB9lqR5EWTHgW/VTITCXg4D21M+lvybRVdylLrRMnqaIONLVb5mav8vM19m44HIcGq4qASeu2Qw==}
     engines: {node: '>=16'}
 
+  transform-property@0.0.1:
+    resolution: {integrity: sha512-L0nMJCwu3/Lpd5t/pRQl+JoYU5V0sYubcn30yWZnHG0HjC6Gdr/Eg/bun1OixYPmsEZdA7Khbq2jiSIjzlEv6Q==}
+
+  translate-component@0.0.1:
+    resolution: {integrity: sha512-KDp9rw+md6mFSCqUrvRfI85QdFEkoWhBZhlJR17OKVDi6Mb4pB9JmJsBEpufsF08ips219LutQihqFaejR/sxw==}
+
   ts-api-utils@2.5.0:
     resolution: {integrity: sha512-OJ/ibxhPlqrMM0UiNHJ/0CKQkoKF243/AEmplt3qpRgkW8VG7IfOS41h7V8TjITqdByHzrjcS/2si+y4lIh8NA==}
     engines: {node: '>=18.12'}
@@ -4277,6 +4330,12 @@ packages:
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+
+  vaul@1.1.2:
+    resolution: {integrity: sha512-ZFkClGpWyI2WUQjdLJ/BaGuV6AVQiJ3uELGk3OYtP+B6yCO7Cmn9vPFXVJkRaGkOJu3m8bQMgtyzNHixULceQA==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
 
   victory-vendor@37.3.6:
     resolution: {integrity: sha512-SbPDPdDBYp+5MJHhBCAyI7wKM3d5ivekigc2Dk2s7pgbZ9wIgIBYGVw4zGHBml/qTFbexrofXW6Gu4noGxrOwQ==}
@@ -5958,6 +6017,14 @@ snapshots:
       '@tanstack/query-core': 5.97.0
       react: 19.2.4
 
+  '@tanstack/react-table@8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@tanstack/table-core': 8.21.3
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+
+  '@tanstack/table-core@8.21.3': {}
+
   '@ts-morph/common@0.27.0':
     dependencies:
       fast-glob: 3.3.3
@@ -6183,6 +6250,8 @@ snapshots:
       acorn: 8.16.0
 
   acorn@8.16.0: {}
+
+  add@2.0.6: {}
 
   agent-base@7.1.4: {}
 
@@ -6579,6 +6648,11 @@ snapshots:
       has-property-descriptors: 1.0.2
       object-keys: 1.1.1
 
+  delegate-component@0.1.0:
+    dependencies:
+      event-component: 0.1.0
+      matches-selector-2: 0.1.0
+
   depd@2.0.0: {}
 
   detect-libc@2.1.2: {}
@@ -6594,6 +6668,11 @@ snapshots:
       esutils: 2.0.3
 
   dotenv@17.4.1: {}
+
+  drawer@0.0.2:
+    dependencies:
+      events-component-2: 1.0.4
+      translate-component: 0.0.1
 
   dunder-proto@1.0.1:
     dependencies:
@@ -6979,7 +7058,14 @@ snapshots:
 
   etag@1.8.1: {}
 
+  event-component@0.1.0: {}
+
   eventemitter3@5.0.4: {}
+
+  events-component-2@1.0.4:
+    dependencies:
+      delegate-component: 0.1.0
+      event-component: 0.1.0
 
   eventsource-parser@3.0.6: {}
 
@@ -7267,6 +7353,10 @@ snapshots:
   has-tostringtag@1.0.2:
     dependencies:
       has-symbols: 1.1.0
+
+  has-translate3d@0.0.3:
+    dependencies:
+      transform-property: 0.0.1
 
   hasown@2.0.2:
     dependencies:
@@ -7651,6 +7741,10 @@ snapshots:
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  matches-selector-2@0.1.0:
+    dependencies:
+      query-component: 0.0.1
 
   math-intrinsics@1.1.0: {}
 
@@ -8043,6 +8137,8 @@ snapshots:
     dependencies:
       side-channel: 1.1.0
 
+  query-component@0.0.1: {}
+
   queue-microtask@1.2.3: {}
 
   radix-ui@1.4.3(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
@@ -8359,7 +8455,7 @@ snapshots:
 
   setprototypeof@1.2.0: {}
 
-  shadcn@4.1.2(@types/node@20.19.39)(typescript@5.9.3):
+  shadcn@4.2.0(@types/node@20.19.39)(typescript@5.9.3):
     dependencies:
       '@babel/core': 7.29.0
       '@babel/parser': 7.29.2
@@ -8628,6 +8724,13 @@ snapshots:
     dependencies:
       tldts: 7.0.28
 
+  transform-property@0.0.1: {}
+
+  translate-component@0.0.1:
+    dependencies:
+      has-translate3d: 0.0.3
+      transform-property: 0.0.1
+
   ts-api-utils@2.5.0(typescript@5.9.3):
     dependencies:
       typescript: 5.9.3
@@ -8800,6 +8903,15 @@ snapshots:
   validate-npm-package-name@7.0.2: {}
 
   vary@1.1.2: {}
+
+  vaul@1.1.2(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+    dependencies:
+      '@radix-ui/react-dialog': 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
 
   victory-vendor@37.3.6:
     dependencies:

@@ -55,6 +55,7 @@
   --font-carter: var(--font-carter-one);
   --font-degular: var(--font-degular);
   --font-figtree: var(--font-figtree);
+  --font-space: var(--font-space);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -186,12 +187,33 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
   html {
     @apply font-sans;
   }
 }
+@layer utilities {
+  .squircle {
+    corner-shape: squircle;
+  }
+ .bg-grid {
+    --grid-size: 32px;
+
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M0 .5H31.5V32' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    mask-size: var(--grid-size) var(--grid-size);
+    mask-repeat: repeat;
+
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M0 .5H31.5V32' stroke='black' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    -webkit-mask-size: var(--grid-size) var(--grid-size);
+    -webkit-mask-repeat: repeat;
+  }
+  .bg-my-gradient {
+   /* @apply bg-linear-to-r from-[#f0ece8] from-50% via-75% to-90% via-[#efead5] to-[#f2e7c6] */
+        @apply bg-linear-to-b from-[#eafc91] from-5% via-40% via-[#ceebc8] to-80% to-[#bbdde1]
+  }
+}
+
 
 .custom-scroll {
   overflow: auto;

@@ -1,26 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
-import { Figtree, Geist, Montserrat } from "next/font/google";
+import { Figtree, Space_Grotesk } from "next/font/google";
 import Providers from "@/components/Providers";
+import { Toaster } from "@/components/ui/sonner";
 
-const montserratHeading = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-heading",
-});
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-//
-//
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
 
 const carter = localFont({
   src: "./VeniceBlvd-Black.woff2",
@@ -30,6 +16,11 @@ const carter = localFont({
 const figtree = Figtree({
   variable: "--font-figtree",
   weight: ["400", "700", "500", "600"],
+});
+
+const SpaceGrotesk = Space_Grotesk({
+  variable: "--font-space",
+  weight: ["300","400", "500", "600", "700"],
 });
 
 const degular = localFont({
@@ -65,12 +56,15 @@ export default function RootLayout({
   return (
     <html
       lang="tr"
-      className={`${geist.variable} ${montserratHeading.variable} h-full antialiased font-sans`}
+      className={`h-full antialiased font-sans`}
     >
       <body
-        className={`min-h-full flex flex-col bright ${figtree.variable} ${degular.className} ${figtree} ${carter.variable}`}
+        className={`min-h-full flex flex-col bright ${figtree.variable} ${degular.className} ${carter.variable} ${SpaceGrotesk.variable}`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

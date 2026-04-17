@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { components } from "@/lib/types/api";
 import { useRegister } from "../_services/mutations";
+import { toast } from "sonner";
 
 type RegisterFormState = {
   firstName: string;
@@ -33,34 +34,32 @@ export function RegisterForm() {
   const router = useRouter();
   const registerMutation = useRegister();
   const [values, setValues] = useState<RegisterFormState>(initialState);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormError(null);
 
     if (values.firstName.trim().length < 2 || values.lastName.trim().length < 2) {
-      setFormError("Ad ve soyad en az 2 karakter olmalıdır.");
+      toast.error("Ad ve soyad en az 2 karakter olmalıdır.");
       return;
     }
 
     if (values.cafeName.trim().length < 2) {
-      setFormError("Kafe adı en az 2 karakter olmalıdır.");
+      toast.error("Kafe adı en az 2 karakter olmalıdır.");
       return;
     }
 
     if (!emailPattern.test(values.email)) {
-      setFormError("Lütfen geçerli bir e-posta adresi girin.");
+      toast.error("Lütfen geçerli bir e-posta adresi girin.");
       return;
     }
 
     if (values.password.length < 6) {
-      setFormError("Şifre en az 6 karakter olmalıdır.");
+      toast.error("Şifre en az 6 karakter olmalıdır.");
       return;
     }
 
     if (values.password !== values.confirmPassword) {
-      setFormError("Şifreler eşleşmiyor.");
+      toast.error("Şifreler eşleşmiyor.");
       return;
     }
 
@@ -76,11 +75,9 @@ export function RegisterForm() {
       await registerMutation.mutateAsync({ body });
       router.push(`/login?registered=1&email=${encodeURIComponent(values.email.trim())}`);
     } catch (error) {
-      setFormError(
-        error instanceof Error
-          ? error.message
-          : "Kayıt yapılırken bir hata oluştu.",
-      );
+      if (!(error instanceof Error)) {
+        toast.error("Kayıt yapılırken bir hata oluştu.");
+      }
     }
   };
 
@@ -226,12 +223,6 @@ export function RegisterForm() {
             required
           />
         </div>
-
-        {formError && (
-          <p className="rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {formError}
-          </p>
-        )}
 
         <Button
           type="submit"

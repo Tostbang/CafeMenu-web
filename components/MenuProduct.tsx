@@ -39,11 +39,11 @@ export function MenuProduct({
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[25px] border border-[var(--menu-border)] bg-[var(--menu-card)] p-2.25 text-[var(--menu-text)]",
+        "overflow-hidden rounded-[25px]  border-2 border-charcoal ${bgFor[d.category]} shadow-[0_4px_0_0_#313131] bg-[var(--menu-card)] text-[var(--menu-text)]",
       )}
     >
       <div className="relative">
-        <div className="h-44 overflow-hidden rounded-b-lg rounded-t-[20px]">
+        <div className="h-44 overflow-hidden  rounded-t-[20px]">
           {product.imageUrl && product.imageUrl.includes("https") && (
             <Image
               src={product.imageUrl}
@@ -54,9 +54,9 @@ export function MenuProduct({
             />
           )}
           {!product.imageUrl && (
-              <div className="flex h-full w-full items-center justify-center rounded-2xl bg-[var(--menu-surface)] text-sm font-medium text-[var(--menu-muted-text)]">
-               Görsel yok
-              </div>
+            <div className="flex h-full w-full items-center justify-center rounded-2xl bg-[var(--menu-surface)] text-sm font-medium text-[var(--menu-muted-text)]">
+              Görsel yok
+            </div>
           )}
         </div>
         {product.isPopular && (
@@ -76,46 +76,52 @@ export function MenuProduct({
         )}
       </div>
 
-      <div className="mt-1 mb-2 flex flex-col px-1.5">
-        <div className="flex-1 font-space">
-          <h3 className="h-6 text-xl font-[500]">{productName}</h3>
-          <p className="text-sm text-[var(--menu-muted-text)]">
-            {productDescription}
-          </p>
+      <div className="p-3">
+        <div className="flex flex-col ">
+          <div className="flex-1 font-space pt-1 pb-2">
+            <h3 className="h-6 text-xl font-[500]">{productName}</h3>
+            <p className="text-sm text-[var(--menu-muted-text)]">
+              {productDescription}
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="mt-1 flex w-full items-center gap-x-1">
-        <span
-          className={cn(
-            "flex h-9 items-center gap-x-1 rounded-full px-4 py-.75",
-            "bg-[var(--menu-secondary)] text-[var(--menu-on-secondary)]",
-          )}
-        >
-          <Tag01Filled className="size-3.5" />
-          <span className="max-w-22 overflow-hidden text-ellipsis text-nowrap text-sm font-semibold">
-            {priceFormatter.format(product.price)}
+        <div className="mt-1 flex w-full items-center gap-x-1">
+          <span
+            className={cn(
+              "flex h-9 items-center gap-x-1 rounded-full border-2 border-charcoal px-4 py-.75",
+              "bg-[var(--menu-secondary)] text-[var(--menu-on-secondary)]",
+            )}
+          >
+            <Tag01Filled className="size-3.5" />
+            <span className="max-w-22 overflow-hidden text-ellipsis text-nowrap text-sm font-semibold">
+              {priceFormatter.format(product.price)}
+            </span>
           </span>
-        </span>
-        <MyButton
-          className={cn(
-            "h-9 flex-1 justify-center rounded-full text-sm font-semibold shadow-none",
-            "bg-[var(--menu-primary)] text-[var(--menu-on-primary)] [&_svg]:text-[var(--menu-on-primary)]",
-          )}
-          onClick={() => {
-            if (interactive) {
-              openDrawer(product);
-            }
-          }}
-          disabled={!interactive}
-        >
-          {hasIngredients ? "İçindekiler" : "Detaylar"}
-        </MyButton>
+          <MyButton
+            className={cn(
+              "h-9 flex-1 justify-center border-2 border-charcoal rounded-full text-sm font-semibold shadow-none",
+              "bg-[var(--menu-primary)] text-[var(--menu-on-primary)] [&_svg]:text-[var(--menu-on-primary)]",
+            )}
+            onClick={() => {
+              if (interactive) {
+                openDrawer(product);
+              }
+            }}
+            disabled={!interactive}
+          >
+            {hasIngredients ? "İçindekiler" : "Detaylar"}
+          </MyButton>
+        </div>
       </div>
     </article>
   );
 }
 
-export function MenuProductDrawer({ theme = defaultMenuTheme }: { theme?: MenuTheme }) {
+export function MenuProductDrawer({
+  theme = defaultMenuTheme,
+}: {
+  theme?: MenuTheme;
+}) {
   const { isOpen, product, setOpen } = useMenuProductDrawerStore();
 
   if (!product) {
@@ -130,7 +136,7 @@ export function MenuProductDrawer({ theme = defaultMenuTheme }: { theme?: MenuTh
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
       <DrawerContent className="p-0" style={toMenuThemeVars(theme)}>
-        <div className="mx-auto w-full max-w-xl overflow-y-auto rounded-t-[2rem] bg-[var(--menu-surface)] text-[var(--menu-text)]">
+        <div className="mx-auto w-full max-w-xl overflow-y-auto rounded-t-[2rem] text-[var(--menu-text)]">
           <div className="space-y-4 px-5 pb-4">
             <div className="h-52 overflow-hidden rounded-[1.25rem] bg-[var(--menu-card)]">
               {product.imageUrl && product.imageUrl.includes("https") ? (
@@ -170,7 +176,9 @@ export function MenuProductDrawer({ theme = defaultMenuTheme }: { theme?: MenuTh
             </div>
 
             <section className="text-[var(--menu-text)]">
-              <h4 className="text-xl font-semibold tracking-wide">İçindekiler:</h4>
+              <h4 className="text-xl font-semibold tracking-wide">
+                İçindekiler:
+              </h4>
               <p className="mt-1 text-sm font-semibold">
                 {hasIngredients
                   ? product.ingredients
@@ -179,7 +187,9 @@ export function MenuProductDrawer({ theme = defaultMenuTheme }: { theme?: MenuTh
             </section>
 
             <section>
-              <h4 className="text-xl font-semibold tracking-wide">Alerjenler:</h4>
+              <h4 className="text-xl font-semibold tracking-wide">
+                Alerjenler:
+              </h4>
               <p className="mt-1 text-sm font-semibold">
                 {hasAllergens ? product.allergens : "Alerjen bilgisi yok"}
               </p>
@@ -211,7 +221,7 @@ export function MyTag({
   return (
     <span
       className={cn(
-        "flex h-6.5 items-center gap-x-1 rounded-full px-2.5 py-.75",
+        "flex h-6.5 items-center gap-x-1  rounded-full px-2.5 py-.75",
         color,
       )}
     >

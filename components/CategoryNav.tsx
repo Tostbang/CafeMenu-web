@@ -14,8 +14,8 @@ export function CategoryNav({
   const menuTitle = menu.title || "Menü";
 
   return (
-    <div className={`sticky z-20 mt-4 ${isPreview ? "top-2" : "top-0"}`}>
-      <div className="rounded-b-[2rem] border border-[var(--menu-border)] bg-[var(--menu-surface)] p-3 text-[var(--menu-text)] shadow-[0_14px_36px_rgba(15,23,42,0.1)] backdrop-blur-md">
+    <div className={`fixed z-20 w-screen top-0 left-0 h-28 overflow-hidden `}>
+      <div className=" border border-[var(--menu-border)] bg-[var(--menu-surface)]/80 p-3 text-[var(--menu-text)] shadow-[0_14px_36px_rgba(15,23,42,0.1)] backdrop-blur-md">
         <div className="flex items-center gap-3">
           {menu.logoUrl && (
             <Image

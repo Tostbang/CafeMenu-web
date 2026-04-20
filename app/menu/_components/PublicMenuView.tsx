@@ -37,7 +37,9 @@ export default function PublicMenuView({
   if (!menu) {
     return;
   }
-  const categories = [...(menu.categories ?? [])].sort((a, b) => a.order - b.order);
+  const categories = [...(menu.categories ?? [])].sort(
+    (a, b) => a.order - b.order,
+  );
   const totalProducts = categories.reduce(
     (count, category) => count + (category.products?.length ?? 0),
     0,
@@ -75,12 +77,22 @@ export default function PublicMenuView({
     <main
       style={toMenuThemeVars(theme)}
       className={cn(
-        "relative bg-linear-to-b from-[var(--menu-bg-start)] via-[var(--menu-bg-middle)] to-[var(--menu-bg-end)] pb-8 font-space",
+        "relative bg-linear-to-b mt-28 from-[var(--menu-bg-start)] via-[var(--menu-bg-middle)] to-[var(--menu-bg-end)] pb-8 font-space",
         isPreview ? "min-h-full bg-scroll pt-2" : "min-h-dvh bg-fixed pt-3",
       )}
     >
-      <div className={cn("mx-auto max-w-360 px-5 md:px-6", isPreview && "px-3 py-1")}>
-        <section className="relative overflow-hidden rounded-[2rem] border border-[var(--menu-border)] bg-[var(--menu-surface)] p-4 text-[var(--menu-text)] shadow-[0_14px_36px_rgba(15,23,42,0.1)] sm:p-6">
+      <div
+        className={cn(
+          "mx-auto max-w-360 px-5 md:px-6 ",
+          isPreview && "px-3 py-1",
+        )}
+      >
+        <CategoryNav
+          menu={menu}
+          categories={categories}
+          isPreview={isPreview}
+        />
+        <section className="relative overflow-hidden  rounded-[2rem] border border-[var(--menu-border)] bg-[var(--menu-surface)] p-4 text-[var(--menu-text)] border-2 border-charcoal p-7 shadow-[0_6px_0_0_#313131] sm:p-6">
           {menu.backgroundImageUrl && (
             <Image
               src={menu.backgroundImageUrl}
@@ -99,7 +111,7 @@ export default function PublicMenuView({
                   alt={`${menuTitle} logosu`}
                   width={200}
                   height={200}
-                  className="size-24 rounded-[1.25rem] border border-[var(--menu-border)] object-cover shadow-[0_10px_24px_rgba(0,0,0,0.12)] sm:size-28"
+                  className="size-24 border-3 border-charcoal rounded-[1.25rem]  object-cover shadow-[0_10px_24px_rgba(0,0,0,0.12)] sm:size-28"
                   loading="eager"
                 />
               ) : (
@@ -143,7 +155,6 @@ export default function PublicMenuView({
             </div>
           </div>
         </section>
-        <CategoryNav menu={menu} categories={categories} isPreview={isPreview} />
 
         <div className="mt-4 space-y-4 md:mt-6">
           {categories.map((category) => (

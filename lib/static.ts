@@ -30,7 +30,7 @@ export const userLinks = [
   },
   {
     title: "Tasarım",
-    url: "/dash/tasarim",
+    url: "/dash/design",
     icon: Palette,
     subLinks: null,
   },

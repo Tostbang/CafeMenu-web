@@ -5,7 +5,7 @@ import { Check, Palette } from "lucide-react";
 import { defaultMenuTheme, menuThemes } from "@/lib/menu-theme";
 import { cn } from "@/lib/utils";
 
-export default function TasarimPage() {
+export default function DesignPage() {
   const [themeId, setThemeId] = useState(defaultMenuTheme.id);
 
   const selectedTheme =

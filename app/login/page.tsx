@@ -1,7 +1,7 @@
+import { Suspense } from "react";
 import { LoginForm } from "./_components/LoginForm";
 
 export default function LoginPage() {
-
   return (
     <main className="min-h-dvh bg-[#f2efed] px-4 py-6 md:px-6 md:py-10">
       <div className="mx-auto grid w-full max-w-6xl gap-4 rounded-[2rem] bg-[#f4f0e8] p-3 shadow-[0_20px_60px_rgba(15,23,42,0.12)] md:grid-cols-[1.1fr_0.9fr] md:p-4">
@@ -37,7 +37,9 @@ export default function LoginPage() {
         </section>
 
         <section className="rounded-[1.75rem] bg-white p-4 md:p-6">
-          <LoginForm />
+          <Suspense>
+            <LoginForm />
+          </Suspense>
         </section>
       </div>
     </main>

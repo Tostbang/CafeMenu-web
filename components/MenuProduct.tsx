@@ -39,11 +39,11 @@ export function MenuProduct({
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[25px]  border-2 border-charcoal ${bgFor[d.category]} shadow-[0_4px_0_0_#313131] bg-[var(--menu-card)] text-[var(--menu-text)]",
+        "overflow-hidden rounded-[25px] flex flex-col  border-2 border-charcoal ${bgFor[d.category]} shadow-[0_4px_0_0_#313131] bg-[var(--menu-card)] text-[var(--menu-text)]",
       )}
     >
-      <div className="relative">
-        <div className="h-44 overflow-hidden  rounded-t-[20px]">
+      <div className="relative h-44 ">
+        <div className="overflow-hidden h-full rounded-t-[20px]">
           {product.imageUrl && product.imageUrl.includes("https") && (
             <Image
               src={product.imageUrl}
@@ -76,11 +76,11 @@ export function MenuProduct({
         )}
       </div>
 
-      <div className="p-3">
-        <div className="flex flex-col ">
+      <div className="p-3 flex-1 flex flex-col">
+        <div className="flex flex-col flex-1">
           <div className="flex-1 font-space pt-1 pb-2">
             <h3 className="h-6 text-xl font-[500]">{productName}</h3>
-            <p className="text-sm text-[var(--menu-muted-text)]">
+            <p className="text-sm text-[var(--menu-muted-text)] line-clamp-2">
               {productDescription}
             </p>
           </div>

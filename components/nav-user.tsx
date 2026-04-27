@@ -1,7 +1,7 @@
 
 "use client"
 
-// import { useSignOut } from "@/app/dash/_services/mutations"
+import { LogOut } from "@/app/dash/_services/mutations"
 import {
   Avatar,
   AvatarFallback,
@@ -35,14 +35,10 @@ export function NavUser() {
   // const isManager = profile?.roleId === "Manager"
   // const isSupplier = profile?.roleId === "Supplier"
   // const isDepartmentUser = profile?.roleId === "DepartmentUser"
-  // const { mutate } = useSignOut()
 
   const profileUrl = isAdmin ? "/admin/profile" : "/dash/profile"
-  const deviceUrl = isAdmin ? "/admin/devices" : "/dash/devices"
   const { setOpenMobile } = useSidebar()
   // const router = useTransitionRouter()
-
-
 
   return (
     <>
@@ -128,7 +124,7 @@ export function NavUser() {
           )} */}
 
           {/* Devices - All roles */}
-          <DropdownMenuItem onClick={
+          {/* <DropdownMenuItem onClick={
             () => {
               setOpenMobile(false)
               router.push(deviceUrl)
@@ -136,10 +132,13 @@ export function NavUser() {
           }>
             <Laptop />
             Cihazlar
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
 
           <DropdownMenuSeparator />
-          
+          <DropdownMenuItem onClick={() => LogOut()}>
+            <Logout04 />
+            Çıkış Yap
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {/* <p className="text-[#848b9b] text-xs text-center mt-2">@2025 Seuqnce Inc.</p> */}
@@ -147,13 +146,3 @@ export function NavUser() {
 
   )
 }
-
-// <DropdownMenuItem onClick={
-// 		  () => mutate({
-//             body: {
-//               sessionId: profile?.currentSessionId ?? 0
-//             }
-//           })}>
-//             <Logout04 />
-//             Çıkış Yap
-//           </DropdownMenuItem>

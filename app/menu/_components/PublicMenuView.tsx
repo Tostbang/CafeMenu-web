@@ -8,6 +8,7 @@ import {
   MenuProductDrawer,
   MyTag,
 } from "@/components/MenuProduct";
+import { Skeleton } from "@/components/ui/skeleton";
 import { defaultMenuTheme, MenuTheme, toMenuThemeVars } from "@/lib/menu-theme";
 import { IconType } from "@/lib/types";
 import { components } from "@/lib/types/api";
@@ -35,7 +36,7 @@ export default function PublicMenuView({
   isPreview?: boolean;
 }) {
   if (!menu) {
-    return;
+    return <PublicMenuViewSkeleton theme={theme} isPreview={isPreview} />;
   }
   const categories = [...(menu.categories ?? [])].sort(
     (a, b) => a.order - b.order,
@@ -186,6 +187,97 @@ export default function PublicMenuView({
         </div>
       </div>
       {!isPreview && <MenuProductDrawer theme={theme} />}
+    </main>
+  );
+}
+
+export function PublicMenuViewSkeleton({
+  theme = defaultMenuTheme,
+  isPreview = false,
+}: {
+  theme?: MenuTheme;
+  isPreview?: boolean;
+}) {
+  return (
+    <main
+      style={toMenuThemeVars(theme)}
+      className={cn(
+        "relative bg-linear-to-b mt-28 from-[var(--menu-bg-start)] via-[var(--menu-bg-middle)] to-[var(--menu-bg-end)] pb-8 font-space",
+        isPreview ? "min-h-full bg-scroll pt-2" : "min-h-dvh bg-fixed pt-3",
+      )}
+    >
+      <div
+        className={cn(
+          "mx-auto max-w-360 px-5 md:px-6",
+          isPreview && "px-3 py-1",
+        )}
+      >
+        <div className="mb-4 flex flex-wrap gap-2 rounded-2xl border border-[var(--menu-border)] bg-[var(--menu-surface)] p-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              className="h-8 w-20 rounded-full !bg-white"
+            />
+          ))}
+        </div>
+
+        <section className="relative overflow-hidden rounded-[2rem] border border-2 border-charcoal bg-[var(--menu-surface)] p-7 text-[var(--menu-text)] shadow-[0_6px_0_0_#313131] sm:p-6">
+          <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex gap-4 sm:flex-row sm:items-center">
+              <Skeleton className="size-24 rounded-[1.25rem] border-3 border-charcoal !bg-white sm:size-28" />
+
+              <div className="space-y-3">
+                <Skeleton className="h-10 w-52 !bg-white" />
+                <Skeleton className="h-5 w-72 !bg-white" />
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Skeleton className="h-7 w-24 rounded-full !bg-white" />
+                  <Skeleton className="h-7 w-20 rounded-full !bg-white" />
+                </div>
+              </div>
+            </div>
+
+            <Skeleton className="h-4 w-56 !bg-white" />
+
+            <div className="flex flex-wrap gap-2">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="h-9 w-28 rounded-full !bg-white"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="mt-4 space-y-4 md:mt-6">
+          {Array.from({ length: 3 }).map((_, categoryIndex) => (
+            <section
+              key={categoryIndex}
+              className="scroll-mt-36 rounded-[1.75rem] bg-transparent"
+            >
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <Skeleton className="h-8 w-44 !bg-white" />
+                <Skeleton className="h-7 w-16 rounded-full !bg-white" />
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                {Array.from({ length: 8 }).map((_, productIndex) => (
+                  <div
+                    key={productIndex}
+                    className="rounded-[1.5rem] border border-[var(--menu-border)] bg-[var(--menu-card)] p-3"
+                  >
+                    <Skeleton className="h-40 w-full !bg-white" />
+                    <Skeleton className="mt-3 h-6 w-3/4 !bg-white" />
+                    <Skeleton className="mt-2 h-4 w-full !bg-white" />
+                    <Skeleton className="mt-2 h-4 w-5/6 !bg-white" />
+                    <Skeleton className="mt-3 h-7 w-24 rounded-full !bg-white" />
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
     </main>
   );
 }

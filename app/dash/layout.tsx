@@ -1,4 +1,3 @@
-
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, } from "@/components/ui/sidebar";
 import React from "react";
@@ -11,7 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <ViewTransitions>
-      <main className="font-figtree">
+      <main>
         <DashProviders sideBarDefaultValue={sideBarDefaultValue}>
           <AppSidebar layout="dash" variant="floating" />
           <SidebarInset className="overflow-hidden">

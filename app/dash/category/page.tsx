@@ -198,10 +198,10 @@ export default function CategoryPage() {
 
   return (
     <div className="h-full p-4 md:p-6">
-      <div className="mx-auto max-w-6xl rounded-2xl border p-4 md:p-6">
+      <div className="mx-auto max-w-6xl rounded-2xl ">
         <div className="mb-6 flex items-start justify-between gap-3">
           <div>
-            <h1 className="font-carter text-3xl uppercase">
+            <h1 className="text-3xl font-bold tracking-tight">
               Kategori Yönetimi
             </h1>
             <p className="mt-1 text-sm">

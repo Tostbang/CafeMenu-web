@@ -200,7 +200,6 @@ export default function FormInput({
                   aria-invalid={fieldState.invalid}
                   placeholder={!labelState ? (label ? label : name) : props.placeholder}
                   {...props}
-                  className={`block w-full ${className}`}
                 />
                 {/* <InputGroupAddon>
                   <InputGroupText>https://</InputGroupText>

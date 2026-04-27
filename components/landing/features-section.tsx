@@ -75,7 +75,6 @@ export function FeaturesSection() {
                 <span className="relative z-10">büyük iştah</span>
                 <span className="absolute inset-x-0 bottom-1 -z-0 h-3 bg-lime rounded-full" aria-hidden="true" />
               </span>
-
               .
             </h2>
 
@@ -133,7 +132,7 @@ export function FeaturesSection() {
             </div>
           </div>
 
-          <div className="lg:col-span-2 rounded-3xl border-2 border-charcoal bg-cream p-4 overflow-hidden relative">
+          <div className="lg:col-span-2 h-75 rounded-3xl border-2 border-charcoal bg-cream p-4 overflow-hidden relative">
             <Image
               src="/images/features-dish.jpg"
               alt="Pembe arka plan üzerinde yoğurtlu Türk mantısı"

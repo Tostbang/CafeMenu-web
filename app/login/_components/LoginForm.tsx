@@ -1,38 +1,41 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { updateToken } from "@/lib/helpers";
-import type { components } from "@/lib/types/api";
 import { useLogin } from "../_services/mutations";
 import { toast } from "sonner";
 
-type LoginFormState = {
-  email: string;
-  password: string;
-};
+const formSchema = z.object({
+  email: z.string().email("Lütfen geçerli bir e-posta adresi girin."),
+  password: z.string().min(6, "Şifre en az 6 karakter olmalıdır."),
+});
 
-const initialState: LoginFormState = {
-  email: "",
-  password: "",
-};
-
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+type FormValues = z.infer<typeof formSchema>;
 
 export function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const loginMutation = useLogin();
   const emailFromQuery = searchParams.get("email")?.trim() ?? "";
   const registered = searchParams.get("registered") === "1";
-  const [values, setValues] = useState<LoginFormState>(() => ({
-    ...initialState,
-    email: emailFromQuery,
-  }));
+  const verified = searchParams.get("verified") === "1";
+
+  const { control, handleSubmit, setValue } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: emailFromQuery,
+      password: "",
+    },
+  });
+
+  useEffect(() => {
+    setValue("email", emailFromQuery);
+  }, [emailFromQuery, setValue]);
 
   useEffect(() => {
     if (registered) {
@@ -40,96 +43,55 @@ export function LoginForm() {
     }
   }, [registered]);
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!emailPattern.test(values.email)) {
-      toast.error("Lütfen geçerli bir e-posta adresi girin.");
-      return;
+  useEffect(() => {
+    if (verified) {
+      toast.success("E-posta doğrulandı. Artık giriş yapabilirsiniz.");
     }
+  }, [verified]);
 
-    if (values.password.length < 6) {
-      toast.error("Şifre en az 6 karakter olmalıdır.");
-      return;
-    }
-
-    const body: components["schemas"]["CafeMenu.Entity.DTO.LoginRequest"] = {
-      email: values.email.trim(),
-      password: values.password,
-    };
-
-    try {
-      const response = await loginMutation.mutateAsync({ body });
-
-      if (!response.token) {
-        toast.error("Giriş yanıtında token bulunamadı.");
-        return;
-      }
-
-      updateToken(response.token);
-      router.push("/dash");
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        toast.error("Giriş yapılırken bir hata oluştu.");
-      }
-    }
+  const onSubmit = async (data: FormValues) => {
+    loginMutation.mutate({
+      body: {
+        email: data.email.trim(),
+        password: data.password,
+      },
+    });
   };
 
   return (
-    <div className="mx-auto w-full max-w-md">
+    <div className="mx-auto w-full max-w-md font-sans text-charcoal">
       <Link
         href="/"
-        className="mb-4 inline-flex rounded-full border border-black/10 bg-[#f2efed] px-3 py-1.5 text-xs font-semibold text-black/70 transition hover:bg-[#ebe6dc]"
+        className="mb-4 inline-flex rounded-full border-2 border-charcoal bg-cream px-3 py-1.5 text-xs font-semibold text-charcoal transition hover:bg-charcoal hover:text-cream"
       >
         Ana sayfaya dön
       </Link>
 
       <div className="space-y-1 text-center">
-        <h2 className="font-carter text-3xl uppercase text-my-dark-background">
+        <h2 className="text-4xl font-bold tracking-tight text-charcoal">
           Tekrar Hoş Geldiniz
         </h2>
-        <p className="text-sm text-black/60">Hesabınıza giriş yapın</p>
+        <p className="text-sm text-charcoal/70">Hesabınıza giriş yapın</p>
       </div>
 
-      <form className="mt-5 space-y-4" onSubmit={onSubmit}>
-        <div className="space-y-2">
-          <Label htmlFor="login-email" className="text-xs font-semibold tracking-wide uppercase">
-            E-posta
-          </Label>
-          <Input
-            id="login-email"
-            type="email"
-            autoComplete="email"
-            placeholder="ornek@eposta.com"
-            value={values.email}
-            className="h-11 rounded-2xl border border-black/10 bg-[#f2efed]"
-            onChange={(event) =>
-              setValues((prev) => ({ ...prev, email: event.target.value }))
-            }
-            required
-          />
-        </div>
+      <form className="mt-5 space-y-2" onSubmit={handleSubmit(onSubmit)}>
+        <FormInput
+          type="text"
+          name="email"
+          label="E-posta"
+          control={control}
+          autoComplete="email"
+          placeholder="ornek@eposta.com"
+        />
 
-        <div className="space-y-2">
-          <Label htmlFor="login-password" className="text-xs font-semibold tracking-wide uppercase">
-            Şifre
-          </Label>
-          <Input
-            id="login-password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Şifrenizi girin"
-            value={values.password}
-            className="h-11 rounded-2xl border border-black/10 bg-[#f2efed]"
-            onChange={(event) =>
-              setValues((prev) => ({
-                ...prev,
-                password: event.target.value,
-              }))
-            }
-            required
-          />
-        </div>
+        <FormInput
+          type="password"
+          name="password"
+          label="Şifre"
+          control={control}
+          autoComplete="current-password"
+          placeholder="Şifrenizi girin"
+        />
 
         <Button
           type="submit"
@@ -142,15 +104,10 @@ export function LoginForm() {
 
       <p className="mt-4 text-center text-sm text-black/65">
         Hesabınız yok mu?{" "}
-        <Link href="/register" className="font-semibold text-[#7f1148] hover:underline">
+        <Link href="/register" className="font-semibold text-red hover:underline">
           Kayıt Ol
         </Link>
       </p>
-
-      <div className="mt-6 rounded-2xl border border-black/10 bg-[#f2efed] p-3 text-xs text-black/60">
-        Menü değişiklikleri panelde anında güncellenir ve müşteriler QR ile en
-        güncel halini görür.
-      </div>
     </div>
   );
 }

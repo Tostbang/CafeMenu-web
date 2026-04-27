@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import type { components } from "@/lib/types/api";
 
 export type MenuTheme = {
   id: string;
@@ -19,6 +20,11 @@ export type MenuTheme = {
   onSecondary: string;
   onTertiary: string;
 };
+
+type MenuThemeDetailModel =
+  components["schemas"]["CafeMenu.Entity.DTO.MenuThemeDetailModel"];
+type SaveMenuThemeRequest =
+  components["schemas"]["CafeMenu.Entity.DTO.SaveMenuThemeRequest"];
 
 export const menuThemes: MenuTheme[] = [
   {
@@ -100,6 +106,86 @@ export const menuThemes: MenuTheme[] = [
 ];
 
 export const defaultMenuTheme = menuThemes[0];
+
+export const neutralSkeletonTheme: MenuTheme = {
+  id: "skeleton",
+  name: "Loading",
+  description: "Neutral loading theme",
+  backgroundStart: "#ffffff",
+  backgroundMiddle: "#ffffff",
+  backgroundEnd: "#ffffff",
+  surface: "#f5f5f5",
+  card: "#ffffff",
+  primary: "#ffffff",
+  secondary: "#ffffff",
+  tertiary: "#ffffff",
+  text: "#ffffff",
+  mutedText: "#ffffff",
+  border: "#e5e5e5",
+  onPrimary: "#ffffff",
+  onSecondary: "#ffffff",
+  onTertiary: "#ffffff",
+};
+
+export function toSaveMenuThemeRequest(theme: MenuTheme): SaveMenuThemeRequest {
+  return {
+    themeName: theme.id,
+    themeMode: theme.id === "midnight" ? "dark" : "light",
+    description: theme.description,
+    backgroundStart: theme.backgroundStart,
+    backgroundMiddle: theme.backgroundMiddle,
+    backgroundEnd: theme.backgroundEnd,
+    cardColor: theme.card,
+    primaryColor: theme.primary,
+    secondaryColor: theme.secondary,
+    tertiaryColor: theme.tertiary,
+    textColor: theme.text,
+    mutedTextColor: theme.mutedText,
+    borderColor: theme.border,
+    onPrimaryColor: theme.onPrimary,
+    onSecondaryColor: theme.onSecondary,
+    onTertiaryColor: theme.onTertiary,
+  };
+}
+
+export function toMenuThemeFromApi(
+  apiTheme: MenuThemeDetailModel | null | undefined,
+): MenuTheme | null {
+  if (!apiTheme) {
+    return null;
+  }
+
+  const normalizedThemeName = apiTheme.themeName?.trim().toLowerCase();
+  const existingTheme = menuThemes.find(
+    (theme) =>
+      theme.id.toLowerCase() === normalizedThemeName ||
+      theme.name.toLowerCase() === normalizedThemeName,
+  );
+  if (existingTheme) {
+    return existingTheme;
+  }
+
+  return {
+    id: apiTheme.themeName?.trim() || "saved-theme",
+    name: apiTheme.themeName?.trim() || "Kayıtlı Tema",
+    description: apiTheme.description?.trim() || "Kaydedilen menü teması",
+    backgroundStart: apiTheme.backgroundStart ?? defaultMenuTheme.backgroundStart,
+    backgroundMiddle:
+      apiTheme.backgroundMiddle ?? defaultMenuTheme.backgroundMiddle,
+    backgroundEnd: apiTheme.backgroundEnd ?? defaultMenuTheme.backgroundEnd,
+    surface: apiTheme.cardColor ?? defaultMenuTheme.surface,
+    card: apiTheme.cardColor ?? defaultMenuTheme.card,
+    primary: apiTheme.primaryColor ?? defaultMenuTheme.primary,
+    secondary: apiTheme.secondaryColor ?? defaultMenuTheme.secondary,
+    tertiary: apiTheme.tertiaryColor ?? defaultMenuTheme.tertiary,
+    text: apiTheme.textColor ?? defaultMenuTheme.text,
+    mutedText: apiTheme.mutedTextColor ?? defaultMenuTheme.mutedText,
+    border: apiTheme.borderColor ?? defaultMenuTheme.border,
+    onPrimary: apiTheme.onPrimaryColor ?? defaultMenuTheme.onPrimary,
+    onSecondary: apiTheme.onSecondaryColor ?? defaultMenuTheme.onSecondary,
+    onTertiary: apiTheme.onTertiaryColor ?? defaultMenuTheme.onTertiary,
+  };
+}
 
 export function toMenuThemeVars(theme: MenuTheme): CSSProperties {
   return {

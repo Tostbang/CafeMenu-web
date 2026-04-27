@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
@@ -8,8 +9,24 @@ import { useReturnCheckout } from "../_services/mutations";
 import MyCard from "@/components/MyCard";
 
 export default function CallBackCard({ token }: { token: string | undefined }) {
-  const { data } = useReturnCheckout(token);
-  const status: "loading" | "success" | "error" = !data
+  const callbackMutation = useReturnCheckout();
+  const { mutate } = callbackMutation;
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    mutate({
+      body: {
+        token,
+      },
+    });
+  }, [mutate, token]);
+
+  const data = callbackMutation.data;
+  const status: "loading" | "success" | "error" =
+    callbackMutation.isPending || !data
     ? "loading"
     : data.code === "200"
       ? "success"

@@ -1,4 +1,5 @@
 import { Check } from "lucide-react"
+import Link from "next/link"
 
 
 const PLANS = [
@@ -26,7 +27,7 @@ const PLANS = [
     tagline: "Daha fazla servis yapmaya hazır yoğun kafeler için.",
     bg: "bg-lime",
     accent: "bg-red",
-    cta: "14 günlük deneme",
+    cta: "Hemen başla",
     popular: true,
     features: [
       "Sınırsız yemek ve kategori",
@@ -45,7 +46,7 @@ const PLANS = [
 
     accent: "bg-charcoal",
 
-    cta: "Satışla görüş",
+    cta: "Hemen başla",
 
     popular: false,
     features: [
@@ -118,9 +119,8 @@ export function PricingSection() {
                 ))}
               </ul>
 
-              <a
-
-                href="#cta"
+              <Link
+                href="/login"
                 className={`mt-8 inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-colors border-2 border-charcoal ${
                   p.popular
                     ? "bg-charcoal text-cream hover:bg-charcoal/90"
@@ -128,7 +128,7 @@ export function PricingSection() {
                 }`}
               >
                 {p.cta}
-              </a>
+              </Link>
             </div>
           ))}
         </div>

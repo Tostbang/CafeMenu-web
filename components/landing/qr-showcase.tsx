@@ -120,7 +120,7 @@ export function QrShowcase() {
 
             </ul>
 
-            <div className="mt-10 flex flex-wrap gap-3">
+            {/* <div className="mt-10 flex flex-wrap gap-3">
               <a
                 href="#cta"
                 className="inline-flex items-center gap-2 rounded-full bg-charcoal px-5 py-3 text-sm font-semibold text-cream hover:bg-charcoal/90"
@@ -136,7 +136,7 @@ export function QrShowcase() {
                 <Printer className="h-4 w-4" aria-hidden="true" />
                 Baskıya hazır paket
               </a>
-            </div>
+            </div> */}
           </div>
 
         </div>

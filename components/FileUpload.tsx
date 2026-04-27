@@ -8,7 +8,7 @@ import { Upload } from 'lucide-react';
 
 const mainVariant = {
   initial: { x: 0, y: 0 },
-  animate: { x: 20, y: -20, opacity: 0.9 },
+  animate: { x: 5, y: -5, opacity: 0.9 },
 };
 
 
@@ -136,7 +136,6 @@ const EmptyState: React.FC<EmptyStateProps> = ({ isDragActive }) => (
       transition={{
         type: 'spring',
         stiffness: 300,
-
         damping: 20,
 
       }}

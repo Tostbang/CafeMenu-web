@@ -24,15 +24,6 @@ function toExternalUrl(url: string) {
   return /^https?:\/\//i.test(url) ? url : `https://${url}`;
 }
 
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
 export default function QrPage() {
   const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
   const menu = getMyMenuQuery.data?.menu;
@@ -145,68 +136,36 @@ export default function QrPage() {
     }
   };
 
-  const onPrint = () => {
-    if (!qrPngDataUrl || !publicMenuUrl) {
+  const onPrint = async () => {
+    if (!qrPngDataUrl) {
       return;
     }
+    try {
+      const { jsPDF } = await import("jspdf");
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const qrSize = 140;
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const qrX = (pageWidth - qrSize) / 2;
+      const qrY = (pageHeight - qrSize) / 2;
 
-    const printWindow = window.open("", "_blank", "noopener,noreferrer");
-    if (!printWindow) {
-      setFeedback("Yazdırma penceresi açılamadı.");
-      return;
+      pdf.addImage(qrPngDataUrl, "PNG", qrX, qrY, qrSize, qrSize);
+
+      pdf.save(`${menuSlug || "menu"}-qr.pdf`);
+    } catch (error) {
+      setFeedback(toErrorMessage(error, "PDF oluşturulamadı."));
     }
-
-    const escapedTitle = escapeHtml(menuTitle || "Cafe Menü");
-    const escapedUrl = escapeHtml(publicMenuUrl);
-    const escapedSocial = socialLinks
-      .map((item) => `<li><strong>${escapeHtml(item.label)}:</strong> ${escapeHtml(item.href)}</li>`)
-      .join("");
-
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>${escapedTitle} QR</title>
-          <style>
-            body { font-family: Arial, sans-serif; padding: 24px; color: #111827; }
-            h1 { margin: 0 0 8px; font-size: 24px; }
-            p { margin: 0 0 6px; }
-            img { width: 280px; height: 280px; border: 1px solid #e5e7eb; padding: 10px; border-radius: 14px; margin: 16px 0; }
-            ul { margin: 14px 0 0; padding-left: 18px; }
-          </style>
-        </head>
-        <body>
-          <h1>${escapedTitle}</h1>
-          <p>Menü Linki: ${escapedUrl}</p>
-          <img src="${qrPngDataUrl}" alt="QR kodu" />
-          ${
-            escapedSocial
-              ? `<h3>Sosyal Medya</h3><ul>${escapedSocial}</ul>`
-              : ""
-          }
-        </body>
-      </html>
-    `);
-
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
   };
 
   return (
     <div className="h-full p-4 md:p-6">
-      <div className="mx-auto max-w-6xl rounded-2xl border p-4 md:p-6">
+      <div className="mx-auto max-w-6xl rounded-2xl ">
         <div className="mb-6">
-          <h1 className="font-carter text-3xl uppercase">QR Kod</h1>
+          <h1 className="text-3xl font-bold tracking-tight">QR Kod</h1>
           <p className="mt-1 text-sm">
             Menü bağlantınızı QR kod olarak indirip paylaşın veya yazdırın.
           </p>
         </div>
-
-        {getMyMenuQuery.isPending && (
-          <p className="mb-4 rounded-xl border px-4 py-2 text-sm">
-            Menü bilgileri yükleniyor...
-          </p>
-        )}
 
         {getMyMenuQuery.isError && (
           <p className="mb-4 rounded-xl border px-4 py-2 text-sm">
@@ -300,7 +259,7 @@ export default function QrPage() {
                   disabled={!qrPngDataUrl}
                 >
                   <Printer className="mr-1" />
-                  Yazdır
+                  PDF İndir
                 </Button>
                 <Button
                   type="button"

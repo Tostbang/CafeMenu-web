@@ -55,13 +55,7 @@ export function SiteNav() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="#login"
-            className="hidden sm:inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-charcoal hover:bg-charcoal/5"
-          >
-            Giriş yap
-          </Link>
-          <Link
-            href="#cta"
+            href="/login"
             className="inline-flex items-center rounded-full bg-charcoal px-4 py-2 text-sm font-semibold text-cream hover:bg-charcoal/90"
           >
             Hemen başla

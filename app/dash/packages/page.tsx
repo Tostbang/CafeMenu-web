@@ -1,11 +1,7 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import {
   Check,
-  Smartphone,
-  Monitor,
-  MapPin,
   Calendar,
   Clock,
   ChevronLeft,
@@ -68,7 +64,7 @@ function PackagesTableSkeleton() {
 }
 
 export default function PackagesPage() {
-  const { data: packagesData, isLoading } = useGetAllPackages();
+  const { data: packagesData, isPending: isPackagesPending } = useGetAllPackages();
   const { data: activePackage } = useGetActivePackage();
   const initializeCheckout = useInitializeCheckout();
   const membershipHistoryMutation = useGetMembershipHistory();
@@ -88,6 +84,10 @@ export default function PackagesPage() {
       },
     });
   }, [currentPage, loadMembershipHistory]);
+
+  const activePackageDetails = packagesData?.packages?.find(
+    (pkg) => pkg.packageId === activePackage?.packageId,
+  );
 
   const handlePurchase = async (packageId: number) => {
     setSelectedPackageId(packageId);
@@ -110,32 +110,22 @@ export default function PackagesPage() {
   };
 
   return (
-    <div className="space-y-6 p-2 md:p-6">
+    <div className="space-y-6 p-4 md:p-6 max-w-6xl">
       <div>
         <h1 className="text-3xl font-bold">Üyelik Paketleri</h1>
         <p className="mt-1 text-muted-foreground">İşiniz için mükemmel planı seçin</p>
       </div>
 
-      {activePackage && activePackage.packageId && (
+      {activePackage?.hasActivePackage && activePackage.packageId && (
         <MyCard title="Aktif Paketiniz" Icon={PackageFilled}>
           <div className="rounded-xl border p-6">
             <div className="mb-4 flex items-start justify-between">
               <div>
-                <h3 className="mb-2 text-xl font-bold">{activePackage.name}</h3>
+                <h3 className="mb-2 text-xl font-bold">{activePackage.packageName}</h3>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm">
-                    <Monitor className="h-4 w-4" />
-                    <span>{activePackage.maxDeviceCount} cihaza kadar</span>
-                  </div>
-                  {activePackage.allowMobile && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Smartphone className="h-4 w-4" />
-                      <span>Mobil erişim aktif</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="h-4 w-4" />
-                    <span>{activePackage.allowedRadiusKm} km yarıçap izni</span>
+                    <Check className="h-4 w-4 text-green-500" />
+                    <span>{activePackageDetails?.description || "Paket aktif durumda"}</span>
                   </div>
                 </div>
               </div>
@@ -147,14 +137,17 @@ export default function PackagesPage() {
                 <Calendar className="h-4 w-4 text-blue-600" />
                 <div>
                   <p className="text-xs text-muted-foreground">Toplam Süre</p>
-                  <p className="font-semibold">{activePackage.totalDays} gün</p>
+                  <p className="font-semibold">
+                    {activePackage.durationValue}{" "}
+                    {DurationTypeLabels[activePackage.durationType as DurationType]}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-orange-600" />
                 <div>
                   <p className="text-xs text-muted-foreground">Kalan Süre</p>
-                  <p className="font-semibold">{activePackage.remainingDays} gün</p>
+                  <p className="font-semibold">{activePackage.remainingDays ?? "-"} gün</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -175,12 +168,13 @@ export default function PackagesPage() {
       )}
 
       <MyCard title="Mevcut Paketler" Icon={PackageFilled}>
-        {isLoading ? (
+        {isPackagesPending ? (
           <PackagesSkeleton />
         ) : packagesData?.packages && packagesData.packages.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {packagesData.packages.map((pkg) => {
-              const isActive = activePackage?.packageId === pkg.packageId;
+              const isActive =
+                activePackage?.hasActivePackage && activePackage.packageId === pkg.packageId;
 
               return (
                 <div
@@ -212,40 +206,25 @@ export default function PackagesPage() {
                       <div className="flex items-start gap-3">
                         <Check className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
                         <span className="text-sm">
-                          <strong>{pkg.maxDeviceCount}</strong> cihaza kadar
-                        </span>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
-                        <span className="text-sm">
-                          {pkg.allowMobile ? (
-                            <>
-                              Mobil erişim <strong>aktif</strong>
-                            </>
-                          ) : (
-                            <>
-                              Mobil erişim <strong>pasif</strong>
-                            </>
-                          )}
-                        </span>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
-                        <span className="text-sm">
-                          <strong>{pkg.allowedRadiusKm} km</strong> yarıçap kapsamı
-                        </span>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
-                        <span className="text-sm">
                           <strong>
                             {pkg.durationValue}{" "}
                             {DurationTypeLabels[pkg.durationType as DurationType]}
                           </strong>{" "}
                           geçerlilik
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
+                        <span className="text-sm">
+                          {pkg.description || "Paket açıklaması bulunmuyor"}
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
+                        <span className="text-sm">
+                          Fiyat: <strong>₺{pkg.price}</strong>
                         </span>
                       </div>
                     </div>
@@ -303,15 +282,14 @@ export default function PackagesPage() {
                 </Button>
                 <div className="text-sm">
                   Sayfa {currentPage} /{" "}
-                  {Math.max(1, Math.ceil(membershipHistoryMutation.data.totalCount / pageSize))}
+                  {Math.max(1, membershipHistoryMutation.data.totalPages)}
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setCurrentPage((prev) => prev + 1)}
                   disabled={
-                    currentPage >=
-                      Math.ceil(membershipHistoryMutation.data.totalCount / pageSize) ||
+                    currentPage >= membershipHistoryMutation.data.totalPages ||
                     membershipHistoryMutation.isPending
                   }
                 >

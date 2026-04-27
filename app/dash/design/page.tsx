@@ -2,57 +2,86 @@
 
 import { useMemo, useState } from "react";
 import { Check, Palette } from "lucide-react";
-import { defaultMenuTheme, menuThemes } from "@/lib/menu-theme";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { useMutationOP, useQueryOP } from "@/lib/Fetch";
+import {
+  defaultMenuTheme,
+  menuThemes,
+  toMenuThemeFromApi,
+  toSaveMenuThemeRequest,
+} from "@/lib/menu-theme";
 import { cn } from "@/lib/utils";
 
 export default function DesignPage() {
-  const [themeId, setThemeId] = useState(defaultMenuTheme.id);
+  const [themeId, setThemeId] = useState<string | null>(null);
+  const getMyThemeQuery = useQueryOP("get", "/api/MenuTheme/GetMyTheme");
+  const saveThemeMutation = useMutationOP(
+    "post",
+    "/api/MenuTheme/SaveMenuTheme",
+  );
+  const savedTheme = toMenuThemeFromApi(getMyThemeQuery.data?.theme);
+  const savedThemeId = menuThemes.some((theme) => theme.id === savedTheme?.id)
+    ? savedTheme?.id
+    : null;
+  const activeThemeId = themeId ?? savedThemeId ?? defaultMenuTheme.id;
 
   const selectedTheme =
-    menuThemes.find((theme) => theme.id === themeId) ?? defaultMenuTheme;
+    menuThemes.find((theme) => theme.id === activeThemeId) ?? defaultMenuTheme;
   const previewUrl = useMemo(
     () => `/menu/preview?theme=${encodeURIComponent(selectedTheme.id)}`,
     [selectedTheme.id],
   );
+  const isSaving = saveThemeMutation.isPending;
+
+  const onSaveTheme = async () => {
+    try {
+      await saveThemeMutation.mutateAsync({
+        body: toSaveMenuThemeRequest(selectedTheme),
+      });
+      toast.success("Tema kaydedildi.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Tema kaydedilemedi.";
+      toast.error(message);
+    }
+  };
 
   return (
-    <div className="h-full p-4 md:p-6 ">
-      <div className="mx-auto max-w-[1600px]">
+    <div className="h-full p-4 md:p-6">
+      <div className="mx-auto max-w-6xl rounded-2xl">
         <div className="mb-6 flex flex-wrap justify-between gap-3">
           <div>
-            <h1 className="font-carter text-3xl uppercase">Tasarım</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <h1 className="text-3xl font-bold tracking-tight">Tasarım</h1>
+            <p className="mt-1 text-sm">
               Menü görünümünü canlı önizleme ile anında düzenleyin.
             </p>
           </div>
-            <span className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold">
-              <Palette className="size-3.5" />
-              Canlı Önizleme
-            </span>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[430px_1fr]">
-          <section className="rounded-3xl border bg-white/70 p-4 shadow-sm backdrop-blur-sm scale-70 origin-top">
+        <div className="grid grid-cols-8 gap-3 ">
+          <section className="rounded-3xl border col-span-8  xl:col-span-3 bg-white/70  md:p-4 shadow-sm backdrop-blur-sm ">
             <p className="mb-3 text-sm font-semibold text-muted-foreground">
               iPhone 17 Pro Önizleme
             </p>
-            <div className="relative mx-auto h-[560px] w-[260px] rounded-[3.3rem] bg-zinc-900 p-2 shadow-[0_28px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/10 sm:h-[844px] sm:w-[390px] ">
+            <div className="relative mx-auto h-[650px] w-[300px] rounded-[3.3rem] bg-zinc-900 p-2 shadow-[0_28px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/10">
               <div className="absolute inset-0 rounded-[3.3rem] bg-linear-to-b from-white/20 to-transparent opacity-40" />
               <div className="relative h-full rounded-[2.8rem] bg-black p-2">
-                {/* <div className="absolute left-1/2 top-2 z-30 h-6 w-30 -translate-x-1/2 rounded-full bg-black" /> */}
-                <div className="h-full overflow-hidden rounded-[2.35rem] bg-black">
-                  <iframe
-                    key={selectedTheme.id}
-                    src={previewUrl}
-                    title="Menü mobil önizleme"
-                    className="h-full w-full border-0"
-                  />
+                <div className="h-full overflow-hidden relative rounded-[2.35rem] bg-black">
+                  <div className="absolute -inset-x-11 -inset-y-26 scale-75">
+                    <iframe
+                      key={selectedTheme.id}
+                      src={previewUrl}
+                      title="Menü mobil önizleme"
+                      className=" border-0  w-full h-full   "
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="rounded-3xl border bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+          <section className="rounded-3xl border bg-white/80 p-5 shadow-sm backdrop-blur-sm col-span-8 xl:col-span-5">
             <div className="mb-4">
               <h2 className="text-xl font-semibold">Renk Grupları</h2>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -110,11 +139,12 @@ export default function DesignPage() {
               })}
             </div>
 
+            
             <div className="mt-6 rounded-2xl border border-dashed p-4">
               <p className="text-sm font-medium">Seçili tema</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                 Arka plan, kart, birincil, ikincil ve üçüncü vurgu rengi canlı
-                 olarak uygulanıyor.
+                Arka plan, kart, birincil, ikincil ve üçüncü vurgu rengi canlı
+                olarak uygulanıyor.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <span className="rounded-full border px-2.5 py-1 text-xs">
@@ -133,6 +163,11 @@ export default function DesignPage() {
                   Üçüncü Renk
                 </span>
               </div>
+            </div>
+	    <div className="flex justify-end gap-2 mt-4">
+              <Button type="button" onClick={onSaveTheme} disabled={isSaving}>
+                {isSaving ? "Kaydediliyor..." : "Temayı Kaydet"}
+              </Button>
             </div>
           </section>
         </div>

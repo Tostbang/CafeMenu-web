@@ -170,16 +170,19 @@ export default function ClientPreview() {
 
     try {
       const uploadedLogo = newLogoFile ? await uploadFile(newLogoFile) : null;
+      const resolvedLogoUrl = uploadedLogo?.url ?? currentMenu?.logoUrl ?? null;
+
+      if (!resolvedLogoUrl) {
+        toast.error("Logo görseli zorunludur.");
+        return;
+      }
 
       if (currentMenu?.menuId) {
         await updateMenuMutation.mutateAsync({
           body: {
             ...payloadBase,
-            logoUrl: uploadedLogo?.url ?? currentMenu.logoUrl ?? null,
+            logoUrl: resolvedLogoUrl,
             backgroundImageUrl: currentMenu.backgroundImageUrl ?? null,
-            primaryColor: currentMenu.primaryColor ?? null,
-            secondaryColor: currentMenu.secondaryColor ?? null,
-            accentColor: currentMenu.accentColor ?? null,
           },
         });
         toast.success("Menünüz başarıyla güncellendi.");
@@ -187,11 +190,8 @@ export default function ClientPreview() {
         await createMenuMutation.mutateAsync({
           body: {
             ...payloadBase,
-            logoUrl: uploadedLogo?.url ?? null,
+            logoUrl: resolvedLogoUrl,
             backgroundImageUrl: null,
-            primaryColor: null,
-            secondaryColor: null,
-            accentColor: null,
           },
         });
         toast.success("Menünüz başarıyla oluşturuldu.");
@@ -207,11 +207,11 @@ export default function ClientPreview() {
   };
 
   return (
-    <div className="h-full p-4 md:p-6">
+    <div className="h-full">
       <div className="mx-auto max-w-6xl rounded-2xl p-4 md:p-6">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="font-carter text-3xl uppercase">Menü Düzenleyici</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Menü Düzenleyici</h1>
             <p className="mt-1 text-sm">
               Başlık ve iletişim bilgilerini tek ekrandan yönetin.
             </p>
@@ -220,12 +220,6 @@ export default function ClientPreview() {
             {hasExistingMenu ? "Mevcut menü" : "Yeni menü"}
           </span>
         </div>
-
-        {getMyMenuQuery.isPending && (
-          <p className="mb-4 rounded-2xl border px-4 py-2 text-sm">
-            Menü bilgileri yükleniyor...
-          </p>
-        )}
 
         {getMyMenuQuery.isError && (
           <p className="mb-4 rounded-2xl border px-4 py-2 text-sm">
@@ -246,6 +240,7 @@ export default function ClientPreview() {
                 defaultImageUrl={currentMenu?.logoUrl ?? null}
                 onChange={handleLogoUpload}
               />
+              <p className="mb-2 text-xs text-muted-foreground">Logo görseli zorunludur.</p>
               <FormInput
                 Icon={Abacus}
                 type="text"

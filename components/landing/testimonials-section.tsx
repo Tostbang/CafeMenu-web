@@ -1,5 +1,4 @@
-import { Quote } from "lucide-react"
-
+import { Quote } from "lucide-react";
 
 const TESTIMONIALS = [
   {
@@ -21,14 +20,13 @@ const TESTIMONIALS = [
   },
   {
     quote:
-
       "Üç şubem var ve Menuly hepsini senkronize tutuyor. Uçakta telefonumdan bir fiyatı değiştirdim. Harika.",
     name: "Ayşe Kaya",
     role: "Kurucu, Bloom Fırın",
     bg: "bg-cream",
     avatar: "bg-lime",
   },
-]
+];
 
 export function TestimonialsSection() {
   return (
@@ -42,7 +40,8 @@ export function TestimonialsSection() {
             Dünyanın dört bir yanındaki kafeler Menuly&apos;e geçiyor.
           </h2>
           <p className="mt-4 text-lg text-cream/70 leading-relaxed">
-            Gerçek kafe sahiplerinden gerçek sözler. Stok alıntı yok, ince yazı yok.
+            Gerçek kafe sahiplerinden gerçek sözler. Stok alıntı yok, ince yazı
+            yok.
           </p>
         </div>
 
@@ -50,19 +49,22 @@ export function TestimonialsSection() {
           {TESTIMONIALS.map((t) => (
             <figure
               key={t.name}
-
-              className={`${t.bg} rounded-3xl border-2 border-cream/10 p-7 text-charcoal flex flex-col`}
+              className={`${t.bg} rounded-3xl border-2 border-cream/10 p-7 text-charcoal flex flex-col justify-between`}
             >
-              <Quote className="h-8 w-8 text-red" aria-hidden="true" />
-              <blockquote className="mt-4 text-lg leading-relaxed text-pretty">
+              <blockquote className=" text-lg leading-relaxed text-pretty">
+                <Quote className="mb-4 h-8 w-8 text-red" aria-hidden="true" />
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
               <figcaption className="mt-6 flex items-center gap-3">
-                <span className={`h-10 w-10 rounded-full ${t.avatar}`} aria-hidden="true" />
+                <span
+                  className={`h-10 w-10 rounded-full ${t.avatar}`}
+                  aria-hidden="true"
+                />
                 <span>
-
                   <span className="block font-bold">{t.name}</span>
-                  <span className="block text-sm text-charcoal/70">{t.role}</span>
+                  <span className="block text-sm text-charcoal/70">
+                    {t.role}
+                  </span>
                 </span>
               </figcaption>
             </figure>
@@ -83,10 +85,7 @@ export function TestimonialsSection() {
             </div>
           ))}
         </dl>
-
       </div>
     </section>
-  )
+  );
 }
-
-

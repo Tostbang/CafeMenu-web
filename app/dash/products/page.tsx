@@ -210,7 +210,9 @@ export default function ProductsPage() {
       });
     } catch (error) {
       if (!(error instanceof Error)) {
-        toast.error(toErrorMessage(error, "Ürün kaydedilirken bir hata oluştu."));
+        toast.error(
+          toErrorMessage(error, "Ürün kaydedilirken bir hata oluştu."),
+        );
       }
     }
   };
@@ -294,10 +296,10 @@ export default function ProductsPage() {
 
   return (
     <div className="h-full p-4 md:p-6">
-      <div className="mx-auto max-w-6xl rounded-2xl border p-4 md:p-6">
+      <div className="mx-auto max-w-6xl rounded-2xl">
         <div className="mb-6 flex items-start justify-between gap-3">
           <div>
-            <h1 className="font-carter text-3xl uppercase">Ürün Yönetimi</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Ürün Yönetimi</h1>
             <p className="mt-1 text-sm">Ürünleri görüntüleyin ve yönetin.</p>
           </div>
           <Button
@@ -385,7 +387,11 @@ export default function ProductsPage() {
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button type="button" variant="outline" size="icon-sm">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="icon-sm"
+                            >
                               <MoreHorizontal className="size-4" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -437,28 +443,40 @@ export default function ProductsPage() {
               className="grid grid-cols-1 gap-3 md:grid-cols-2"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <FormInput
-                type="select"
-                name="categoryId"
-                label="Kategori"
-                control={control}
-              >
-                {categories.map((category) => (
-                  <SelectItem
-                    key={category.categoryId}
-                    value={category.categoryId.toString()}
+              <div className="w-full flex flex-col md:flex-row col-span-2 gap-3">
+                <div className="w-full md:w-1/2  ">
+                  <FileUploadStruc
+                    key="product-create-image"
+                    onChange={(files) =>
+                      setNewProductImageFile(files[0] ?? null)
+                    }
+                  />
+                </div>
+                <div className="w-full md:w-1/2">
+                  <FormInput
+                    type="select"
+                    name="categoryId"
+                    label="Kategori"
+                    control={control}
                   >
-                    {category.name || `Kategori #${category.categoryId}`}
-                  </SelectItem>
-                ))}
-              </FormInput>
-              <FormInput
-                type="text"
-                name="name"
-                label="Ürün Adı"
-                placeholder="Örn: Latte"
-                control={control}
-              />
+                    {categories.map((category) => (
+                      <SelectItem
+                        key={category.categoryId}
+                        value={category.categoryId.toString()}
+                      >
+                        {category.name || `Kategori #${category.categoryId}`}
+                      </SelectItem>
+                    ))}
+                  </FormInput>
+                  <FormInput
+                    type="text"
+                    name="name"
+                    label="Ürün Adı"
+                    placeholder="Örn: Latte"
+                    control={control}
+                  />
+                </div>
+              </div>
               <FormInput
                 type="number"
                 name="price"
@@ -468,12 +486,7 @@ export default function ProductsPage() {
                 min={0}
                 step="0.01"
               />
-              <div className="md:col-span-2">
-                <FileUploadStruc
-                  key="product-create-image"
-                  onChange={(files) => setNewProductImageFile(files[0] ?? null)}
-                />
-              </div>
+
               <FormInput
                 type="text"
                 name="description"
@@ -496,57 +509,58 @@ export default function ProductsPage() {
                 control={control}
               />
 
-              <Controller
-                name="isAvailable"
-                control={control}
-                render={({ field }) => (
-                  <Label
-                    htmlFor="product-create-is-available"
-                    className="flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 md:col-span-2"
-                  >
-                    <div>
-                      <p className="text-sm font-semibold">Satışta</p>
-                      <p className="text-xs">
-                        Kapalıysa ürün menüde gösterilmez.
-                      </p>
-                    </div>
-                    <Switch
-                      id="product-create-is-available"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </Label>
-                )}
-              />
+                <Controller
+                  name="isAvailable"
+                  control={control}
+                  render={({ field }) => (
+                    <Label
+                      htmlFor="product-create-is-available"
+                      className="flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 md:col-span-2"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold">Satışta</p>
+                        <p className="text-xs">
+                          Kapalıysa ürün menüde gösterilmez.
+                        </p>
+                      </div>
+                      <Switch
+                        id="product-create-is-available"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </Label>
+                  )}
+                />
 
-              <Controller
-                name="isPopular"
-                control={control}
-                render={({ field }) => (
-                  <Label
-                    htmlFor="product-create-is-popular"
-                    className="flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 md:col-span-2"
-                  >
-                    <div>
-                      <p className="text-sm font-semibold">Popüler</p>
-                      <p className="text-xs">Açık olursa ürünü öne çıkarır.</p>
-                    </div>
-                    <Switch
-                      id="product-create-is-popular"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </Label>
-                )}
-              />
-
-              <Button
-                type="submit"
-                className="md:col-span-2"
-                disabled={!menuId || categories.length === 0 || isSaving}
-              >
-                {isSaving ? "Kaydediliyor..." : "Ürün Oluştur"}
-              </Button>
+                <Controller
+                  name="isPopular"
+                  control={control}
+                  render={({ field }) => (
+                    <Label
+                      htmlFor="product-create-is-popular"
+                      className="flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 md:col-span-2"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold">Popüler</p>
+                        <p className="text-xs">
+                          Açık olursa ürünü öne çıkarır.
+                        </p>
+                      </div>
+                      <Switch
+                        id="product-create-is-popular"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </Label>
+                  )}
+                />
+                <Button
+                  type="submit"
+                  className="md:col-span-2"
+                  disabled={!menuId || categories.length === 0 || isSaving}
+                >
+                  {isSaving ? "Kaydediliyor..." : "Ürün Oluştur"}
+                </Button>
             </form>
           </DialogContent>
         </Dialog>

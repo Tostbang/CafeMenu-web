@@ -132,15 +132,21 @@ export const userLinks = [
 
 export const adminLinks = [
   {
-    title: "Kontrol Paneli",
-    url: "/admin/dashboard",
-    icon: DashboardSquare03Filled,
-    subLinks: null,
-  },
-  {
     title: "Kullanıcılar",
     url: "/admin/users",
     icon: UserMultipleFilled,
+    subLinks: null,
+  },
+  {
+    title: "Menüler",
+    url: "/admin/menus",
+    icon: NoodlesFilled,
+    subLinks: null,
+  },
+  {
+    title: "Global Kategoriler",
+    url: "/admin/global-categories",
+    icon: GeometricShapes01Filled,
     subLinks: null,
   },
   {
@@ -148,18 +154,6 @@ export const adminLinks = [
     url: "/admin/packages",
     icon: PackageFilled,
     subLinks: null,
-  },
-  {
-    title: "Destek",
-    url: "/admin/support",
-    icon: CustomerSupportFilled,
-    subLinks: null
-  },
-  {
-    title: "Cihazlar",
-    url: "/admin/devices",
-    icon: LaptopPhoneSync1Filled,
-    subLinks: null
   },
   {
     title: "Profil",

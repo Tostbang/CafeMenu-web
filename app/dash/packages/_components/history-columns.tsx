@@ -27,24 +27,6 @@ export const historyColumns: ColumnDef<MembershipHistoryItem>[] = [
     },
   },
   {
-    accessorKey: "maxDeviceCount",
-    header: "Maks. Cihaz",
-    cell: ({ row }) => <div className="text-center">{row.getValue("maxDeviceCount")}</div>,
-  },
-  {
-    accessorKey: "allowMobile",
-    header: "Mobil Erişim",
-    cell: ({ row }) => {
-      const allowMobile = row.getValue("allowMobile") as boolean;
-      return <Badge variant={allowMobile ? "default" : "secondary"}>{allowMobile ? "Evet" : "Hayır"}</Badge>;
-    },
-  },
-  {
-    accessorKey: "allowedRadiusKm",
-    header: "Yarıçap (km)",
-    cell: ({ row }) => <div className="text-center">{row.getValue("allowedRadiusKm")}</div>,
-  },
-  {
     accessorKey: "startsAt",
     header: "Başlangıç Tarihi",
     cell: ({ row }) => (

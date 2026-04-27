@@ -3,7 +3,7 @@
  * Do not edit manually. Run `npm run sync-api` to regenerate.
  *
  * Generated from: https://cafemenuapi.azurewebsites.net/swagger/v1/swagger.json
- * Generated at: 2026-04-10T11:10:02.493Z
+ * Generated at: 2026-04-21T11:34:05.560Z
  */
 export interface paths {
     "/api/Admin/Users/Search": {
@@ -379,6 +379,196 @@ export interface paths {
                         "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteGlobalCategoryResponse"];
                         "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteGlobalCategoryResponse"];
                         "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminDeleteGlobalCategoryResponse"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/Packages/Create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Admin paket oluşturur */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.CreatePackageRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.CreatePackageRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.CreatePackageRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.CreatePackageResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.CreatePackageResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.CreatePackageResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/Packages/Update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Admin paketi günceller */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.UpdatePackageRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.UpdatePackageRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.UpdatePackageRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.UpdatePackageResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.UpdatePackageResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.UpdatePackageResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/Packages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Admin paketleri listeler */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllPackagesResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllPackagesResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetAllPackagesResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/Packages/{packageId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Admin paket detayı getirir */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    packageId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminGetPackageByIdResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetPackageByIdResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminGetPackageByIdResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        /** Admin paketi pasife çeker */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    packageId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.DeletePackageResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.DeletePackageResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.DeletePackageResponse"];
                     };
                 };
             };
@@ -1036,6 +1226,171 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/File/UploadFile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Azure Blob'a dosya yükler ve link döner */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "multipart/form-data": {
+                        /** Format: binary */
+                        File?: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.UploadFileResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.UploadFileResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.UploadFileResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Membership/GetAllPackages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Paketleri listeler */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetAllPackageResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetAllPackageResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetAllPackageResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Membership/GetActivePackage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kendi aktif paketimi getirir */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetActivePackageResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetActivePackageResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetActivePackageResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Membership/GetMyMembershipHistory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kendi üyelik satın alma geçmişimi getirir */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetMyMembershipHistoryRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetMyMembershipHistoryRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.GetMyMembershipHistoryRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetMyMembershipHistoryResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetMyMembershipHistoryResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetMyMembershipHistoryResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Menu/Create": {
         parameters: {
             query?: never;
@@ -1197,6 +1552,176 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/MenuTheme/GetMyTheme": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının aktif menü temasını getirir */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.GetMyMenuThemeResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.GetMyMenuThemeResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.GetMyMenuThemeResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/MenuTheme/SaveMenuTheme": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kullanıcının aktif menü temasını kaydeder veya günceller */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.SaveMenuThemeRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.SaveMenuThemeRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.SaveMenuThemeRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.SaveMenuThemeResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.SaveMenuThemeResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.SaveMenuThemeResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Payment/start-package-payment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Paket satın alma için ödeme başlatır */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.StartPackagePaymentRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.StartPackagePaymentRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.StartPackagePaymentRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.StartPackagePaymentResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.StartPackagePaymentResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.StartPackagePaymentResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Payment/iyzico-callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Iyzico ödeme callback sonucunu işler */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.IyzicoCallbackRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.IyzicoCallbackRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.IyzicoCallbackRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.IyzicoCallbackResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.IyzicoCallbackResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.IyzicoCallbackResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1565,6 +2090,12 @@ export interface components {
             /** Format: int32 */
             totalPages: number;
         };
+        "CafeMenu.Entity.DTO.AdminGetAllPackagesResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            packages: components["schemas"]["CafeMenu.Entity.DTO.AdminPackageListModel"][] | null;
+        };
         "CafeMenu.Entity.DTO.AdminGetAllUsersRequest": {
             status: boolean | null;
             /** Format: int32 */
@@ -1591,6 +2122,12 @@ export interface components {
             message: string | null;
             errors: string[] | null;
             menu: components["schemas"]["CafeMenu.Entity.DTO.AdminMenuDetailModel"];
+        };
+        "CafeMenu.Entity.DTO.AdminGetPackageByIdResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            package: components["schemas"]["CafeMenu.Entity.DTO.AdminPackageDetailModel"];
         };
         "CafeMenu.Entity.DTO.AdminGetUserByIdResponse": {
             code: string | null;
@@ -1637,6 +2174,46 @@ export interface components {
             isPublished: boolean;
             phoneNumber: string | null;
             address: string | null;
+            /** Format: date-time */
+            createdDate: string;
+            /** Format: date-time */
+            modifiedDate: string | null;
+            /** Format: date-time */
+            deletedDate: string | null;
+        };
+        "CafeMenu.Entity.DTO.AdminPackageDetailModel": {
+            /** Format: int64 */
+            packageId: number;
+            name: string | null;
+            /** Format: double */
+            price: number;
+            status: boolean;
+            /** Format: int32 */
+            durationValue: number;
+            durationType: components["schemas"]["CafeMenu.Entity.Enum.DurationType"];
+            description: string | null;
+            /** Format: date-time */
+            createdDate: string;
+            /** Format: date-time */
+            modifiedDate: string | null;
+            /** Format: date-time */
+            deletedDate: string | null;
+            /** Format: int32 */
+            activeUserCount: number;
+            /** Format: int32 */
+            passiveUserCount: number;
+        };
+        "CafeMenu.Entity.DTO.AdminPackageListModel": {
+            /** Format: int64 */
+            packageId: number;
+            name: string | null;
+            /** Format: double */
+            price: number;
+            status: boolean;
+            /** Format: int32 */
+            durationValue: number;
+            durationType: components["schemas"]["CafeMenu.Entity.Enum.DurationType"];
+            description: string | null;
             /** Format: date-time */
             createdDate: string;
             /** Format: date-time */
@@ -1732,9 +2309,6 @@ export interface components {
             description: string | null;
             logoUrl: string | null;
             backgroundImageUrl: string | null;
-            primaryColor: string | null;
-            secondaryColor: string | null;
-            accentColor: string | null;
             phoneNumber: string | null;
             address: string | null;
             instagramUrl: string | null;
@@ -1750,6 +2324,22 @@ export interface components {
             /** Format: int64 */
             menuId: number;
             slug: string | null;
+        };
+        "CafeMenu.Entity.DTO.CreatePackageRequest": {
+            name: string | null;
+            /** Format: double */
+            price: number;
+            /** Format: int32 */
+            durationValue: number;
+            durationType: components["schemas"]["CafeMenu.Entity.Enum.DurationType"];
+            description: string | null;
+        };
+        "CafeMenu.Entity.DTO.CreatePackageResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            packageId: number;
         };
         "CafeMenu.Entity.DTO.CreateProductRequest": {
             /** Format: int64 */
@@ -1792,12 +2382,45 @@ export interface components {
             /** Format: int64 */
             userId: number;
         };
+        "CafeMenu.Entity.DTO.DeletePackageResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            packageId: number;
+        };
         "CafeMenu.Entity.DTO.DeleteProductResponse": {
             code: string | null;
             message: string | null;
             errors: string[] | null;
             /** Format: int64 */
             productId: number;
+        };
+        "CafeMenu.Entity.DTO.GetActivePackageResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            hasActivePackage: boolean;
+            /** Format: int64 */
+            packageId: number | null;
+            packageName: string | null;
+            /** Format: double */
+            price: number | null;
+            /** Format: int32 */
+            durationValue: number | null;
+            durationType: components["schemas"]["CafeMenu.Entity.Enum.DurationType"];
+            /** Format: date-time */
+            startsAt: string | null;
+            /** Format: date-time */
+            endsAt: string | null;
+            /** Format: int32 */
+            remainingDays: number | null;
+        };
+        "CafeMenu.Entity.DTO.GetAllPackageResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            packages: components["schemas"]["CafeMenu.Entity.DTO.PackageListModel"][] | null;
         };
         "CafeMenu.Entity.DTO.GetCategoriesByMenuResponse": {
             code: string | null;
@@ -1817,11 +2440,37 @@ export interface components {
             errors: string[] | null;
             categories: components["schemas"]["CafeMenu.Entity.DTO.CategoryModel"][] | null;
         };
+        "CafeMenu.Entity.DTO.GetMyMembershipHistoryRequest": {
+            /** Format: int32 */
+            page: number;
+            /** Format: int32 */
+            pageSize: number;
+        };
+        "CafeMenu.Entity.DTO.GetMyMembershipHistoryResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            items: components["schemas"]["CafeMenu.Entity.DTO.MembershipHistoryListModel"][] | null;
+            /** Format: int32 */
+            page: number;
+            /** Format: int32 */
+            pageSize: number;
+            /** Format: int32 */
+            totalCount: number;
+            /** Format: int32 */
+            totalPages: number;
+        };
         "CafeMenu.Entity.DTO.GetMyMenuResponse": {
             code: string | null;
             message: string | null;
             errors: string[] | null;
             menu: components["schemas"]["CafeMenu.Entity.DTO.MenuDetailModel"];
+        };
+        "CafeMenu.Entity.DTO.GetMyMenuThemeResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            theme: components["schemas"]["CafeMenu.Entity.DTO.MenuThemeDetailModel"];
         };
         "CafeMenu.Entity.DTO.GetMyProductsResponse": {
             code: string | null;
@@ -1847,6 +2496,15 @@ export interface components {
             errors: string[] | null;
             user: components["schemas"]["CafeMenu.Entity.DTO.UserListModel"];
         };
+        "CafeMenu.Entity.DTO.IyzicoCallbackRequest": {
+            token: string | null;
+        };
+        "CafeMenu.Entity.DTO.IyzicoCallbackResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            paymentSuccess: boolean;
+        };
         "CafeMenu.Entity.DTO.LoginRequest": {
             email: string | null;
             password: string | null;
@@ -1868,6 +2526,22 @@ export interface components {
             message: string | null;
             errors: string[] | null;
         };
+        "CafeMenu.Entity.DTO.MembershipHistoryListModel": {
+            /** Format: int64 */
+            membershipId: number;
+            /** Format: int64 */
+            packageId: number;
+            packageName: string | null;
+            /** Format: double */
+            price: number;
+            /** Format: date-time */
+            startsAt: string;
+            /** Format: date-time */
+            endsAt: string | null;
+            isActive: boolean;
+            /** Format: date-time */
+            createdDate: string;
+        };
         "CafeMenu.Entity.DTO.MenuDetailModel": {
             /** Format: int64 */
             menuId: number;
@@ -1878,9 +2552,6 @@ export interface components {
             description: string | null;
             logoUrl: string | null;
             backgroundImageUrl: string | null;
-            primaryColor: string | null;
-            secondaryColor: string | null;
-            accentColor: string | null;
             phoneNumber: string | null;
             address: string | null;
             instagramUrl: string | null;
@@ -1888,6 +2559,37 @@ export interface components {
             xUrl: string | null;
             whatsappPhone: string | null;
             isPublished: boolean;
+        };
+        "CafeMenu.Entity.DTO.MenuThemeDetailModel": {
+            /** Format: int64 */
+            menuId: number;
+            themeName: string | null;
+            themeMode: string | null;
+            description: string | null;
+            backgroundStart: string | null;
+            backgroundMiddle: string | null;
+            backgroundEnd: string | null;
+            cardColor: string | null;
+            primaryColor: string | null;
+            secondaryColor: string | null;
+            tertiaryColor: string | null;
+            textColor: string | null;
+            mutedTextColor: string | null;
+            borderColor: string | null;
+            onPrimaryColor: string | null;
+            onSecondaryColor: string | null;
+            onTertiaryColor: string | null;
+        };
+        "CafeMenu.Entity.DTO.PackageListModel": {
+            /** Format: int64 */
+            packageId: number;
+            name: string | null;
+            /** Format: double */
+            price: number;
+            /** Format: int32 */
+            durationValue: number;
+            durationType: components["schemas"]["CafeMenu.Entity.Enum.DurationType"];
+            description: string | null;
         };
         "CafeMenu.Entity.DTO.ProductModel": {
             /** Format: int64 */
@@ -1981,11 +2683,51 @@ export interface components {
             /** Format: int32 */
             remainingSeconds: number | null;
         };
+        "CafeMenu.Entity.DTO.SaveMenuThemeRequest": {
+            themeName: string | null;
+            themeMode: string | null;
+            description: string | null;
+            backgroundStart: string | null;
+            backgroundMiddle: string | null;
+            backgroundEnd: string | null;
+            cardColor: string | null;
+            primaryColor: string | null;
+            secondaryColor: string | null;
+            tertiaryColor: string | null;
+            textColor: string | null;
+            mutedTextColor: string | null;
+            borderColor: string | null;
+            onPrimaryColor: string | null;
+            onSecondaryColor: string | null;
+            onTertiaryColor: string | null;
+        };
+        "CafeMenu.Entity.DTO.SaveMenuThemeResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            menuId: number;
+            themeName: string | null;
+            themeMode: string | null;
+        };
         "CafeMenu.Entity.DTO.SearchPublicMenuProductsResponse": {
             code: string | null;
             message: string | null;
             errors: string[] | null;
             products: components["schemas"]["CafeMenu.Entity.DTO.PublicMenuSearchProductModel"][] | null;
+        };
+        "CafeMenu.Entity.DTO.StartPackagePaymentRequest": {
+            /** Format: int64 */
+            packageId: number;
+            callbackUrl: string | null;
+        };
+        "CafeMenu.Entity.DTO.StartPackagePaymentResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            token: string | null;
+            checkoutFormContent: string | null;
+            conversationId: string | null;
         };
         "CafeMenu.Entity.DTO.UpdateCategoryRequest": {
             /** Format: int64 */
@@ -2006,9 +2748,6 @@ export interface components {
             description: string | null;
             logoUrl: string | null;
             backgroundImageUrl: string | null;
-            primaryColor: string | null;
-            secondaryColor: string | null;
-            accentColor: string | null;
             phoneNumber: string | null;
             address: string | null;
             instagramUrl: string | null;
@@ -2024,6 +2763,25 @@ export interface components {
             /** Format: int64 */
             menuId: number;
             slug: string | null;
+        };
+        "CafeMenu.Entity.DTO.UpdatePackageRequest": {
+            /** Format: int64 */
+            packageId: number;
+            name: string | null;
+            /** Format: double */
+            price: number;
+            status: boolean;
+            /** Format: int32 */
+            durationValue: number;
+            durationType: components["schemas"]["CafeMenu.Entity.Enum.DurationType"];
+            description: string | null;
+        };
+        "CafeMenu.Entity.DTO.UpdatePackageResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            packageId: number;
         };
         "CafeMenu.Entity.DTO.UpdateProductRequest": {
             /** Format: int64 */
@@ -2060,6 +2818,16 @@ export interface components {
             /** Format: int64 */
             userId: number;
         };
+        "CafeMenu.Entity.DTO.UploadFileResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            fileName: string | null;
+            fileUrl: string | null;
+            contentType: string | null;
+            /** Format: int64 */
+            fileSize: number;
+        };
         "CafeMenu.Entity.DTO.UserListModel": {
             /** Format: int64 */
             userId: number;
@@ -2082,6 +2850,11 @@ export interface components {
             message: string | null;
             errors: string[] | null;
         };
+        /**
+         * Format: int32
+         * @enum {integer}
+         */
+        "CafeMenu.Entity.Enum.DurationType": 1 | 2 | 3;
     };
     responses: never;
     parameters: never;

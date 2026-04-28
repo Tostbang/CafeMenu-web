@@ -80,6 +80,7 @@ export default function PublicMenuView({
       className={cn(
         "relative bg-linear-to-b mt-28 from-[var(--menu-bg-start)] via-[var(--menu-bg-middle)] to-[var(--menu-bg-end)] pb-8 font-space",
         isPreview ? "min-h-full bg-scroll pt-2" : "min-h-dvh bg-fixed pt-3",
+        categories.length > 0 ? "mt-28" : "mt-21",
       )}
     >
       <div
@@ -202,7 +203,7 @@ export function PublicMenuViewSkeleton({
     <main
       style={toMenuThemeVars(theme)}
       className={cn(
-        "relative bg-linear-to-b mt-28 from-[var(--menu-bg-start)] via-[var(--menu-bg-middle)] to-[var(--menu-bg-end)] pb-8 font-space",
+        "relative bg-linear-to-b  from-[var(--menu-bg-start)] via-[var(--menu-bg-middle)] to-[var(--menu-bg-end)] pb-8 font-space",
         isPreview ? "min-h-full bg-scroll pt-2" : "min-h-dvh bg-fixed pt-3",
       )}
     >
@@ -214,10 +215,7 @@ export function PublicMenuViewSkeleton({
       >
         <div className="mb-4 flex flex-wrap gap-2 rounded-2xl border border-[var(--menu-border)] bg-[var(--menu-surface)] p-3">
           {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton
-              key={index}
-              className="h-8 w-20 rounded-full !bg-white"
-            />
+            <Skeleton key={index} className="h-8 w-20 rounded-full !bg-white" />
           ))}
         </div>
 

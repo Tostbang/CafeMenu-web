@@ -1,11 +1,16 @@
 "use client";
 
 import { useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import PublicMenuView, { PublicMenuViewSkeleton } from "../_components/PublicMenuView";
 import { useQueryOP } from "@/lib/Fetch";
 import { getToken } from "@/lib/helpers";
-import { defaultMenuTheme, toMenuThemeFromApi, neutralSkeletonTheme } from "@/lib/menu-theme";
+import {
+  defaultMenuTheme,
+  menuThemes,
+  neutralSkeletonTheme,
+  toMenuThemeFromApi,
+} from "@/lib/menu-theme";
 
 function toErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
@@ -13,7 +18,9 @@ function toErrorMessage(error: unknown, fallback: string) {
 
 export default function PublicMenuBySlugPage() {
   const params = useParams<{ slug: string }>();
+  const searchParams = useSearchParams();
   const slug = typeof params.slug === "string" ? params.slug : "";
+  const themeId = searchParams.get("theme");
   const hasToken = Boolean(getToken());
 
   const publicMenuQuery = useQueryOP(
@@ -32,10 +39,13 @@ export default function PublicMenuBySlugPage() {
     () => Boolean(publicMenuQuery.data?.menu?.menuId),
     [publicMenuQuery.data?.menu?.menuId],
   );
-  const selectedTheme = useMemo(
-    () => toMenuThemeFromApi(myThemeQuery.data?.theme) ?? defaultMenuTheme,
-    [myThemeQuery.data?.theme],
-  );
+  const selectedTheme = useMemo(() => {
+    const previewTheme = menuThemes.find((theme) => theme.id === themeId);
+    if (previewTheme) {
+      return previewTheme;
+    }
+    return toMenuThemeFromApi(myThemeQuery.data?.theme) ?? defaultMenuTheme;
+  }, [myThemeQuery.data?.theme, themeId]);
 
   if (!slug) {
     return (

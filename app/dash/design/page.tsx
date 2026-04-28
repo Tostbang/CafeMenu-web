@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Check, Palette } from "lucide-react";
+import { Check } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useMutationOP, useQueryOP } from "@/lib/Fetch";
@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 export default function DesignPage() {
   const [themeId, setThemeId] = useState<string | null>(null);
   const getMyThemeQuery = useQueryOP("get", "/api/MenuTheme/GetMyTheme");
+  const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
   const saveThemeMutation = useMutationOP(
     "post",
     "/api/MenuTheme/SaveMenuTheme",
@@ -28,9 +29,13 @@ export default function DesignPage() {
 
   const selectedTheme =
     menuThemes.find((theme) => theme.id === activeThemeId) ?? defaultMenuTheme;
+  const menuSlug = getMyMenuQuery.data?.menu?.slug;
   const previewUrl = useMemo(
-    () => `/menu/preview?theme=${encodeURIComponent(selectedTheme.id)}`,
-    [selectedTheme.id],
+    () =>
+      menuSlug
+        ? `/menu/${encodeURIComponent(menuSlug)}?theme=${encodeURIComponent(selectedTheme.id)}`
+        : "",
+    [menuSlug, selectedTheme.id],
   );
   const isSaving = saveThemeMutation.isPending;
 
@@ -69,12 +74,18 @@ export default function DesignPage() {
               <div className="relative h-full rounded-[2.8rem] bg-black p-2">
                 <div className="h-full overflow-hidden relative rounded-[2.35rem] bg-black">
                   <div className="absolute -inset-x-11 -inset-y-26 scale-75">
-                    <iframe
-                      key={selectedTheme.id}
-                      src={previewUrl}
-                      title="Menü mobil önizleme"
-                      className=" border-0  w-full h-full   "
-                    />
+                    {previewUrl ? (
+                      <iframe
+                        key={`${menuSlug}-${selectedTheme.id}`}
+                        src={previewUrl}
+                        title="Menü mobil önizleme"
+                        className=" border-0  w-full h-full   "
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
+                        Menü bağlantısı bulunamadı. Önce menü bilgilerinizi tamamlayın.
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

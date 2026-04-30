@@ -179,9 +179,6 @@ export default function QrPage() {
 
         {!getMyMenuQuery.isPending && !isMenuReady && (
           <div className="rounded-xl border p-4 text-sm">
-            <p>
-              First add your menu, then you can see your QR code here.
-            </p>
             <p className="mt-2">
               Önce menü adınızı ve temel menü bilgilerinizi girin, sonra QR kod
               burada otomatik oluşur.

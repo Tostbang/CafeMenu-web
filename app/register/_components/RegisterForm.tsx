@@ -150,6 +150,15 @@ export function RegisterForm() {
           Giriş Yap
         </Link>
       </p>
+      <p className="mt-1 text-center text-sm text-black/65">
+        Şifrenizi mi unuttunuz?{" "}
+        <Link
+          href="/forgot-password"
+          className="font-semibold text-red hover:underline"
+        >
+          Şifreyi Sıfırla
+        </Link>
+      </p>
 
     </div>
   );

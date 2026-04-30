@@ -20,7 +20,7 @@ export function SiteNav() {
           />
 
           <span className="text-xl font-bold tracking-tight text-charcoal">
-            qr menu
+	  QR Menü
           </span>
         </Link>
 

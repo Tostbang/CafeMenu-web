@@ -24,6 +24,7 @@ export function LoginForm() {
   const emailFromQuery = searchParams.get("email")?.trim() ?? "";
   const registered = searchParams.get("registered") === "1";
   const verified = searchParams.get("verified") === "1";
+  const reset = searchParams.get("reset") === "1";
 
   const { control, handleSubmit, setValue } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -48,6 +49,12 @@ export function LoginForm() {
       toast.success("E-posta doğrulandı. Artık giriş yapabilirsiniz.");
     }
   }, [verified]);
+
+  useEffect(() => {
+    if (reset) {
+      toast.success("Şifreniz başarıyla güncellendi. Şimdi giriş yapabilirsiniz.");
+    }
+  }, [reset]);
 
   const onSubmit = async (data: FormValues) => {
     loginMutation.mutate({
@@ -92,6 +99,15 @@ export function LoginForm() {
           autoComplete="current-password"
           placeholder="Şifrenizi girin"
         />
+
+        <div className="flex justify-end">
+          <Link
+            href="/forgot-password"
+            className="text-sm font-semibold text-red hover:underline"
+          >
+            Şifremi unuttum
+          </Link>
+        </div>
 
         <Button
           type="submit"

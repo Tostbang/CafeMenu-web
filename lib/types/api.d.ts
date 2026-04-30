@@ -3,7 +3,7 @@
  * Do not edit manually. Run `npm run sync-api` to regenerate.
  *
  * Generated from: https://cafemenuapi.azurewebsites.net/swagger/v1/swagger.json
- * Generated at: 2026-04-21T11:34:05.560Z
+ * Generated at: 2026-04-28T13:27:08.834Z
  */
 export interface paths {
     "/api/Admin/Users/Search": {
@@ -222,6 +222,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Admin/Menus/{menuId}/Activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Admin menüyü aktife çeker */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    menuId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminActivateMenuResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminActivateMenuResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminActivateMenuResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Admin/Menus/PublishStatus": {
         parameters: {
             query?: never;
@@ -341,6 +381,50 @@ export interface paths {
             };
         };
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Admin/GlobalCategories/Update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Admin global kategoriyi günceller */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminUpdateGlobalCategoryRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminUpdateGlobalCategoryRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.AdminUpdateGlobalCategoryRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.AdminUpdateGlobalCategoryResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.AdminUpdateGlobalCategoryResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.AdminUpdateGlobalCategoryResponse"];
+                    };
+                };
+            };
+        };
         post?: never;
         delete?: never;
         options?: never;
@@ -949,6 +1033,94 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Auth/ForgotPassword": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Şifremi unuttum kodu gönderir */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.ForgotPasswordRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.ForgotPasswordRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.ForgotPasswordRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.ForgotPasswordResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.ForgotPasswordResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.ForgotPasswordResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Auth/ResetPassword": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Şifre sıfırlama kodu ile yeni şifre belirler */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CafeMenu.Entity.DTO.ResetPasswordRequest"];
+                    "text/json": components["schemas"]["CafeMenu.Entity.DTO.ResetPasswordRequest"];
+                    "application/*+json": components["schemas"]["CafeMenu.Entity.DTO.ResetPasswordRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CafeMenu.Entity.DTO.ResetPasswordResponse"];
+                        "application/json": components["schemas"]["CafeMenu.Entity.DTO.ResetPasswordResponse"];
+                        "text/json": components["schemas"]["CafeMenu.Entity.DTO.ResetPasswordResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2016,6 +2188,13 @@ export interface components {
             /** Format: int64 */
             categoryId: number;
         };
+        "CafeMenu.Entity.DTO.AdminActivateMenuResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            menuId: number;
+        };
         "CafeMenu.Entity.DTO.AdminChangeMenuPublishStatusRequest": {
             /** Format: int64 */
             menuId: number;
@@ -2221,6 +2400,20 @@ export interface components {
             /** Format: date-time */
             deletedDate: string | null;
         };
+        "CafeMenu.Entity.DTO.AdminUpdateGlobalCategoryRequest": {
+            /** Format: int64 */
+            categoryId: number;
+            name: string | null;
+            /** Format: int32 */
+            order: number;
+        };
+        "CafeMenu.Entity.DTO.AdminUpdateGlobalCategoryResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int64 */
+            categoryId: number;
+        };
         "CafeMenu.Entity.DTO.AdminUserDetailModel": {
             /** Format: int64 */
             userId: number;
@@ -2395,6 +2588,16 @@ export interface components {
             errors: string[] | null;
             /** Format: int64 */
             productId: number;
+        };
+        "CafeMenu.Entity.DTO.ForgotPasswordRequest": {
+            email: string | null;
+        };
+        "CafeMenu.Entity.DTO.ForgotPasswordResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
+            /** Format: int32 */
+            remainingSeconds: number | null;
         };
         "CafeMenu.Entity.DTO.GetActivePackageResponse": {
             code: string | null;
@@ -2682,6 +2885,17 @@ export interface components {
             errors: string[] | null;
             /** Format: int32 */
             remainingSeconds: number | null;
+        };
+        "CafeMenu.Entity.DTO.ResetPasswordRequest": {
+            email: string | null;
+            code: string | null;
+            newPassword: string | null;
+            confirmNewPassword: string | null;
+        };
+        "CafeMenu.Entity.DTO.ResetPasswordResponse": {
+            code: string | null;
+            message: string | null;
+            errors: string[] | null;
         };
         "CafeMenu.Entity.DTO.SaveMenuThemeRequest": {
             themeName: string | null;

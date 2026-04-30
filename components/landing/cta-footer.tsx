@@ -70,7 +70,7 @@ export function SiteFooter() {
               <span className="grid size-14 p-1.5 place-items-center rounded-full bg-cream text-charcoal">
                 <Image src={"/logo.svg"} alt="logo" width={50} height={50} />
               </span>
-              <span className="text-xl font-bold tracking-tight">qr menü</span>
+              <span className="text-xl font-bold tracking-tight">QR Menü</span>
             </Link>
 
             <p className="mt-4 max-w-sm text-cream/70 leading-relaxed">

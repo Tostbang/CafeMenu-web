@@ -16,6 +16,10 @@ function toErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
 }
 
+function normalizeColor(color: string | null | undefined) {
+  return color?.trim().toLowerCase() ?? "";
+}
+
 export default function PublicMenuBySlugPage() {
   const params = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
@@ -39,13 +43,53 @@ export default function PublicMenuBySlugPage() {
     () => Boolean(publicMenuQuery.data?.menu?.menuId),
     [publicMenuQuery.data?.menu?.menuId],
   );
+  const publicMenuTheme = useMemo(() => {
+    const menu = publicMenuQuery.data?.menu;
+    if (!menu) {
+      return null;
+    }
+
+    const primary = normalizeColor(menu.primaryColor);
+    const secondary = normalizeColor(menu.secondaryColor);
+    const tertiary = normalizeColor(menu.accentColor);
+    if (!primary && !secondary && !tertiary) {
+      return null;
+    }
+
+    const matchedTheme = menuThemes.find((theme) => {
+      const isPrimaryMatch = !primary || normalizeColor(theme.primary) === primary;
+      const isSecondaryMatch =
+        !secondary || normalizeColor(theme.secondary) === secondary;
+      const isTertiaryMatch =
+        !tertiary || normalizeColor(theme.tertiary) === tertiary;
+      return isPrimaryMatch && isSecondaryMatch && isTertiaryMatch;
+    });
+    if (matchedTheme) {
+      return matchedTheme;
+    }
+
+    return {
+      ...defaultMenuTheme,
+      id: "public-menu-theme",
+      name: "Menü Renkleri",
+      description: "Kayıtlı menü renklerinden oluşturuldu.",
+      primary: menu.primaryColor ?? defaultMenuTheme.primary,
+      secondary: menu.secondaryColor ?? defaultMenuTheme.secondary,
+      tertiary: menu.accentColor ?? defaultMenuTheme.tertiary,
+    };
+  }, [publicMenuQuery.data?.menu]);
+
   const selectedTheme = useMemo(() => {
     const previewTheme = menuThemes.find((theme) => theme.id === themeId);
     if (previewTheme) {
       return previewTheme;
     }
-    return toMenuThemeFromApi(myThemeQuery.data?.theme) ?? defaultMenuTheme;
-  }, [myThemeQuery.data?.theme, themeId]);
+    return (
+      toMenuThemeFromApi(myThemeQuery.data?.theme) ??
+      publicMenuTheme ??
+      defaultMenuTheme
+    );
+  }, [myThemeQuery.data?.theme, publicMenuTheme, themeId]);
 
   if (!slug) {
     return (

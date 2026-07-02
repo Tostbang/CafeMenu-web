@@ -36,6 +36,12 @@ export default function QrPage() {
   const menuTitle = menu?.title?.trim() ?? "";
   const menuSlug = menu?.slug?.trim() ?? "";
   const isMenuReady = Boolean(menu?.menuId && menuTitle && menuSlug);
+  // Treat the page as "ready to render the QR" only once both the menu and
+  // the saved theme have been fetched. Otherwise the first paint of the QR
+  // uses a URL without `?theme=...`, which becomes a stale QR code once the
+  // theme query resolves.
+  const isThemeReady = !getMyThemeQuery.isPending && !getMyThemeQuery.isFetching;
+  const isReadyForQr = isMenuReady && isThemeReady;
   const savedTheme = toMenuThemeFromApi(getMyThemeQuery.data?.theme);
   const savedThemeId = menuThemes.some((theme) => theme.id === savedTheme?.id)
     ? savedTheme?.id
@@ -85,7 +91,7 @@ export default function QrPage() {
       ]);
       return { pngDataUrl, svgMarkup };
     },
-    enabled: isMenuReady && Boolean(publicMenuUrl),
+    enabled: isReadyForQr && Boolean(publicMenuUrl),
     staleTime: Infinity,
   });
 
@@ -208,13 +214,18 @@ export default function QrPage() {
               </p>
 
               <div className="mt-4 rounded-xl border bg-white p-3">
-                {isGeneratingQr && (
+                {!isThemeReady && (
+                  <p className="py-14 text-center text-sm">
+                    Tema bilgisi yükleniyor...
+                  </p>
+                )}
+                {isThemeReady && isGeneratingQr && (
                   <p className="py-14 text-center text-sm">QR kod hazırlanıyor...</p>
                 )}
-                {!isGeneratingQr && qrError && (
+                {isThemeReady && !isGeneratingQr && qrError && (
                   <p className="py-14 text-center text-sm">{qrError}</p>
                 )}
-                {!isGeneratingQr && !qrError && qrPngDataUrl && (
+                {isThemeReady && !isGeneratingQr && !qrError && qrPngDataUrl && (
                   <Image
                     src={qrPngDataUrl}
                     alt={`${menuTitle} QR`}

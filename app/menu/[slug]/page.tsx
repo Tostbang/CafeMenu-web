@@ -5,11 +5,13 @@ import PublicMenuView, {
   PublicMenuViewSkeleton,
 } from "../_components/PublicMenuView";
 import { useQueryOP } from "@/lib/Fetch";
+import { getToken } from "@/lib/helpers";
 import {
   defaultMenuTheme,
   menuThemes,
   neutralSkeletonTheme,
   toMenuThemeFromApi,
+  toMenuThemeFromPublicMenu,
 } from "@/lib/menu-theme";
 
 function toErrorMessage(error: unknown, fallback: string) {
@@ -21,6 +23,9 @@ export default function PublicMenuBySlugPage() {
   const searchParams = useSearchParams();
   const slug = typeof params.slug === "string" ? params.slug : "";
   const themeId = searchParams.get("theme");
+  // Only fetch the dashboard user's theme when authenticated; otherwise the
+  // call 401s and we fall back to the menu's stored colors or the default.
+  const isAuthenticated = Boolean(getToken());
 
   const publicMenuQuery = useQueryOP(
     "get",
@@ -30,7 +35,12 @@ export default function PublicMenuBySlugPage() {
     },
     { enabled: Boolean(slug) },
   );
-  const myThemeQuery = useQueryOP("get", "/api/MenuTheme/GetMyTheme");
+  const myThemeQuery = useQueryOP(
+    "get",
+    "/api/MenuTheme/GetMyTheme",
+    undefined,
+    { enabled: isAuthenticated },
+  );
 
   const hasMenu = useMemo(
     () => Boolean(publicMenuQuery.data?.menu?.menuId),
@@ -38,12 +48,31 @@ export default function PublicMenuBySlugPage() {
   );
 
   const selectedTheme = useMemo(() => {
+    // 1. URL query param wins (used by QR codes and design preview).
     const previewTheme = menuThemes.find((theme) => theme.id === themeId);
     if (previewTheme) {
       return previewTheme;
     }
-    return toMenuThemeFromApi(myThemeQuery.data?.theme) ?? defaultMenuTheme;
-  }, [myThemeQuery.data?.theme, themeId]);
+    const menu = publicMenuQuery.data?.menu;
+    // 2. Theme derived from the menu's stored colors (saved theme is mirrored
+    //    onto the menu entity by SaveMenuTheme).
+    const fromMenu = toMenuThemeFromPublicMenu(menu);
+    if (fromMenu) {
+      return fromMenu;
+    }
+    // 3. Authenticated dashboard user's saved theme.
+    const fromApi = toMenuThemeFromApi(myThemeQuery.data?.theme);
+    if (fromApi) {
+      return fromApi;
+    }
+    // 4. Default fallback.
+    return defaultMenuTheme;
+  }, [
+    themeId,
+    publicMenuQuery.data?.menu,
+    myThemeQuery.data?.theme,
+  ]);
+
   if (!slug) {
     return (
       <main className="min-h-dvh p-4">

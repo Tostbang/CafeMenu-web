@@ -46,12 +46,50 @@ export default function DesignPage() {
       await saveThemeMutation.mutateAsync({
         body: toSaveMenuThemeRequest(selectedTheme),
       });
-      await queryClient.invalidateQueries({
-        queryKey: ["get", "/api/MenuTheme/GetMyTheme"],
-      });
+
+      // Optimistically push the new theme into the GetMyTheme cache so the
+      // QR page and any other consumer see the new theme on next render
+      // without waiting for a refetch round-trip.
+      queryClient.setQueryData(
+        ["get", "/api/MenuTheme/GetMyTheme"],
+        (previous: unknown) => {
+          const prev =
+            typeof previous === "object" && previous !== null
+              ? (previous as { theme?: Record<string, unknown> })
+              : undefined;
+          return {
+            ...(prev ?? {}),
+            theme: {
+              ...(prev?.theme ?? {}),
+              menuId: prev?.theme?.menuId ?? 0,
+              themeName: selectedTheme.id,
+              themeMode:
+                selectedTheme.id === "midnight" ? "dark" : "light",
+              description: selectedTheme.description,
+              backgroundStart: selectedTheme.backgroundStart,
+              backgroundMiddle: selectedTheme.backgroundMiddle,
+              backgroundEnd: selectedTheme.backgroundEnd,
+              cardColor: selectedTheme.card,
+              primaryColor: selectedTheme.primary,
+              secondaryColor: selectedTheme.secondary,
+              tertiaryColor: selectedTheme.tertiary,
+              textColor: selectedTheme.text,
+              mutedTextColor: selectedTheme.mutedText,
+              borderColor: selectedTheme.border,
+              onPrimaryColor: selectedTheme.onPrimary,
+              onSecondaryColor: selectedTheme.onSecondary,
+              onTertiaryColor: selectedTheme.onTertiary,
+            },
+          };
+        },
+      );
+
+      // Also invalidate the public menu query so any open public menu view
+      // refetches its colors from the API.
       await queryClient.invalidateQueries({
         queryKey: ["get", "/api/PublicMenu"],
       });
+
       toast.success("Tema kaydedildi.");
     } catch (error) {
       const message =

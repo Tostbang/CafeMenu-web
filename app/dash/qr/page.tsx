@@ -15,6 +15,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useQueryOP } from "@/lib/Fetch";
+import { menuThemes, toMenuThemeFromApi } from "@/lib/menu-theme";
 
 function toErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
@@ -26,6 +27,7 @@ function toExternalUrl(url: string) {
 
 export default function QrPage() {
   const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
+  const getMyThemeQuery = useQueryOP("get", "/api/MenuTheme/GetMyTheme");
   const menu = getMyMenuQuery.data?.menu;
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
@@ -34,13 +36,21 @@ export default function QrPage() {
   const menuTitle = menu?.title?.trim() ?? "";
   const menuSlug = menu?.slug?.trim() ?? "";
   const isMenuReady = Boolean(menu?.menuId && menuTitle && menuSlug);
+  const savedTheme = toMenuThemeFromApi(getMyThemeQuery.data?.theme);
+  const savedThemeId = menuThemes.some((theme) => theme.id === savedTheme?.id)
+    ? savedTheme?.id
+    : null;
 
   const publicMenuUrl = useMemo(() => {
     if (!origin || !menuSlug) {
       return "";
     }
-    return `${origin}/menu/${menuSlug}`;
-  }, [origin, menuSlug]);
+    const baseUrl = `${origin}/menu/${encodeURIComponent(menuSlug)}`;
+    if (!savedThemeId) {
+      return baseUrl;
+    }
+    return `${baseUrl}?theme=${encodeURIComponent(savedThemeId)}`;
+  }, [origin, menuSlug, savedThemeId]);
 
   const socialLinks = [
     menu?.instagramUrl

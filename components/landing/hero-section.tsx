@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { ArrowRight, Star, Sparkles } from "lucide-react"
 
 export function HeroSection() {
@@ -24,7 +25,7 @@ export function HeroSection() {
             </span>
 
             <h1 className="mt-6 text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-charcoal text-balance leading-[0.95]">
-              Menünüz.{" "}
+              Menünüz{" "}
 
               <span className="relative inline-block">
                 <span className="relative z-10">Tarandı.</span>
@@ -40,8 +41,8 @@ export function HeroSection() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg text-charcoal/70 text-pretty leading-relaxed">
-              Menuly, kafe ve restoranınızın menüsünü güzel bir dijital deneyime dönüştürür. Tek bir QR kod
-              bastırın, yemekleri istediğiniz zaman güncelleyin — uygulama yok, yeniden baskı yok, baş ağrısı yok.
+              menuqrda, kafe ve restoranınızın menüsünü güzel bir dijital deneyime dönüştürür. Tek bir QR kod
+              bastırın, yemekleri istediğiniz zaman güncelleyin — uygulama yok, yeniden baskı yok.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -52,14 +53,14 @@ export function HeroSection() {
                 Menümü oluştur — ücretsiz
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </a>
-              <a
+              <Link
                 href="/menu"
 
                 className="inline-flex items-center gap-2 rounded-full border-2 border-charcoal bg-cream px-6 py-3.5 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-cream transition-colors"
 
               >
                 Örnek menüyü gör
-              </a>
+              </Link>
             </div>
 
             {/* Social proof */}
@@ -85,7 +86,7 @@ export function HeroSection() {
                   ))}
                 </div>
                 <p className="text-sm text-charcoal/70">
-                  <span className="font-semibold text-charcoal">2.400+</span> kafe Menuly ile servis yapıyor
+                  <span className="font-semibold text-charcoal">2.400+</span> kafe menuqrda ile servis yapıyor
                 </p>
               </div>
             </div>
@@ -137,7 +138,7 @@ export function HeroSection() {
                 "Tara. Sipariş ver. Keyfini çıkar.",
                 "Uygulama gerekmez",
                 "Gerçek zamanlı güncelleme",
-                "Çok dilli menüler",
+                "Dil seçenekleri",
 
                 "Fotoğraf odaklı tasarım",
 

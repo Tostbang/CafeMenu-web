@@ -1,17 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Sparkles } from "asem-icons";
 
-import { AnimatePresence, motion as m } from "motion/react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenuButton,
   SidebarRail,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
@@ -28,8 +24,6 @@ export function AppSidebar({
   layout,
   ...props
 }: { layout: "admin" | "dash" } & React.ComponentProps<typeof Sidebar>) {
-  const { open } = useSidebar();
-
   return (
     <Sidebar
       collapsible="icon"

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Instagram, Twitter, QrCode, Youtube } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 export function CtaSection() {
@@ -28,21 +28,26 @@ export function CtaSection() {
           </div>
 
           <h2 className="relative mx-auto max-w-2xl text-4xl sm:text-6xl font-bold tracking-tight text-charcoal text-balance leading-tight">
-            Bir sonraki müşteriniz az önce içeri girdi. Taramaları için bir şey
-            verin.
+            Sıradaki müşteriniz için QR kodunu taratın ve işlemi başlatın.
           </h2>
           <p className="relative mx-auto mt-6 max-w-xl text-lg text-charcoal/80 leading-relaxed">
-            İlk menünüzü 15 dakikadan kısa sürede oluşturun. Küçük kafeler için
-            sonsuza kadar ücretsiz — kart gerekmez.
+            İlk menünüzü 15 dakikadan kısa sürede oluşturun — küçük kafeler için
+            uygun fiyatlı planlarla.
           </p>
 
-          <form className="relative mx-auto mt-8 flex flex-col sm:flex-row items-stretch gap-3 max-w-md">
-            <label htmlFor="email" className="sr-only">
+          <form
+            action="/register"
+            method="get"
+            className="relative mx-auto mt-8 flex flex-col sm:flex-row items-stretch gap-3 max-w-md"
+          >
+            <label htmlFor="cta-email" className="sr-only">
               E-postanız
             </label>
             <input
-              id="email"
+              id="cta-email"
+              name="email"
               type="email"
+              required
               placeholder="siz@kafeniz.com"
               className="flex-1 rounded-full border-2 border-charcoal bg-cream px-5 py-3.5 text-charcoal placeholder:text-charcoal/50 focus:outline-none focus:ring-2 focus:ring-charcoal"
             />
@@ -50,7 +55,7 @@ export function CtaSection() {
               type="submit"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-red border-2 border-charcoal px-6 py-3.5 text-sm font-bold text-white hover:bg-charcoal transition-colors"
             >
-              Başla
+              Hemen başla
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </button>
           </form>
@@ -130,7 +135,7 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-cream/10 pt-8 text-sm text-cream/60">
           <p>
-            &copy; {new Date().getFullYear()} Menuly. Sevgi ve Türk kahvesiyle
+            &copy; {new Date().getFullYear()} menuqrda. Sevgi ve Türk kahvesiyle
             yapıldı.
           </p>
 

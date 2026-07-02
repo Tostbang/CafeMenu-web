@@ -12,7 +12,7 @@ export async function uploadFile(
   file: File,
 ): Promise<{ url: string; fileName: string }> {
   if (!file || file.size === 0) {
-    throw new Error('File is required');
+    throw new Error('Yüklenecek dosya bulunamadı.');
   }
 
   const formData = new FormData();
@@ -26,8 +26,20 @@ export async function uploadFile(
     bodyType: 'file',
   });
 
-  if (!result || !result.url || !result.fileName) {
-    throw new Error('Failed to upload file');
+  if (!result) {
+    throw new Error('Dosya yüklenirken bir hata oluştu. Lütfen tekrar deneyin.');
+  }
+
+  if (!result.success) {
+    const backendMessage =
+      (Array.isArray(result.errors) && result.errors[0]) ||
+      result.message ||
+      'Dosya yüklenirken bir hata oluştu. Lütfen tekrar deneyin.';
+    throw new Error(backendMessage);
+  }
+
+  if (!result.url || !result.fileName) {
+    throw new Error('Dosya yüklendi ancak sunucudan geçerli bir yanıt alınamadı.');
   }
 
   return {

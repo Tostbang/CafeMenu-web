@@ -1,5 +1,4 @@
 "use client"
-import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
@@ -21,6 +20,10 @@ export default function DynamicBreadcrumb() {
   const breadcrumbNameMap: Record<string, string> = {
     '/dash': "Kontrol Paneli",
     '/dash/calculate': "Hesaplama",
+    '/dash/category': "Kategori",
+    '/dash/products': "Ürünler",
+    '/dash/design': "Tasarım",
+    '/dash/qr': "QR Kod",
     "/dash/packages": "Paketler",
     "/dash/packages/result": "Sonuç",
     '/dash/devices': "Cihazlarım",
@@ -28,6 +31,8 @@ export default function DynamicBreadcrumb() {
     '/admin': "Kontrol Paneli",
     '/admin/users': "Kullanıcılar",
     '/admin/packages': "Paketler",
+    '/admin/menus': "Menüler",
+    '/admin/global-categories': "Global Kategoriler",
     '/admin/support': "Destek",
     '/admin/devices': "Cihazlarım",
     '/dash/diyarbakir': "Diyarbakır",

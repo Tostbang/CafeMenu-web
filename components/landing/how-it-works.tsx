@@ -44,7 +44,7 @@ export function HowItWorks() {
 
           </h2>
           <p className="mt-4 text-lg text-charcoal/70 leading-relaxed">
-            Cidden — çoğu kafe ilk QR menüsünü 15 dakikadan kısa sürede yayına alıyor.
+            Çoğu kafe ilk QR menüsünü 15 dakikadan kısa sürede yayına alıyor.
           </p>
         </div>
 

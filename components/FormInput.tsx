@@ -12,7 +12,6 @@ import { cn } from '@/lib/utils';
 import { Field, FieldContent, FieldError, FieldLabel } from './ui/field';
 import { Calendar04, View, ViewOff } from 'asem-icons';
 import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group';
-import { InfoIcon } from 'lucide-react';
 import { IconType } from '@/lib/types';
 
 export type Type =

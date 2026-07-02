@@ -48,7 +48,7 @@ export function PricingSection() {
           </span>
 
           <h2 className="mt-4 text-4xl sm:text-5xl font-bold tracking-tight text-charcoal text-balance">
-            Basit planlar. Bir fincan kahve fiyatına.
+            Basit planlar, bir fincan kahve kadar uygun.
           </h2>
           <p className="mt-4 text-lg text-charcoal/70 leading-relaxed">
             Ücretsiz başlayın. Kafeniz canlanınca yükseltirsiniz.

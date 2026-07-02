@@ -130,6 +130,7 @@ export default function ClientPreview() {
   const createMenuMutation = useMutationOP("post", "/api/Menu/Create");
   const updateMenuMutation = useMutationOP("put", "/api/Menu/Update");
   const [newLogoFile, setNewLogoFile] = useState<File | null>(null);
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
 
   const {
     control,
@@ -143,7 +144,8 @@ export default function ClientPreview() {
 
   const currentMenu = getMyMenuQuery.data?.menu;
   const hasExistingMenu = Boolean(currentMenu?.menuId);
-  const isSaving = createMenuMutation.isPending || updateMenuMutation.isPending;
+  const isSaving =
+    isUploadingLogo || createMenuMutation.isPending || updateMenuMutation.isPending;
 
   useEffect(() => {
     if (currentMenu) {
@@ -169,7 +171,15 @@ export default function ClientPreview() {
     };
 
     try {
-      const uploadedLogo = newLogoFile ? await uploadFile(newLogoFile) : null;
+      let uploadedLogo: { url: string; fileName: string } | null = null;
+      if (newLogoFile) {
+        setIsUploadingLogo(true);
+        try {
+          uploadedLogo = await uploadFile(newLogoFile);
+        } finally {
+          setIsUploadingLogo(false);
+        }
+      }
       const resolvedLogoUrl = uploadedLogo?.url ?? currentMenu?.logoUrl ?? null;
 
       if (!resolvedLogoUrl) {
@@ -200,9 +210,7 @@ export default function ClientPreview() {
       setNewLogoFile(null);
       await getMyMenuQuery.refetch();
     } catch (error) {
-      if (!(error instanceof Error)) {
-        toast.error(toErrorMessage(error, "Menü kaydedilirken bir hata oluştu."));
-      }
+      toast.error(toErrorMessage(error, "Menü kaydedilirken bir hata oluştu."));
     }
   };
 
@@ -239,6 +247,7 @@ export default function ClientPreview() {
               <FileUploadStruc
                 defaultImageUrl={currentMenu?.logoUrl ?? null}
                 onChange={handleLogoUpload}
+                onReject={(message) => toast.error(message)}
               />
               <p className="mb-2 text-xs text-muted-foreground">Logo görseli zorunludur.</p>
               <FormInput
@@ -336,11 +345,13 @@ export default function ClientPreview() {
               className="h-11 rounded-2xl px-6"
               disabled={isSaving}
             >
-              {isSaving
-                ? "Kaydediliyor..."
-                : hasExistingMenu
-                  ? "Menüyü Güncelle"
-                  : "Menüyü Oluştur"}
+              {isUploadingLogo
+                ? "Görsel yükleniyor..."
+                : createMenuMutation.isPending || updateMenuMutation.isPending
+                  ? "Kaydediliyor..."
+                  : hasExistingMenu
+                    ? "Menüyü Güncelle"
+                    : "Menüyü Oluştur"}
             </Button>
             {!isDirty && <span className="text-xs">Değişiklik yok</span>}
           </div>

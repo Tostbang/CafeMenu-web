@@ -137,13 +137,13 @@ export default function PublicMenuView({
                     {totalProducts} ürün
                   </p>
                 </div>
+                {menu.address && (
+                  <p className="mt-3 max-w-2xl text-sm text-[var(--menu-muted-text)]">
+                    {menu.address}
+                  </p>
+                )}
               </div>
             </div>
-            {menu.address && (
-              <p className="mt-2 max-w-2xl text-sm text-[var(--menu-muted-text)]">
-                {menu.address}
-              </p>
-            )}
 
             <div className="flex flex-wrap gap-2">
               {socialLinks.map((socialLink) => (

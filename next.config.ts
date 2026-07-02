@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
       {hostname: "example.com"}
     ],
   },
+ allowedDevOrigins: ['vid-invite-polished-peterson.trycloudflare.com'],
 };
 
 export default nextConfig;

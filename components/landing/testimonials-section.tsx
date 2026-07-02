@@ -20,7 +20,7 @@ const TESTIMONIALS = [
   },
   {
     quote:
-      "Üç şubem var ve Menuly hepsini senkronize tutuyor. Uçakta telefonumdan bir fiyatı değiştirdim. Harika.",
+      "Üç şubem var ve menuqrda hepsini senkronize tutuyor. Uçakta telefonumdan bir fiyatı değiştirdim. Harika.",
     name: "Ayşe Kaya",
     role: "Kurucu, Bloom Fırın",
     bg: "bg-cream",
@@ -37,10 +37,10 @@ export function TestimonialsSection() {
             Sahipler seviyor
           </span>
           <h2 className="mt-4 text-4xl sm:text-5xl font-bold tracking-tight text-cream text-balance">
-            Dünyanın dört bir yanındaki kafeler Menuly&apos;e geçiyor.
+            Dünyanın dört bir yanındaki kafeler menuqrda&apos;ya geçiyor.
           </h2>
           <p className="mt-4 text-lg text-cream/70 leading-relaxed">
-            Gerçek kafe sahiplerinden gerçek sözler. Stok alıntı yok, ince yazı
+            Gerçek kafe sahiplerinden gerçek sözler. Süsleme yok, ince yazı
             yok.
           </p>
         </div>

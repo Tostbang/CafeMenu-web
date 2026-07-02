@@ -23,6 +23,8 @@ export type MenuTheme = {
 
 type MenuThemeDetailModel =
   components["schemas"]["CafeMenu.Entity.DTO.MenuThemeDetailModel"];
+type PublicMenuDetailModel =
+  components["schemas"]["CafeMenu.Entity.DTO.PublicMenuDetailModel"];
 type SaveMenuThemeRequest =
   components["schemas"]["CafeMenu.Entity.DTO.SaveMenuThemeRequest"];
 
@@ -184,6 +186,51 @@ export function toMenuThemeFromApi(
     onPrimary: apiTheme.onPrimaryColor ?? defaultMenuTheme.onPrimary,
     onSecondary: apiTheme.onSecondaryColor ?? defaultMenuTheme.onSecondary,
     onTertiary: apiTheme.onTertiaryColor ?? defaultMenuTheme.onTertiary,
+  };
+}
+
+function normalizeColor(color: string | null | undefined) {
+  return color?.trim().toLowerCase() ?? null;
+}
+
+export function toMenuThemeFromPublicMenu(
+  menu: PublicMenuDetailModel | null | undefined,
+): MenuTheme | null {
+  if (!menu) {
+    return null;
+  }
+
+  const primaryColor = normalizeColor(menu.primaryColor);
+  const secondaryColor = normalizeColor(menu.secondaryColor);
+  const accentColor = normalizeColor(menu.accentColor);
+
+  const matchedTheme = menuThemes.find((theme) => {
+    const themePrimary = normalizeColor(theme.primary);
+    const themeSecondary = normalizeColor(theme.secondary);
+    const themeAccent = normalizeColor(theme.tertiary);
+
+    return (
+      (!primaryColor || themePrimary === primaryColor) &&
+      (!secondaryColor || themeSecondary === secondaryColor) &&
+      (!accentColor || themeAccent === accentColor)
+    );
+  });
+  if (matchedTheme) {
+    return matchedTheme;
+  }
+
+  if (!primaryColor && !secondaryColor && !accentColor) {
+    return null;
+  }
+
+  return {
+    ...defaultMenuTheme,
+    id: "public-menu-theme",
+    name: "Menü Teması",
+    description: "Menüye kaydedilen renk düzeni.",
+    primary: primaryColor ?? defaultMenuTheme.primary,
+    secondary: secondaryColor ?? defaultMenuTheme.secondary,
+    tertiary: accentColor ?? defaultMenuTheme.tertiary,
   };
 }
 

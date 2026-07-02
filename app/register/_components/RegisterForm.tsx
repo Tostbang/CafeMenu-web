@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,10 +12,20 @@ import type { components } from "@/lib/types/api";
 import { useRegister } from "../_services/mutations";
 import { toast } from "sonner";
 
+const nameRegex = /^[A-Za-zÇĞİÖŞÜçğıöşü\s]+$/;
+
 const formSchema = z
   .object({
-    firstName: z.string().trim().min(2, "Ad en az 2 karakter olmalıdır."),
-    lastName: z.string().trim().min(2, "Soyad en az 2 karakter olmalıdır."),
+    firstName: z
+      .string()
+      .trim()
+      .min(2, "Ad en az 2 karakter olmalıdır.")
+      .regex(nameRegex, "Ad yalnızca harf içermelidir."),
+    lastName: z
+      .string()
+      .trim()
+      .min(2, "Soyad en az 2 karakter olmalıdır.")
+      .regex(nameRegex, "Soyad yalnızca harf içermelidir."),
     cafeName: z.string().trim().min(2, "Kafe adı en az 2 karakter olmalıdır."),
     email: z.string().email("Lütfen geçerli bir e-posta adresi girin."),
     password: z.string().min(6, "Şifre en az 6 karakter olmalıdır."),
@@ -29,19 +40,27 @@ type FormValues = z.infer<typeof formSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const emailFromQuery = searchParams.get("email")?.trim() ?? "";
   const registerMutation = useRegister();
 
-  const { control, handleSubmit } = useForm<FormValues>({
+  const { control, handleSubmit, setValue } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       cafeName: "",
-      email: "",
+      email: emailFromQuery,
       password: "",
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    if (emailFromQuery) {
+      setValue("email", emailFromQuery);
+    }
+  }, [emailFromQuery, setValue]);
 
   const onSubmit = async (data: FormValues) => {
     const body: components["schemas"]["CafeMenu.Entity.DTO.RegisterUserRequest"] = {

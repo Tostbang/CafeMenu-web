@@ -20,12 +20,37 @@ const secondaryVariant = {
 
 interface FileUploadProps {
   onChange?: (files: File[]) => void;
+  onReject?: (message: string) => void;
   defaultImageUrl?: string | null;
   title?: string;
 }
 
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+
+function formatRejectionMessage(
+  fileRejections: readonly { file: File; errors: readonly { code: string; message: string }[] }[],
+): string {
+  const first = fileRejections[0];
+  if (!first) {
+    return "Dosya yüklenemedi.";
+  }
+
+  const errorCodes = new Set(first.errors.map((e) => e.code));
+  if (errorCodes.has("file-too-large")) {
+    return `${first.file.name} çok büyük. En fazla 5 MB boyutunda bir görsel yükleyin.`;
+  }
+  if (errorCodes.has("file-invalid-type")) {
+    return `${first.file.name} desteklenmeyen biçimde. Lütfen PNG, JPG veya WebP görsel yükleyin.`;
+  }
+  if (first.errors[0]?.message) {
+    return first.errors[0].message;
+  }
+  return `${first.file.name} yüklenemedi.`;
+}
+
 export const FileUploadStruc: React.FC<FileUploadProps> = ({
   onChange,
+  onReject,
   defaultImageUrl,
   title = "Görsel",
 }) => {
@@ -41,6 +66,20 @@ export const FileUploadStruc: React.FC<FileUploadProps> = ({
       return;
     }
 
+    if (!nextFile.type.startsWith("image/")) {
+      onReject?.(
+        `${nextFile.name} desteklenmeyen biçimde. Lütfen PNG, JPG veya WebP görsel yükleyin.`,
+      );
+      return;
+    }
+
+    if (nextFile.size > MAX_FILE_SIZE_BYTES) {
+      onReject?.(
+        `${nextFile.name} çok büyük. En fazla 5 MB boyutunda bir görsel yükleyin.`,
+      );
+      return;
+    }
+
     const nextPreviewUrl = URL.createObjectURL(nextFile);
     setUploadedPreviewUrl(nextPreviewUrl);
     onChange?.([nextFile]);
@@ -48,6 +87,16 @@ export const FileUploadStruc: React.FC<FileUploadProps> = ({
 
   const handleClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) {
+      return;
+    }
+    handleFileChange(files);
+    // allow re-selecting the same file
+    event.target.value = "";
   };
 
   useEffect(() => {
@@ -61,11 +110,19 @@ export const FileUploadStruc: React.FC<FileUploadProps> = ({
   const { getRootProps, isDragActive } = useDropzone({
     multiple: false,
     noClick: true,
+    maxSize: MAX_FILE_SIZE_BYTES,
     accept: {
-      'image/*': [],
+      'image/png': [],
+      'image/jpeg': [],
+      'image/jpg': [],
+      'image/webp': [],
+      'image/gif': [],
+      'image/svg+xml': [],
     },
     onDrop: handleFileChange,
-    onDropRejected: console.error,
+    onDropRejected: (rejections) => {
+      onReject?.(formatRejectionMessage(rejections));
+    },
   });
 
   return (
@@ -74,8 +131,8 @@ export const FileUploadStruc: React.FC<FileUploadProps> = ({
         ref={fileInputRef}
         id="file-upload-handle"
         type="file"
-        accept="image/*"
-        onChange={(e) => handleFileChange(Array.from(e.target.files || []))}
+        accept="image/png,image/jpeg,image/jpg,image/webp,image/gif,image/svg+xml"
+        onChange={handleInputChange}
         className="hidden"
       />
       <motion.div

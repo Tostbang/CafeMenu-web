@@ -1,4 +1,4 @@
-import createFetchClient, { Middleware } from "openapi-fetch"
+import createFetchClient from "openapi-fetch"
 import createClient from "openapi-react-query"
 import type { paths } from "@/lib/types/api"
 import { deleteToken, getToken } from "./helpers"
@@ -7,7 +7,7 @@ import { isRedirectError } from "next/dist/client/components/redirect-error"
 export const baseUrl = "https://cafemenuapi.azurewebsites.net"
 
 
-type baseApi = {
+type BaseApiResponse = {
   code?: string;
   message?: string;
   errors?: string[]
@@ -48,7 +48,7 @@ export const customFetch = async (
 
   // 3. Handle your custom "Business Logic" errors (like code: "400")
   if (data && typeof data === "object") {
-    const api = data as any; // or your baseApi type
+    const api = data as BaseApiResponse;
 
     // Check if the internal code is an error, even if HTTP status is 200
     if (api.code && api.code !== "200") {

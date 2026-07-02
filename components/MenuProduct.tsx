@@ -39,7 +39,7 @@ export function MenuProduct({
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[25px] flex flex-col  border-2 border-charcoal ${bgFor[d.category]} shadow-[0_4px_0_0_#313131] bg-[var(--menu-card)] text-[var(--menu-text)]",
+        "overflow-hidden rounded-[25px] flex flex-col border-2 border-charcoal shadow-[0_4px_0_0_#313131] bg-[var(--menu-card)] text-[var(--menu-text)]",
       )}
     >
       <div className="relative h-44 ">

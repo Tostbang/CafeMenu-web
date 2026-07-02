@@ -1,7 +1,6 @@
 
 "use client"
 
-import { ArrowRight01Sharp } from "asem-icons"
 import { ChevronRight } from "lucide-react"
 
 import {
@@ -52,11 +51,6 @@ export function MyNav({ layout }: { layout: "dash" | "admin" }) {
   const { isMobile, state } = useSidebar()
   const links = useLinks(layout)
   // const { profile } = useProfileStore()
-
-  // const isManager = profile?.roleId === "Manager"
-  // const isPurchaser = profile?.roleId === "Purchaser"
-  const isManager = true
-  const isPurchaser = false
 
   return (
     <SidebarGroup>

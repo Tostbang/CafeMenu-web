@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import Image from "next/image";
 import { z } from "zod";
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
@@ -96,6 +97,12 @@ function toNullableString(value: string) {
 
 function toErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
+}
+
+function isRenderableImageUrl(
+  url: string | null | undefined,
+): url is string {
+  return Boolean(url && /^(https?:\/\/|\/)/i.test(url));
 }
 
 function ProductsTableSkeleton() {
@@ -368,6 +375,7 @@ export default function ProductsPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>ID</TableHead>
+                    <TableHead>Görsel</TableHead>
                     <TableHead>Ad</TableHead>
                     <TableHead>Fiyat</TableHead>
                     <TableHead>Durum</TableHead>
@@ -378,6 +386,21 @@ export default function ProductsPage() {
                   {products.map((product) => (
                     <TableRow key={product.productId}>
                       <TableCell>{product.productId}</TableCell>
+                      <TableCell>
+                        {isRenderableImageUrl(product.imageUrl) ? (
+                          <div className="relative size-12 overflow-hidden rounded-md border">
+                            <Image
+                              src={product.imageUrl}
+                              alt={`${product.name || "Ürün"} görseli`}
+                              fill
+                              sizes="48px"
+                              className="object-cover"
+                            />
+                          </div>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Yok</span>
+                        )}
+                      </TableCell>
                       <TableCell>{product.name || "-"}</TableCell>
                       <TableCell>{product.price}</TableCell>
                       <TableCell>

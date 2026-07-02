@@ -5,7 +5,6 @@ import Image from "next/image";
 export function CategoryNav({
   menu,
   categories,
-  isPreview = false,
 }: {
   menu: components["schemas"]["CafeMenu.Entity.DTO.PublicMenuDetailModel"];
   categories: components["schemas"]["CafeMenu.Entity.DTO.PublicCategoryModel"][];

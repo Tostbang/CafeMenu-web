@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useMutationOP, useQueryOP } from "@/lib/Fetch";
 import {
@@ -15,6 +16,7 @@ import { cn } from "@/lib/utils";
 
 export default function DesignPage() {
   const [themeId, setThemeId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
   const getMyThemeQuery = useQueryOP("get", "/api/MenuTheme/GetMyTheme");
   const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
   const saveThemeMutation = useMutationOP(
@@ -43,6 +45,12 @@ export default function DesignPage() {
     try {
       await saveThemeMutation.mutateAsync({
         body: toSaveMenuThemeRequest(selectedTheme),
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["get", "/api/MenuTheme/GetMyTheme"],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["get", "/api/PublicMenu"],
       });
       toast.success("Tema kaydedildi.");
     } catch (error) {

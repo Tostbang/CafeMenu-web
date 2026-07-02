@@ -5,7 +5,6 @@ import { LogOut } from "@/app/dash/_services/mutations"
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -19,10 +18,9 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { deleteToken } from "@/lib/helpers"
 import { useProfileStore } from "@/lib/store/profile-store"
 import { Role } from "@/lib/types"
-import { Computer, Laptop, Logout04, UnfoldMoreSharp, User02 } from "asem-icons"
+import { Logout04, UnfoldMoreSharp, User02 } from "asem-icons"
 import { useRouter } from "next/navigation"
 // import { useProfileStore } from "@/lib/stores/profile-store"
 

@@ -24,7 +24,7 @@ const FEATURES = [
   },
   {
     icon: Globe,
-    title: "Çok dilli",
+    title: "Dil desteği",
     desc: "Türkçe, İngilizce, Arapça, Almanca — her turist için menünüzü otomatik çevirin.",
 
   },
@@ -55,7 +55,7 @@ const FEATURES = [
     icon: Smartphone,
     title: "Uygulama gerekmez",
 
-    desc: "Müşteriler tarar, menü tarayıcıda açılır. İndirme yok. Sürtünme yok.",
+    desc: "Müşteriler QR'ı tarar, menü tarayıcıda açılır — indirme yok, bekleme yok.",
   },
 ]
 
@@ -114,7 +114,7 @@ export function FeaturesSection() {
             </h3>
 
             <p className="mt-4 max-w-md text-charcoal/80 leading-relaxed">
-              Logonuzu ekleyin, renklerinizi seçin — Menuly kafenizin ruhunu yansıtır: samimi bir köşe
+              Logonuzu ekleyin, renklerinizi seçin — menuqrda kafenizin ruhunu yansıtır: samimi bir köşe
               fırınından şık bir bistroya kadar.
             </p>
             <div className="mt-8 flex flex-wrap gap-2">

@@ -1,4 +1,4 @@
-import { Check, Download, Printer } from "lucide-react"
+import { Check } from "lucide-react"
 
 function QrArt() {
   // Stylized 11x11 "QR-like" grid — purely decorative
@@ -56,7 +56,7 @@ export function QrShowcase() {
                   <p className="mt-1 text-2xl font-bold text-charcoal">Kafe Zeytin</p>
                 </div>
                 <span className="inline-flex items-center rounded-full bg-charcoal px-3 py-1 text-xs font-medium text-cream">
-                  menuly.app
+                  menuqrda.app
                 </span>
               </div>
 
@@ -97,8 +97,8 @@ export function QrShowcase() {
 
             </span>
             <h2 className="mt-4 text-4xl sm:text-5xl font-bold tracking-tight text-charcoal text-balance">
-              Tek bir kod. Her masa.{" "}
-              <span className="text-red">Sıfır</span> yeniden baskı.
+              Tek bir kod, her masa için —{" "}
+              <span className="text-red">sıfır</span> yeniden baskı.
             </h2>
             <p className="mt-5 text-lg text-charcoal/75 leading-relaxed max-w-lg">
               Bir yemeği güncelleyin, aynı QR kod çalışmaya devam etsin. Masalara, stantlara, vitrine veya fişlere

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { SiteFooter } from "@/components/landing/cta-footer";
 import { SiteNav } from "@/components/landing/site-nav";
@@ -42,7 +43,9 @@ export default function RegisterPage() {
             </section>
 
             <section className="rounded-[2rem] border-2 border-charcoal bg-white p-4 sm:p-6">
-              <RegisterForm />
+              <Suspense fallback={<div className="py-8 text-center text-sm text-muted-foreground">Yükleniyor...</div>}>
+                <RegisterForm />
+              </Suspense>
             </section>
           </div>
         </div>

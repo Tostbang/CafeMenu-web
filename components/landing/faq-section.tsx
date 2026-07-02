@@ -19,11 +19,11 @@ const FAQ = [
   },
 
   {
-    q: "Menuly'i kafemin markasına uyumlu hale getirebilir miyim?",
+    q: "menuqrda'yı kafemin markasına uyumlu hale getirebilir miyim?",
     a: "Evet. Logonuzu yükleyin, marka renklerinizi ve fontlarınızı ayarlayın — menünüz jenerik bir şablon değil, kafenizin bir uzantısı gibi görünsün.",
   },
   {
-    q: "Menuly çok dilli menüleri destekliyor mu?",
+    q: "menuqrda çok dilli menüleri destekliyor mu?",
     a: "Kesinlikle. Büyüme planı 3 dili, Zincir planı ise sınırsız dili destekler. Hatta başlangıç için yemeklerinizi otomatik çevirebiliriz.",
   },
   {
@@ -33,7 +33,7 @@ const FAQ = [
   {
 
     q: "İstediğim zaman iptal edebilir miyim?",
-    a: "Evet. Sözleşme yok, gizli ücret yok. Tek tıkla iptal edin; menünüz ücretsiz planda kullanılabilir kalır.",
+    a: "Evet. Sözleşme yok, bağlayıcı taahhüt yok. Tek tıkla iptal edin; menünüz taslak olarak saklanır. Yayına almak için ücretli bir paket gerekir.",
   },
 ]
 

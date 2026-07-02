@@ -5,6 +5,7 @@ import { Separator } from "./ui/separator";
 import { NavUser } from "./nav-user";
 import DashPage from "./DashPage";
 import DynamicBreadcrumb from "./BreadCrumb";
+import { ViewMenuButton } from "./view-menu-button";
 import { useProfileStore } from "@/lib/store/profile-store";
 import useGetProfile from "@/app/dash/_services/queries";
 
@@ -12,7 +13,7 @@ export function DashProviders({
   children,
   sideBarDefaultValue,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   sideBarDefaultValue: boolean;
 }) {
   const { setProfile } = useProfileStore();
@@ -49,7 +50,10 @@ export function MainComponent({
             <DynamicBreadcrumb />
           </div>
         </div>
-        <NavUser />
+        <div className="flex items-center gap-2">
+          <ViewMenuButton />
+          <NavUser />
+        </div>
       </header>
       <DashPage>{children}</DashPage>
     </main>

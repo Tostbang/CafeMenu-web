@@ -1,14 +1,16 @@
 FROM node:22-alpine AS base
 WORKDIR /app
 
-# Install pnpm explicitly (FAST + RELIABLE)
-RUN npm install -g pnpm
+# Pin pnpm version to match the lockfile (lockfileVersion: 9.0).
+# Installing "latest" via `npm i -g pnpm` has caused `--frozen-lockfile`
+# to fail when a newer pnpm with stricter lockfile validation is pulled.
+RUN corepack enable && corepack prepare pnpm@10.16.1 --activate
 
 # ---------- Dependencies ----------
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # ---------- Build ----------

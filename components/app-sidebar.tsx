@@ -8,6 +8,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
@@ -15,6 +16,7 @@ import { Link } from "next-view-transitions";
 import { ScrollArea } from "./ui/scroll-area";
 import { NavUser } from "./nav-user";
 import { MyNav } from "./my-nav";
+import { ViewMenuButton } from "./view-menu-button";
 // import { useProfileStore } from "@/lib/store/profile-store"
 // import { useProfileStore } from "@/lib/stores/profile-store"
 
@@ -24,6 +26,9 @@ export function AppSidebar({
   layout,
   ...props
 }: { layout: "admin" | "dash" } & React.ComponentProps<typeof Sidebar>) {
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
+
   return (
     <Sidebar
       collapsible="icon"
@@ -51,8 +56,8 @@ export function AppSidebar({
               {/* <Image
                 src="/logo.logo"
                 alt="Logo"
-                width={50}
-                height={50}
+                width={200}
+                height={200}
                 priority
                 className=""
               /> */}
@@ -63,6 +68,11 @@ export function AppSidebar({
             <span className="truncate text-xs text-gray-500">Panel</span>
           </div>
         </Link>
+        {layout === "dash" && (
+          <div className="mt-2 px-1 group-data-[state=collapsed]:px-0">
+            <ViewMenuButton collapsed={isCollapsed} />
+          </div>
+        )}
         {/* <ChevronsUpDown className="ml-auto" /> */}
         {/* <div className="flex gap-x-2 items-center px-3">
           <div className="w-20">

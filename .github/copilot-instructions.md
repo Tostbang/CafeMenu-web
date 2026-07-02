@@ -1,39 +1,101 @@
 # Project Overview
 
-This project is a web application that allows restaurant-cafe owners to manage their menu and show their menu to their customer by reading qr code. It is frontend project that count on an isolated .net backend built using Next.js and React. The whole content would be in Turkish.
+This repository contains two main projects:
 
+## `/mini-pazar`
 
-## Folder Structure
+The main project under active development.  
+It is a no-code / low-code mini e-commerce builder that allows non-technical users to create their own online store, manage products, and instantly publish a shareable storefront website.
 
-- `/app`: Contains the source code for all the pages.
-- `/app/admin`: This for admin pages.
-- `/app/dash`: This for regular user pages.
-- `/lib`: Contains the codes that is used globally like zustand store and types, etc.
-- `/components`: Contains reusable components including form components and UI elements.
+## `/CafeMenu-web`
 
-## Libraries and Frameworks
+A reference project used for UI/UX and structural inspiration only.  
+It represents a café menu system and is used as a design and architecture benchmark. The goal is to adapt and improve its patterns for the mini e-commerce system in `/mini-pazar`.
 
-- Next.js and Tailwind CSS.
-- Shadcn as the UI library - all of its components are in `/components/ui/*`
+---
 
-- React Hook Form with Zod for form validation
-- TanStack Query for data fetching
+# Folder Structure
 
+Inside `/mini-pazar`:
 
-## Coding Standards
+- `/app` → All application pages and routes (Next.js App Router)
+- `/app/admin` → Admin dashboard (store owner management)
+- `/app/dashboard` → User dashboard (store setup, products, settings)
+- `/lib` → Global utilities, Zustand stores, API helpers, shared logic
+- `/components` → Reusable UI components
+- `/components/ui` → Shadcn UI components (do not modify core structure unless necessary)
+- `/types` → Shared TypeScript types (if needed)
 
-- Use function-based components in React.
-- Use `useQueryOp` and `useMuationOp` from `/lib/Fetch.ts` these are react query rapper that comes with types safetly by openapi the types they are using is comming form `/lib/types/api.d.ts` here all the endpoints types.
-- Use `useForm`, `zod`, `zodResolver` like in the login form for all forms.
-- **Forms**: Always use `FormInput` component from `/components/FormInput.tsx` instead of raw `Input` components.
-- **Boolean Controls**: Use `Switch` component from `/components/ui/switch.tsx` instead of checkboxes for boolean toggles.
-- Form validation should use Zod schemas with proper error messages in Turkish.
+---
 
-## UI Guidelines
+# Libraries and Frameworks
 
-- Application should have a modern and clean design.
-- The design must have one identity that all pages share common elements.
-- All user-facing text must be in Turkish.
+- Next.js (App Router)
+- React
+- Tailwind CSS
+- Shadcn UI (components located in `/components/ui`)
+- React Hook Form + Zod (form handling and validation)
+- TanStack Query (data fetching and caching)
 
-- Use consistent spacing and styling across pages.
-- Forms should use the FormInput component for consistency and built-in validation display.
+Custom API layer:
+
+- `useQueryOp`
+- `useMutationOp`
+
+Located in `/lib/Fetch.ts`  
+Uses OpenAPI-generated types from `/lib/types/api.d.ts`
+
+---
+
+# Coding Standards
+
+- Use **function components only** (no class components)
+- Always use:
+  - `useQueryOp` for queries
+  - `useMutationOp` for mutations
+
+- All forms must use:
+  - `useForm`
+  - `zod`
+  - `zodResolver`
+
+- Always use `FormInput` from:
+  - `/components/FormInput.tsx`
+
+- For boolean inputs:
+  - Use `Switch` from `/components/ui/switch.tsx` (never checkboxes)
+
+- All validation messages must be written in **Turkish**
+
+- All API calls must remain fully typed using `/lib/types/api.d.ts`
+
+---
+
+# UI Guidelines
+
+- The UI must be modern, clean, and consistent across all pages
+- Maintain a single design identity across dashboard and public storefronts
+- All user-facing text must be in **Turkish**
+- Use `/CafeMenu-web` as a **reference only**
+- Adapt and improve its UX for e-commerce use cases (products, cart, checkout, etc.)
+
+---
+
+# Architectural Rules
+
+- `/CafeMenu-web` is **read-only reference**
+  - Do not copy blindly
+  - Use only as inspiration for UI/UX patterns
+
+- `/mini-pazar` is the only active development target
+  - All new features must be implemented here
+  - Focused on e-commerce / mini store builder logic
+
+---
+
+# Important Principles
+
+- Keep components reusable and domain-agnostic where possible
+- Prefer consistency over one-off UI variations
+- Optimize for non-technical users creating stores
+- Ensure fast, minimal, and mobile-friendly UX

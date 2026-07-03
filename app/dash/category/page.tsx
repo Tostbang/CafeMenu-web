@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo, useState } from "react";
+import { useMemo, useState } from "react"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FormInput from "@/components/FormInput";
@@ -133,6 +133,8 @@ export default function CategoryPage() {
 
       await categoriesQuery.refetch();
 
+      // We only reach here if mutate + refetch both succeeded — a throw on
+      // either keeps the dialog open so the user can retry with edits intact.
       if (editingCategory) {
         setIsEditDialogOpen(false);
       } else {

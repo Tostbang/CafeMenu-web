@@ -1729,11 +1729,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/MenuTheme/GetMyTheme": {
+    "/api/MenuTheme/GetMyTheme/{slug}": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                slug: string;
+            };
             cookie?: never;
         };
         /** Kullanıcının aktif menü temasını getirir */
@@ -1741,7 +1743,9 @@ export interface paths {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    slug: string;
+                };
                 cookie?: never;
             };
             requestBody?: never;
@@ -2546,6 +2550,8 @@ export interface components {
             isPopular: boolean;
             ingredients: string | null;
             allergens: string | null;
+            /** Format: int32 */
+            calories: number | null;
         };
         "CafeMenu.Entity.DTO.CreateProductResponse": {
             code: string | null;
@@ -2809,6 +2815,8 @@ export interface components {
             isPopular: boolean;
             ingredients: string | null;
             allergens: string | null;
+            /** Format: int32 */
+            calories: number | null;
         };
         "CafeMenu.Entity.DTO.PublicCategoryModel": {
             /** Format: int64 */
@@ -2851,6 +2859,8 @@ export interface components {
             isPopular: boolean;
             ingredients: string | null;
             allergens: string | null;
+            /** Format: int32 */
+            calories: number | null;
         };
         "CafeMenu.Entity.DTO.PublicProductModel": {
             /** Format: int64 */
@@ -2863,6 +2873,8 @@ export interface components {
             isPopular: boolean;
             ingredients: string | null;
             allergens: string | null;
+            /** Format: int32 */
+            calories: number | null;
         };
         "CafeMenu.Entity.DTO.RegisterUserRequest": {
             firstName: string | null;
@@ -3011,6 +3023,8 @@ export interface components {
             isPopular: boolean;
             ingredients: string | null;
             allergens: string | null;
+            /** Format: int32 */
+            calories: number | null;
         };
         "CafeMenu.Entity.DTO.UpdateProductResponse": {
             code: string | null;

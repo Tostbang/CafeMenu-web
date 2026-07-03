@@ -27,14 +27,19 @@ function toExternalUrl(url: string) {
 
 export default function QrPage() {
   const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
-  const getMyThemeQuery = useQueryOP("get", "/api/MenuTheme/GetMyTheme");
   const menu = getMyMenuQuery.data?.menu;
+  const menuSlug = menu?.slug?.trim() ?? "";
+  const getMyThemeQuery = useQueryOP(
+    "get",
+    "/api/MenuTheme/GetMyTheme/{slug}",
+    { params: { path: { slug: menuSlug } } },
+    { enabled: Boolean(menuSlug) },
+  );
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const menuTitle = menu?.title?.trim() ?? "";
-  const menuSlug = menu?.slug?.trim() ?? "";
   const isMenuReady = Boolean(menu?.menuId && menuTitle && menuSlug);
   // Treat the page as "ready to render the QR" only once both the menu and
   // the saved theme have been fetched. Otherwise the first paint of the QR

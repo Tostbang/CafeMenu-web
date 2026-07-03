@@ -51,7 +51,6 @@ export function MainComponent({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <ViewMenuButton />
           <NavUser />
         </div>
       </header>

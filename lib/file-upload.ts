@@ -38,12 +38,24 @@ export async function uploadFile(
     throw new Error(backendMessage);
   }
 
-  if (!result.url || !result.fileName) {
-    throw new Error('Dosya yüklendi ancak sunucudan geçerli bir yanıt alınamadı.');
+  if (!result.fileUrl && !result.fileUri && !result.url) {
+    // Surface what the backend actually sent so the user can compare it
+    // with the OpenAPI spec without having to open devtools.
+    const keys = Object.keys(result)
+      .filter((k) => k !== "success")
+      .join(", ");
+    console.error("[uploadFile] missing url in response", result);
+    throw new Error(
+      `Dosya yüklendi ancak sunucudan geçerli bir yanıt alınamadı (alanlar: ${keys || "boş"}).`,
+    );
   }
 
-  return {
-    url: result.url,
-    fileName: result.fileName,
-  };
+  // The backend has shipped the response under several field names over
+  // time (fileUrl, fileUri, url). Be lenient so a single rename on the
+  // server doesn't break product/avatar uploads here.
+  const url = result.fileUrl || result.fileUri || (result.url as string);
+  const fileName =
+    result.fileName || (file instanceof File ? file.name : "upload");
+
+  return { url, fileName };
 }

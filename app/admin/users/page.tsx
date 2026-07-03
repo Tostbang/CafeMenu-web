@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, Trash2 } from "lucide-react"
 import { GoogleDoc } from "asem-icons"
+import { getRoleLabel } from "@/lib/types"
 
 function UsersTableSkeleton() {
   return (
@@ -153,7 +154,7 @@ export default function AdminUsersPage() {
                     <TableCell className="text-sm">{user.email}</TableCell>
                     <TableCell>
                       <Badge variant={user.roleId === 1 ? "default" : "secondary"}>
-                        {user.roleId === 1 ? "Admin" : "Kullanıcı"}
+                        {getRoleLabel(user.roleId)}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -258,7 +259,7 @@ export default function AdminUsersPage() {
                 <span className="font-medium">Rol:</span>
                 <span className="col-span-2">
                   <Badge variant={selectedUser.roleId === 1 ? "default" : "secondary"}>
-                    {selectedUser.roleId === 1 ? "Admin" : "Kullanıcı"}
+                    {getRoleLabel(selectedUser.roleId)}
                   </Badge>
                 </span>
               </div>

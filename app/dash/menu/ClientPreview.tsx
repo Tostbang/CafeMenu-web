@@ -1,7 +1,7 @@
 
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import FormInput from "@/components/FormInput";
@@ -83,7 +83,9 @@ const defaultValues: MenuFormValues = {
   facebookUrl: "",
   xUrl: "",
   whatsappPhone: "",
-  isPublished: false,
+  // Publish the menu by default — non-technical owners expect their
+  // storefront to be live the moment they finish the setup form.
+  isPublished: true,
 };
 
 function toInputValue(value: string | null | undefined) {
@@ -157,7 +159,21 @@ export default function ClientPreview() {
     setNewLogoFile(files[0] ?? null);
   };
 
+  // Ref-guard against double-submits within a render cycle. The submit
+  // button's `disabled` prop already handles the slow path, but a fast
+  // double-click can fire `onSubmit` twice before the disabled state flushes.
+  const isSubmittingRef = useRef(false);
+  // A logo is "ready" if we have either a previously persisted menu logo
+  // or a freshly picked file the user intends to upload. Without this,
+  // submitting before currentMenu loads trips a "Logo görseli zorunludur"
+  // toast and leaves newLogoFile half-state behind.
+  const hasReadyLogo = Boolean(currentMenu?.logoUrl) || Boolean(newLogoFile);
+
   const onSubmit = async (values: MenuFormValues) => {
+    if (isSubmittingRef.current) {
+      return;
+    }
+    isSubmittingRef.current = true;
     const payloadBase = {
       title: toNullableString(values.title),
       description: toNullableString(values.description),
@@ -211,6 +227,8 @@ export default function ClientPreview() {
       await getMyMenuQuery.refetch();
     } catch (error) {
       toast.error(toErrorMessage(error, "Menü kaydedilirken bir hata oluştu."));
+    } finally {
+      isSubmittingRef.current = false;
     }
   };
 
@@ -343,7 +361,7 @@ export default function ClientPreview() {
             <Button
               type="submit"
               className="h-11 rounded-2xl px-6"
-              disabled={isSaving}
+              disabled={isSaving || !hasReadyLogo}
             >
               {isUploadingLogo
                 ? "Görsel yükleniyor..."

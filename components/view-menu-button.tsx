@@ -20,10 +20,15 @@ export function ViewMenuButton({
   collapsed?: boolean;
 }) {
   const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
-  const getMyThemeQuery = useQueryOP("get", "/api/MenuTheme/GetMyTheme");
 
   const menu = getMyMenuQuery.data?.menu;
   const slug = menu?.slug?.trim() ?? "";
+  const getMyThemeQuery = useQueryOP(
+    "get",
+    "/api/MenuTheme/GetMyTheme/{slug}",
+    { params: { path: { slug } } },
+    { enabled: Boolean(slug) },
+  );
 
   const savedTheme = toMenuThemeFromApi(getMyThemeQuery.data?.theme);
   const savedThemeId = menuThemes.some((theme) => theme.id === savedTheme?.id)
@@ -37,7 +42,7 @@ export function ViewMenuButton({
   }, [slug, savedThemeId]);
 
   const isLoading = getMyMenuQuery.isPending || getMyThemeQuery.isFetching;
-  const isReady = Boolean(publicMenuUrl) && !isLoading;
+  const isReady = (Boolean(publicMenuUrl) && !isLoading) ;
 
   if (collapsed) {
     return (

@@ -6,7 +6,9 @@ import { cookies } from "next/headers";
 import { DashProviders, MainComponent } from "@/components/DashProviders";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  const sideBarDefaultValue = (await cookies()).get("sidebar_state")?.value === "true" ? true : false;
+  const sideBarDefaultValue = ["true", "open"].includes(
+    (await cookies()).get("sidebar_state")?.value ?? "",
+  );
 
   return (
     <ViewTransitions>

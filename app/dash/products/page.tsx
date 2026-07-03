@@ -72,6 +72,11 @@ const productFormSchema = z.object({
     .string()
     .trim()
     .max(MAX_INPUT_LENGTH, "Alerjen bilgisi çok uzun."),
+  calories: z
+    .number({ invalid_type_error: "Kalori girin." })
+    .int("Kalori tam sayı olmalıdır.")
+    .min(0, "Kalori 0'dan küçük olamaz.")
+    .max(20000, "Kalori çok yüksek."),
   isAvailable: z.boolean(),
   isPopular: z.boolean(),
 });
@@ -86,6 +91,7 @@ const defaultValues: ProductFormValues = {
   price: 0,
   ingredients: "",
   allergens: "",
+  calories: 0,
   isAvailable: true,
   isPopular: false,
 };
@@ -93,6 +99,12 @@ const defaultValues: ProductFormValues = {
 function toNullableString(value: string) {
   const normalized = value.trim();
   return normalized.length > 0 ? normalized : null;
+}
+
+// Empty / zero calorie input collapses to null so the API treats the
+// product as "no calorie info" rather than a misleading 0 kcal.
+function toNullableCalories(value: number) {
+  return Number.isFinite(value) && value > 0 ? Math.round(value) : null;
 }
 
 function toErrorMessage(error: unknown, fallback: string) {
@@ -185,6 +197,7 @@ export default function ProductsPage() {
         isPopular: values.isPopular,
         ingredients: toNullableString(values.ingredients),
         allergens: toNullableString(values.allergens),
+        calories: toNullableCalories(values.calories),
       };
 
       if (editingProduct) {
@@ -203,7 +216,11 @@ export default function ProductsPage() {
       }
 
       setSelectedCategoryId(values.categoryId);
+      // refetch before closing so a stale-list flicker is impossible.
       await productsQuery.refetch();
+
+      // We only reach here if mutate + refetch both succeeded — throw on
+      // either leaves the dialog open so the user can retry with edits intact.
       if (editingProduct) {
         setIsEditDialogOpen(false);
       } else {
@@ -216,11 +233,10 @@ export default function ProductsPage() {
         categoryId: values.categoryId,
       });
     } catch (error) {
-      if (!(error instanceof Error)) {
-        toast.error(
-          toErrorMessage(error, "Ürün kaydedilirken bir hata oluştu."),
-        );
-      }
+      // Surface every error here — the previous `!(error instanceof Error)`
+      // guard silently dropped the very real `Error` thrown by `uploadFile`,
+      // leaving the user staring at a 500 with no feedback.
+      toast.error(toErrorMessage(error, "Ürün kaydedilirken bir hata oluştu."));
     }
   };
 
@@ -253,6 +269,7 @@ export default function ProductsPage() {
       price: product.price,
       ingredients: product.ingredients ?? "",
       allergens: product.allergens ?? "",
+      calories: product.calories ?? 0,
       isAvailable: product.isAvailable,
       isPopular: product.isPopular,
     });
@@ -282,9 +299,8 @@ export default function ProductsPage() {
         setNewProductImageFile(null);
       }
     } catch (error) {
-      if (!(error instanceof Error)) {
-        toast.error(toErrorMessage(error, "Ürün silinirken bir hata oluştu."));
-      }
+      // Mirror the onSubmit guard fix — log real Errors too, don't swallow them.
+      toast.error(toErrorMessage(error, "Ürün silinirken bir hata oluştu."));
     }
   };
 
@@ -531,6 +547,15 @@ export default function ProductsPage() {
                 placeholder="Süt ürünleri"
                 control={control}
               />
+              <FormInput
+                type="number"
+                name="calories"
+                label="Kalori (kcal)"
+                placeholder="0"
+                control={control}
+                min={0}
+                step="1"
+              />
 
                 <Controller
                   name="isAvailable"
@@ -613,28 +638,41 @@ export default function ProductsPage() {
               className="grid grid-cols-1 gap-3 md:grid-cols-2"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <FormInput
-                type="select"
-                name="categoryId"
-                label="Kategori"
-                control={control}
-              >
-                {categories.map((category) => (
-                  <SelectItem
-                    key={category.categoryId}
-                    value={category.categoryId.toString()}
+              <div className="w-full flex flex-col md:flex-row col-span-2 gap-3">
+                <div className="w-full md:w-1/2  ">
+                  <FileUploadStruc
+                    key={`product-edit-image-${editingProduct?.productId ?? "none"}`}
+                    defaultImageUrl={editingProduct?.imageUrl ?? null}
+                    onChange={(files) =>
+                      setNewProductImageFile(files[0] ?? null)
+                    }
+                  />
+                </div>
+                <div className="w-full md:w-1/2">
+                  <FormInput
+                    type="select"
+                    name="categoryId"
+                    label="Kategori"
+                    control={control}
                   >
-                    {category.name || `Kategori #${category.categoryId}`}
-                  </SelectItem>
-                ))}
-              </FormInput>
-              <FormInput
-                type="text"
-                name="name"
-                label="Ürün Adı"
-                placeholder="Örn: Latte"
-                control={control}
-              />
+                    {categories.map((category) => (
+                      <SelectItem
+                        key={category.categoryId}
+                        value={category.categoryId.toString()}
+                      >
+                        {category.name || `Kategori #${category.categoryId}`}
+                      </SelectItem>
+                    ))}
+                  </FormInput>
+                  <FormInput
+                    type="text"
+                    name="name"
+                    label="Ürün Adı"
+                    placeholder="Örn: Latte"
+                    control={control}
+                  />
+                </div>
+              </div>
               <FormInput
                 type="number"
                 name="price"
@@ -644,13 +682,6 @@ export default function ProductsPage() {
                 min={0}
                 step="0.01"
               />
-              <div className="md:col-span-2">
-                <FileUploadStruc
-                  key={`product-edit-image-${editingProduct?.productId ?? "none"}`}
-                  defaultImageUrl={editingProduct?.imageUrl ?? null}
-                  onChange={(files) => setNewProductImageFile(files[0] ?? null)}
-                />
-              </div>
               <FormInput
                 type="text"
                 name="description"
@@ -671,6 +702,15 @@ export default function ProductsPage() {
                 label="Alerjenler"
                 placeholder="Süt ürünleri"
                 control={control}
+              />
+              <FormInput
+                type="number"
+                name="calories"
+                label="Kalori (kcal)"
+                placeholder="0"
+                control={control}
+                min={0}
+                step="1"
               />
 
               <Controller

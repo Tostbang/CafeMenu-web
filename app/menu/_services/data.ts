@@ -2,6 +2,7 @@ export const data = {
   menu: {
     menuId: 2,
     slug: "slug",
+    isPublished: true,
     title: "Çarşı Kafe",
     description: "İstanbul'un en iyi yeri",
     logoUrl: "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
@@ -31,6 +32,7 @@ export const data = {
             isPopular: true,
             ingredients: "Kahve",
             allergens: null,
+            calories: 5,
           },
           {
             productId: 2,
@@ -42,6 +44,7 @@ export const data = {
             isPopular: true,
             ingredients: "Su, Karbonat, Limon",
             allergens: null,
+            calories: 90,
           },
           {
             productId: 3,
@@ -53,6 +56,7 @@ export const data = {
             isPopular: false,
             ingredients: "Kahve, Süt",
             allergens: "Süt",
+            calories: 150,
           },
           {
             productId: 4,
@@ -64,6 +68,7 @@ export const data = {
             isPopular: true,
             ingredients: "Çay yaprağı",
             allergens: null,
+            calories: 2,
           },
           {
             productId: 5,
@@ -75,6 +80,7 @@ export const data = {
             isPopular: false,
             ingredients: "Portakal",
             allergens: null,
+            calories: 120,
           },
         ],
       },
@@ -93,6 +99,7 @@ export const data = {
             isPopular: true,
             ingredients: "Yumurta, Domates, Biber",
             allergens: "Yumurta",
+            calories: 220,
           },
           {
             productId: 7,
@@ -104,6 +111,7 @@ export const data = {
             isPopular: true,
             ingredients: "Avokado, Ekmek",
             allergens: "Gluten",
+            calories: 320,
           },
           {
             productId: 8,
@@ -115,6 +123,7 @@ export const data = {
             isPopular: true,
             ingredients: "Peynir, Zeytin, Sebze",
             allergens: "Süt",
+            calories: 450,
           },
         ],
       },
@@ -133,6 +142,7 @@ export const data = {
             isPopular: true,
             ingredients: "Peynir, Şeker, Bisküvi",
             allergens: "Süt, Gluten",
+            calories: 380,
           },
           {
             productId: 10,
@@ -144,6 +154,7 @@ export const data = {
             isPopular: true,
             ingredients: "Süt, Şeker",
             allergens: "Süt",
+            calories: 210,
           },
         ],
       },

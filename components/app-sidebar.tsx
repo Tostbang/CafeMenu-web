@@ -17,6 +17,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { NavUser } from "./nav-user";
 import { MyNav } from "./my-nav";
 import { ViewMenuButton } from "./view-menu-button";
+import { useQueryOP } from "@/lib/Fetch";
 // import { useProfileStore } from "@/lib/store/profile-store"
 // import { useProfileStore } from "@/lib/stores/profile-store"
 
@@ -26,6 +27,9 @@ export function AppSidebar({
   layout,
   ...props
 }: { layout: "admin" | "dash" } & React.ComponentProps<typeof Sidebar>) {
+  const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
+  const menuId = getMyMenuQuery.data?.menu?.menuId;
+
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
 
@@ -68,7 +72,7 @@ export function AppSidebar({
             <span className="truncate text-xs text-gray-500">Panel</span>
           </div>
         </Link>
-        {layout === "dash" && (
+        {layout === "dash" && menuId && (
           <div className="mt-2 px-1 group-data-[state=collapsed]:px-0">
             <ViewMenuButton collapsed={isCollapsed} />
           </div>
@@ -97,3 +101,4 @@ export function AppSidebar({
     </Sidebar>
   );
 }
+

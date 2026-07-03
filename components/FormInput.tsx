@@ -44,7 +44,7 @@ export default function FormInput({
   label?: string;
   Icon?: IconType;
   labelState?: boolean;
-  children?: React.ReactNode[]
+  children?: React.ReactNode
 } & InputHTMLAttributes<HTMLInputElement>) {
   const [show, setShow] = useState<'password' | 'text'>('password');
   const ref = useRef<HTMLInputElement | null>(null);

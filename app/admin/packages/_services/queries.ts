@@ -45,6 +45,7 @@ export const useDeletePackage = () => {
   const queryClient = useQueryClient()
   return useMutationOP("delete", "/api/Admin/Packages/{packageId}", {
     onSuccess: () => {
+      // Invalidate the list cache AND any per-package detail cache.
       queryClient.invalidateQueries({ queryKey: ["get", "/api/Admin/Packages"] })
     },
   })

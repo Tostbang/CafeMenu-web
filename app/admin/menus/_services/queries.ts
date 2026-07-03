@@ -42,6 +42,7 @@ export const useDeleteAdminMenu = () => {
   return useMutationOP("delete", "/api/Admin/Menus/{menuId}", {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["post", "/api/Admin/Menus/Search"] })
+      queryClient.invalidateQueries({ queryKey: ["get", "/api/Admin/Menus"] })
     },
   })
 }
@@ -51,6 +52,7 @@ export const usePublishMenu = () => {
   return useMutationOP("put", "/api/Admin/Menus/PublishStatus", {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["post", "/api/Admin/Menus/Search"] })
+      queryClient.invalidateQueries({ queryKey: ["get", "/api/Admin/Menus"] })
     },
   })
 }

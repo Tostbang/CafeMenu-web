@@ -8,6 +8,19 @@ export enum Role {
   User = 3,
 }
 
+export const RoleLabels: Record<Role, string> = {
+  [Role.Admin]: "Admin",
+  [Role.CafeOwner]: "Kafe Sahibi",
+  [Role.User]: "Kullanıcı",
+};
+
+export function getRoleLabel(roleId: number | null | undefined): string {
+  if (roleId === Role.Admin) return RoleLabels[Role.Admin];
+  if (roleId === Role.CafeOwner) return RoleLabels[Role.CafeOwner];
+  if (roleId === Role.User) return RoleLabels[Role.User];
+  return "—";
+}
+
 export enum DurationType {
   Days = 1,
   Months = 2,

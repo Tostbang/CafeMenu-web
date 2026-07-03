@@ -38,9 +38,13 @@ export default function PublicMenuView({
   if (!menu) {
     return <PublicMenuViewSkeleton theme={theme} isPreview={isPreview} />;
   }
-  const categories = [...(menu.categories ?? [])].sort(
-    (a, b) => a.order - b.order,
-  );
+  const rawCategories = menu.categories ?? [];
+  const categories =
+    rawCategories.length > 1
+      ? [...rawCategories].sort(
+          (a, b) => (a.order ?? 0) - (b.order ?? 0),
+        )
+      : rawCategories;
   const totalProducts = categories.reduce(
     (count, category) => count + (category.products?.length ?? 0),
     0,
@@ -78,9 +82,9 @@ export default function PublicMenuView({
     <main
       style={toMenuThemeVars(theme)}
       className={cn(
-        "relative bg-linear-to-b mt-28 from-[var(--menu-bg-start)] via-[var(--menu-bg-middle)] to-[var(--menu-bg-end)] pb-8 font-space",
+        "relative bg-linear-to-b from-[var(--menu-bg-start)] via-[var(--menu-bg-middle)] to-[var(--menu-bg-end)] pb-8 font-space",
         isPreview ? "min-h-full bg-scroll pt-2" : "min-h-dvh bg-fixed pt-3",
-        categories.length > 0 ? "mt-28" : "mt-21",
+        categories.length > 0 ? "mt-28" : "mt-24",
       )}
     >
       <div

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
@@ -12,11 +12,17 @@ export default function CallBackCard({ token }: { token: string | undefined }) {
   const callbackMutation = useReturnCheckout();
   const { mutate } = callbackMutation;
 
+  // Guard against re-firing the iyzico POST on parent re-renders.
+  // iyzico's callback endpoint is not idempotent — duplicate POSTs can mark
+  // a paid order as failed or trigger side effects. openapi-react-query
+  // wraps `mutate` to capture fresh closure state, so this effect would
+  // otherwise run on every render.
+  const firedRef = useRef(false);
   useEffect(() => {
-    if (!token) {
+    if (!token || firedRef.current) {
       return;
     }
-
+    firedRef.current = true;
     mutate({
       body: {
         token,

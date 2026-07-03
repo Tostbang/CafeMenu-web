@@ -39,7 +39,9 @@ export const useDeleteAdminUser = () => {
   const queryClient = useQueryClient()
   return useMutationOP("delete", "/api/Admin/Users/{userId}", {
     onSuccess: () => {
+      // Invalidate the search/list cache AND any per-user detail caches.
       queryClient.invalidateQueries({ queryKey: ["post", "/api/Admin/Users/Search"] })
+      queryClient.invalidateQueries({ queryKey: ["get", "/api/Admin/Users"] })
     },
   })
 }

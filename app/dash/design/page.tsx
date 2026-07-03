@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Check } from "lucide-react";
+import { AlertTriangle, Check, Info, Loader2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -14,11 +14,56 @@ import {
 } from "@/lib/menu-theme";
 import { cn } from "@/lib/utils";
 
+type AlertVariant = "info" | "warning" | "error";
+
+function PhoneAlert({
+  icon,
+  title,
+  description,
+  variant = "info",
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  variant?: AlertVariant;
+}) {
+  const tone =
+    variant === "error"
+      ? "bg-red-100 text-red-700"
+      : variant === "warning"
+        ? "bg-amber-100 text-amber-700"
+        : "bg-sky-100 text-sky-700";
+  return (
+    <div className="flex h-full items-center justify-center p-4">
+      <div className="w-full max-w-[260px] rounded-2xl bg-white/95 p-4 text-center shadow-lg ring-1 ring-black/5 backdrop-blur-sm">
+        <div
+          className={cn(
+            "mx-auto mb-3 flex size-9 items-center justify-center rounded-full",
+            tone,
+          )}
+        >
+          {icon}
+        </div>
+        <p className="text-sm font-semibold text-zinc-900">{title}</p>
+        <p className="mt-1.5 text-xs leading-snug text-zinc-600">
+          {description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function DesignPage() {
   const [themeId, setThemeId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  const getMyThemeQuery = useQueryOP("get", "/api/MenuTheme/GetMyTheme");
   const getMyMenuQuery = useQueryOP("get", "/api/Menu/GetMyMenu");
+  const menuSlug = getMyMenuQuery.data?.menu?.slug?.trim() ?? "";
+  const getMyThemeQuery = useQueryOP(
+    "get",
+    "/api/MenuTheme/GetMyTheme/{slug}",
+    { params: { path: { slug: menuSlug } } },
+    { enabled: Boolean(menuSlug) },
+  );
   const saveThemeMutation = useMutationOP(
     "post",
     "/api/MenuTheme/SaveMenuTheme",
@@ -31,14 +76,23 @@ export default function DesignPage() {
 
   const selectedTheme =
     menuThemes.find((theme) => theme.id === activeThemeId) ?? defaultMenuTheme;
-  const menuSlug = getMyMenuQuery.data?.menu?.slug;
+  const menu = getMyMenuQuery.data?.menu;
+  // The preview iframe only makes sense when the menu is published and the
+  // query is in a healthy state. Surface every other case as an iOS-style
+  // alert inside the phone frame so the operator sees what to fix instead
+  // of a silently broken iframe.
+  const isMenuQueryPending = getMyMenuQuery.isPending && !getMyMenuQuery.data;
+  const isMenuQueryError = getMyMenuQuery.isError;
+  const isMenuUnpublished = Boolean(menu) && menu?.isPublished === false;
   const previewUrl = useMemo(
     () =>
-      menuSlug
+      menuSlug && !isMenuUnpublished
         ? `/menu/${encodeURIComponent(menuSlug)}?theme=${encodeURIComponent(selectedTheme.id)}`
         : "",
-    [menuSlug, selectedTheme.id],
+    [menuSlug, selectedTheme.id, isMenuUnpublished],
   );
+  const showPreviewIframe =
+    Boolean(menuSlug) && !isMenuUnpublished && !isMenuQueryError;
   const isSaving = saveThemeMutation.isPending;
 
   const onSaveTheme = async () => {
@@ -50,8 +104,10 @@ export default function DesignPage() {
       // Optimistically push the new theme into the GetMyTheme cache so the
       // QR page and any other consumer see the new theme on next render
       // without waiting for a refetch round-trip.
+      // The key mirrors the query key openapi-react-query uses for the
+      // `/api/MenuTheme/GetMyTheme/{slug}` call (path + path params).
       queryClient.setQueryData(
-        ["get", "/api/MenuTheme/GetMyTheme"],
+        ["get", "/api/MenuTheme/GetMyTheme/{slug}", { params: { path: { slug: menuSlug } } }],
         (previous: unknown) => {
           const prev =
             typeof previous === "object" && previous !== null
@@ -120,7 +176,28 @@ export default function DesignPage() {
               <div className="relative h-full rounded-[2.8rem] bg-black p-2">
                 <div className="h-full overflow-hidden relative rounded-[2.35rem] bg-black">
                   <div className="absolute -inset-x-11 -inset-y-26 scale-75">
-                    {previewUrl ? (
+                    {isMenuQueryPending ? (
+                      <PhoneAlert
+                        variant="info"
+                        icon={<Loader2 className="size-5 animate-spin" />}
+                        title="Menü yükleniyor"
+                        description="Lütfen bekleyin, menünüz hazırlanıyor..."
+                      />
+                    ) : isMenuQueryError ? (
+                      <PhoneAlert
+                        variant="error"
+                        icon={<XCircle className="size-5" />}
+                        title="Menü yüklenemedi"
+                        description="Bir hata oluştu. Sayfayı yenileyip tekrar deneyin."
+                      />
+                    ) : isMenuUnpublished ? (
+                      <PhoneAlert
+                        variant="warning"
+                        icon={<AlertTriangle className="size-5" />}
+                        title="Menü henüz yayında değil"
+                        description="Müşterilerinizin menüyü görebilmesi için menü düzenleyicide 'Menü Yayında' seçeneğini açın."
+                      />
+                    ) : showPreviewIframe ? (
                       <iframe
                         key={`${menuSlug}-${selectedTheme.id}`}
                         src={previewUrl}
@@ -128,9 +205,12 @@ export default function DesignPage() {
                         className=" border-0  w-full h-full   "
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
-                        Menü bağlantısı bulunamadı. Önce menü bilgilerinizi tamamlayın.
-                      </div>
+                      <PhoneAlert
+                        variant="info"
+                        icon={<Info className="size-5" />}
+                        title="Menü bağlantısı bulunamadı"
+                        description="Önce menü bilgilerinizi tamamlayın."
+                      />
                     )}
                   </div>
                 </div>

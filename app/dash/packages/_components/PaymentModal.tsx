@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +21,12 @@ export function PaymentModal({
   onOpenChange,
   checkoutFormHtml,
 }: PaymentModalProps) {
+  // Track the injected iyzico script so we can remove it when the modal
+  // closes. Without this, every purchase leaks a script element into the
+  // DOM and iyzico's global state (`iyziInit`) outlives the dialog, which
+  // can break subsequent purchases.
+  const injectedScriptRef = useRef<HTMLScriptElement | null>(null);
+
   useEffect(() => {
     if (checkoutFormHtml && open) {
       const iziycoScript = checkoutFormHtml.replace(/<script[^>]*>|<\/script>/gi, "");
@@ -37,7 +43,16 @@ export function PaymentModal({
       script.type = "text/javascript";
       script.innerHTML = runScript;
       document.body.appendChild(script);
+      injectedScriptRef.current = script;
     }
+
+    return () => {
+      const script = injectedScriptRef.current;
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+        injectedScriptRef.current = null;
+      }
+    };
   }, [checkoutFormHtml, open]);
 
   return (

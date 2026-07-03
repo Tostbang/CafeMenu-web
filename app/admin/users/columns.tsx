@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { format } from "date-fns"
 import { GoogleDoc } from "asem-icons"
+import { getRoleLabel } from "@/lib/types"
 
 export const createColumns = (
   onViewDetails: (user: AdminUser) => void,
@@ -45,10 +46,9 @@ export const createColumns = (
       header: "Rol",
       cell: ({ row }) => {
         const roleId = row.getValue("roleId") as number
-        const roleName = roleId === 1 ? "Admin" : "Kullanıcı"
         return (
           <Badge variant={roleId === 1 ? "default" : "secondary"}>
-            {roleName}
+            {getRoleLabel(roleId)}
           </Badge>
         )
       },

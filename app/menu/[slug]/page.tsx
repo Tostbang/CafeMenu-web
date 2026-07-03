@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import PublicMenuView, {
   PublicMenuViewSkeleton,
@@ -19,6 +19,18 @@ function toErrorMessage(error: unknown, fallback: string) {
 }
 
 export default function PublicMenuBySlugPage() {
+  // useSearchParams requires a Suspense boundary in Next 16 (it opts the
+  // entire component tree up to the boundary into client-side rendering).
+  return (
+    <Suspense
+      fallback={<PublicMenuViewSkeleton theme={neutralSkeletonTheme} />}
+    >
+      <PublicMenuBySlugPageInner />
+    </Suspense>
+  );
+}
+
+function PublicMenuBySlugPageInner() {
   const params = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
   const slug = typeof params.slug === "string" ? params.slug : "";
@@ -37,9 +49,9 @@ export default function PublicMenuBySlugPage() {
   );
   const myThemeQuery = useQueryOP(
     "get",
-    "/api/MenuTheme/GetMyTheme",
-    undefined,
-    { enabled: isAuthenticated },
+    "/api/MenuTheme/GetMyTheme/{slug}",
+    { params: { path: { slug } } },
+    { enabled: isAuthenticated && Boolean(slug) },
   );
 
   const hasMenu = useMemo(

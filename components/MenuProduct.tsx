@@ -14,7 +14,7 @@ import {
   DrawerTitle,
 } from "./ui/drawer";
 import { Button } from "./ui/button";
-import { CrownFilled, Tag01Filled } from "asem-icons";
+import { BioEnergyFilled, CrownFilled, FirePitFilled, Tag01Filled } from "asem-icons";
 import { IconType } from "@/lib/types";
 
 const priceFormatter = new Intl.NumberFormat("tr-TR", {
@@ -35,6 +35,10 @@ export function MenuProduct({
   const productDescription = product.description || "Açıklama bulunmuyor.";
   const hasIngredients = Boolean(product.ingredients);
   const hasAllergens = Boolean(product.allergens);
+  const calories =
+    typeof product.calories === "number" && product.calories > 0
+      ? product.calories
+      : null;
 
   return (
     <article
@@ -97,6 +101,20 @@ export function MenuProduct({
               {priceFormatter.format(product.price)}
             </span>
           </span>
+          {calories !== null && (
+            <span
+              className={cn(
+                "flex h-9 items-center gap-x-1 rounded-full border-2 border-charcoal px-3 py-.75",
+                "bg-[var(--menu-tertiary)] text-[var(--menu-on-tertiary)]",
+              )}
+              aria-label={`${calories} kalori`}
+            >
+              <FirePitFilled className="size-3.5" />
+              <span className="text-sm font-semibold">
+                {calories} kcal
+              </span>
+            </span>
+          )}
           <MyButton
             className={cn(
               "h-9 flex-1 justify-center border-2 border-charcoal rounded-full text-sm font-semibold shadow-none",
@@ -132,6 +150,10 @@ export function MenuProductDrawer({
   const productDescription = product.description || "Açıklama bulunmuyor.";
   const hasIngredients = Boolean(product.ingredients);
   const hasAllergens = Boolean(product.allergens);
+  const calories =
+    typeof product.calories === "number" && product.calories > 0
+      ? product.calories
+      : null;
 
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
@@ -167,6 +189,13 @@ export function MenuProductDrawer({
                 name={priceFormatter.format(product.price)}
                 color="bg-[var(--menu-secondary)] text-[var(--menu-on-secondary)]"
               />
+              {calories !== null && (
+                <MyTag
+                  Icon={FirePitFilled}
+                  name={`${calories} kcal`}
+                  color="bg-[var(--menu-tertiary)] text-[var(--menu-on-tertiary)]"
+                />
+              )}
               {product.isPopular && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-[var(--menu-primary)] px-2.5 py-1 text-xs font-semibold text-[var(--menu-on-primary)]">
                   <CrownFilled className="size-4" />
@@ -192,6 +221,15 @@ export function MenuProductDrawer({
               </h4>
               <p className="mt-1 text-sm font-semibold">
                 {hasAllergens ? product.allergens : "Alerjen bilgisi yok"}
+              </p>
+            </section>
+
+            <section>
+              <h4 className="text-xl font-semibold tracking-wide">
+                Kalori:
+              </h4>
+              <p className="mt-1 text-sm font-semibold">
+                {calories !== null ? `${calories} kcal` : "Kalori bilgisi yok"}
               </p>
             </section>
           </div>

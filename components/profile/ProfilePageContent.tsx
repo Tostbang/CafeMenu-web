@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   UserAccount,
   LockKeyFilled,
@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import ChangePasswordModal from "@/components/profile/ChangePasswordModal";
 import EditProfileModal from "@/components/profile/EditProfileModal";
-import { useMutationOP, useQueryOP } from "@/lib/Fetch";
+import { useMutationOP } from "@/lib/Fetch";
+import { useQueryClient } from "@tanstack/react-query";
 import { Alert } from "@/lib/store/useGlobalStore";
 import { deleteToken } from "@/lib/helpers";
 import { useRouter } from "next/navigation";
@@ -48,24 +49,21 @@ function ProfileSkeleton() {
 
 export default function ProfilePageContent() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const profile = useProfileStore((state) => state.profile);
   const setProfile = useProfileStore((state) => state.setProfile);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
-  const getProfileQuery = useQueryOP("get", "/api/Auth/GetMyProfile");
+  // Profile data is fetched once by DashProviders and mirrored into the
+  // Zustand store. We deliberately do NOT refetch from here to avoid the
+  // duplicate write that races with DashProviders' effect.
   const deleteMutation = useMutationOP("delete", "/api/Auth/DeleteMyAccount");
 
-  useEffect(() => {
-    if (getProfileQuery.data?.user) {
-      setProfile(getProfileQuery.data.user);
-    }
-  }, [getProfileQuery.data?.user, setProfile]);
-
   const refreshProfile = async () => {
-    const response = await getProfileQuery.refetch();
-    if (response.data?.user) {
-      setProfile(response.data.user);
-    }
+    // Trigger a background refetch via the same query key DashProviders owns.
+    await queryClient.refetchQueries({
+      queryKey: ["get", "/api/Auth/GetMyProfile"],
+    });
   };
 
   const onDeleteAccount = async () => {
